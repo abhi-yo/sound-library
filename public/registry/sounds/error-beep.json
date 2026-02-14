@@ -1,0 +1,10 @@
+{
+  "name": "error-beep",
+  "type": "webaudio",
+  "files": [
+    {
+      "name": "error-beep.ts",
+      "content": "export function playErrorBeep() {\n  const ctx = new AudioContext();\n  const now = ctx.currentTime;\n  [500, 350].forEach((freq, i) => {\n    const osc = ctx.createOscillator();\n    const gain = ctx.createGain();\n    osc.type = 'square';\n    osc.frequency.setValueAtTime(freq, now + i * 0.12);\n    gain.gain.setValueAtTime(0.001, now);\n    gain.gain.setValueAtTime(0.15, now + i * 0.12);\n    gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.12 + 0.1);\n    osc.connect(gain).connect(ctx.destination);\n    osc.start(now + i * 0.12);\n    osc.stop(now + i * 0.12 + 0.1);\n  });\n}"
+    }
+  ]
+}

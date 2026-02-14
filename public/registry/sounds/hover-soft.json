@@ -1,0 +1,10 @@
+{
+  "name": "hover-soft",
+  "type": "webaudio",
+  "files": [
+    {
+      "name": "hover-soft.ts",
+      "content": "export function playHoverSoft() {\n  const ctx = new AudioContext();\n  const now = ctx.currentTime;\n  const osc = ctx.createOscillator();\n  const gain = ctx.createGain();\n  osc.type = 'sine';\n  osc.frequency.setValueAtTime(900, now);\n  gain.gain.setValueAtTime(0.08, now);\n  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);\n  osc.connect(gain).connect(ctx.destination);\n  osc.start(now);\n  osc.stop(now + 0.06);\n}"
+    }
+  ]
+}

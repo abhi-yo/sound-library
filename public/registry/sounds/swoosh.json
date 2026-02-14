@@ -1,0 +1,10 @@
+{
+  "name": "swoosh",
+  "type": "webaudio",
+  "files": [
+    {
+      "name": "swoosh.ts",
+      "content": "export function playSwoosh() {\n  const ctx = new AudioContext();\n  const now = ctx.currentTime;\n  const bufferSize = Math.floor(ctx.sampleRate * 0.4);\n  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);\n  const data = buffer.getChannelData(0);\n  for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;\n  const noise = ctx.createBufferSource();\n  noise.buffer = buffer;\n  const lp = ctx.createBiquadFilter();\n  lp.type = 'lowpass';\n  lp.frequency.setValueAtTime(350, now);\n  lp.frequency.linearRampToValueAtTime(500, now + 0.15);\n  lp.frequency.linearRampToValueAtTime(250, now + 0.38);\n  lp.Q.setValueAtTime(0.5, now);\n  const noiseGain = ctx.createGain();\n  noiseGain.gain.setValueAtTime(0.001, now);\n  noiseGain.gain.linearRampToValueAtTime(0.06, now + 0.16);\n  noiseGain.gain.linearRampToValueAtTime(0.05, now + 0.24);\n  noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);\n  noise.connect(lp).connect(noiseGain).connect(ctx.destination);\n  noise.start(now);\n  noise.stop(now + 0.4);\n}"
+    }
+  ]
+}

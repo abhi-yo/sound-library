@@ -1,0 +1,13 @@
+{
+  "name": "button-click",
+  "type": "mp3",
+  "files": [
+    {
+      "name": "button-click.ts",
+      "content": "export function play() {\n// Requires click1.mp3 in your public folder\nconst audio = new Audio('/click1.mp3');\naudio.volume = 0.5;\naudio.play();\n}"
+    }
+  ],
+  "assets": [
+    "click1.mp3"
+  ]
+}

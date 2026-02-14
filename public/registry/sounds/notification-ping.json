@@ -1,0 +1,10 @@
+{
+  "name": "notification-ping",
+  "type": "webaudio",
+  "files": [
+    {
+      "name": "notification-ping.ts",
+      "content": "export function playNotificationPing() {\n  const ctx = new AudioContext();\n  const now = ctx.currentTime;\n  const osc = ctx.createOscillator();\n  const gain = ctx.createGain();\n  osc.type = 'sine';\n  osc.frequency.setValueAtTime(1100, now);\n  osc.frequency.exponentialRampToValueAtTime(1800, now + 0.05);\n  osc.frequency.exponentialRampToValueAtTime(1100, now + 0.1);\n  gain.gain.setValueAtTime(0.25, now);\n  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);\n  osc.connect(gain).connect(ctx.destination);\n  osc.start(now);\n  osc.stop(now + 0.15);\n}"
+    }
+  ]
+}

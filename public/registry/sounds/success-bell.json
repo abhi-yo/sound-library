@@ -1,0 +1,10 @@
+{
+  "name": "success-bell",
+  "type": "webaudio",
+  "files": [
+    {
+      "name": "success-bell.ts",
+      "content": "export function playSuccessBell() {\n  const ctx = new AudioContext();\n  const now = ctx.currentTime;\n  [1000, 1250, 1500].forEach((freq, i) => {\n    const osc = ctx.createOscillator();\n    const gain = ctx.createGain();\n    osc.type = 'sine';\n    osc.frequency.setValueAtTime(freq, now + i * 0.08);\n    gain.gain.setValueAtTime(0.001, now);\n    gain.gain.setValueAtTime(0.2, now + i * 0.08);\n    gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.15);\n    osc.connect(gain).connect(ctx.destination);\n    osc.start(now + i * 0.08);\n    osc.stop(now + i * 0.08 + 0.15);\n  });\n}"
+    }
+  ]
+}

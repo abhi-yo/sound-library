@@ -1,0 +1,10 @@
+{
+  "name": "success-chime",
+  "type": "webaudio",
+  "files": [
+    {
+      "name": "success-chime.ts",
+      "content": "export function playSuccessChime() {\n  const ctx = new AudioContext();\n  const now = ctx.currentTime;\n  const osc1 = ctx.createOscillator();\n  const gain1 = ctx.createGain();\n  osc1.type = 'sine';\n  osc1.frequency.setValueAtTime(800, now);\n  gain1.gain.setValueAtTime(0.25, now);\n  gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.15);\n  osc1.connect(gain1).connect(ctx.destination);\n  osc1.start(now);\n  osc1.stop(now + 0.15);\n  const osc2 = ctx.createOscillator();\n  const gain2 = ctx.createGain();\n  osc2.type = 'sine';\n  osc2.frequency.setValueAtTime(1200, now + 0.1);\n  gain2.gain.setValueAtTime(0.001, now);\n  gain2.gain.setValueAtTime(0.25, now + 0.1);\n  gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.3);\n  osc2.connect(gain2).connect(ctx.destination);\n  osc2.start(now + 0.1);\n  osc2.stop(now + 0.3);\n}"
+    }
+  ]
+}

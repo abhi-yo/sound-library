@@ -88,6 +88,12 @@ const SOUNDS_DATA: Array<{
     category: 'Interaction',
     description: 'Subtle tick sound for sliders and range inputs.',
   },
+  {
+    name: 'key-press',
+    label: 'Key Press',
+    category: 'Interaction',
+    description: 'Mechanical switch click for text input and keyboards.',
+  },
 ];
 
 export function SoundsGallery() {
@@ -110,7 +116,7 @@ export function SoundsGallery() {
           <button
             key={category}
             onClick={() => setSelectedCategory(category)}
-            className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+            className={`rounded-full px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
               selectedCategory === category
                 ? 'bg-primary text-primary-foreground'
                 : 'border border-border bg-card text-card-foreground hover:bg-accent'

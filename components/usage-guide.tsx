@@ -33,6 +33,7 @@ const availableSounds = [
   { name: 'swoosh', use: 'Page transitions, panel slides', source: 'Web Audio API' },
   { name: 'pop', use: 'Tooltips, popovers, reveals', source: 'Web Audio API' },
   { name: 'slider-tick', use: 'Sliders, range inputs', source: 'Web Audio API' },
+  { name: 'key-press', use: 'Text inputs, keyboards', source: 'Web Audio API' },
 ];
 
 export function UsageGuide() {
@@ -72,8 +73,8 @@ osc.stop(ctx.currentTime + 0.15);`;
                   setTimeout(() => setCopiedQuick(false), 2000);
                 });
               }}
-              title="Copy code"
-              className="rounded-md border border-border bg-muted p-1.5 text-muted-foreground transition-colors hover:bg-accent"
+              aria-label={copiedQuick ? 'Copied' : 'Copy code'}
+              className="rounded-md border border-border bg-muted p-1.5 text-muted-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               {copiedQuick ? <CheckIcon /> : <CopyIcon />}
             </button>
@@ -110,7 +111,7 @@ audio.play();`}</code>
       <div className="flex flex-col gap-3">
         <h3 className="text-sm font-semibold">All Sounds</h3>
         <div className="overflow-x-auto rounded-lg border border-border">
-          <table className="w-full text-sm">
+          <table className="w-full text-sm" style={{ fontVariantNumeric: 'tabular-nums' }}>
             <thead>
               <tr className="border-b border-border bg-muted">
                 <th className="px-4 py-2.5 text-left text-xs font-medium text-muted-foreground">

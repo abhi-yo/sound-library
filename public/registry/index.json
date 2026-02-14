@@ -1,0 +1,92 @@
+{
+  "name": "sonix",
+  "version": "1.0.0",
+  "sounds": [
+    {
+      "name": "button-click",
+      "type": "mp3",
+      "file": "click1.mp3",
+      "category": "interaction",
+      "description": "Classic click sound for button interactions."
+    },
+    {
+      "name": "button-click-secondary",
+      "type": "mp3",
+      "file": "click2.mp3",
+      "category": "interaction",
+      "description": "Softer click for secondary actions."
+    },
+    {
+      "name": "hover-blip",
+      "type": "webaudio",
+      "category": "feedback",
+      "description": "Quick chirp when hovering over interactive elements."
+    },
+    {
+      "name": "hover-soft",
+      "type": "webaudio",
+      "category": "feedback",
+      "description": "Subtle and gentle hover feedback."
+    },
+    {
+      "name": "success-chime",
+      "type": "webaudio",
+      "category": "notification",
+      "description": "Pleasant chime for successful completion."
+    },
+    {
+      "name": "success-bell",
+      "type": "webaudio",
+      "category": "notification",
+      "description": "Uplifting bell for positive feedback."
+    },
+    {
+      "name": "error-buzz",
+      "type": "webaudio",
+      "category": "alert",
+      "description": "Attention-grabbing buzz for error states."
+    },
+    {
+      "name": "error-beep",
+      "type": "webaudio",
+      "category": "alert",
+      "description": "Clear beep to signal an error."
+    },
+    {
+      "name": "notification-ping",
+      "type": "webaudio",
+      "category": "alert",
+      "description": "Quick ping for notifications."
+    },
+    {
+      "name": "notification-subtle",
+      "type": "webaudio",
+      "category": "alert",
+      "description": "Quiet notification for background alerts."
+    },
+    {
+      "name": "swoosh",
+      "type": "webaudio",
+      "category": "transition",
+      "description": "Smooth whoosh for page transitions."
+    },
+    {
+      "name": "pop",
+      "type": "webaudio",
+      "category": "interaction",
+      "description": "Playful pop for tooltips and reveals."
+    },
+    {
+      "name": "slider-tick",
+      "type": "webaudio",
+      "category": "interaction",
+      "description": "Subtle tick for sliders and range inputs."
+    },
+    {
+      "name": "key-press",
+      "type": "webaudio",
+      "category": "interaction",
+      "description": "Mechanical switch click for text inputs."
+    }
+  ]
+}

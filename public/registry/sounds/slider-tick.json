@@ -1,0 +1,10 @@
+{
+  "name": "slider-tick",
+  "type": "webaudio",
+  "files": [
+    {
+      "name": "slider-tick.ts",
+      "content": "export function playSliderTick() {\n  const ctx = new AudioContext();\n  const now = ctx.currentTime;\n  const osc = ctx.createOscillator();\n  const gain = ctx.createGain();\n  osc.type = 'square';\n  osc.frequency.setValueAtTime(5000, now);\n  osc.frequency.exponentialRampToValueAtTime(1200, now + 0.005);\n  gain.gain.setValueAtTime(0.08, now);\n  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.01);\n  osc.connect(gain).connect(ctx.destination);\n  osc.start(now);\n  osc.stop(now + 0.01);\n}"
+    }
+  ]
+}

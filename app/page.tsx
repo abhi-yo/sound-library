@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col bg-background text-foreground">
+    <main id="main-content" className="flex min-h-screen flex-col bg-background text-foreground">
       <div className="flex flex-col gap-12 px-4 py-12 sm:px-8 lg:px-16">
         {/* Header */}
         <div className="flex flex-col gap-4 border-b border-border pb-8">

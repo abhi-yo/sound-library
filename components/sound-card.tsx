@@ -195,6 +195,58 @@ gain.gain.exponentialRampToValueAtTime(0.001, now + 0.01);
 osc.connect(gain).connect(ctx.destination);
 osc.start(now);
 osc.stop(now + 0.01);`,
+
+  'key-press': `// Usage: element.onkeydown = (e) => { if (!e.repeat) playKey(); }
+function playKey() {
+const ctx = new AudioContext();
+const now = ctx.currentTime;
+// Lubed Cherry MX Brown — deep muted thock, no click
+const v = () => 0.94 + Math.random() * 0.12;
+const drift = Math.random() * 0.0015;
+// Layer 1: bottom-out thock (main sound)
+const thud = ctx.createOscillator();
+const thudGain = ctx.createGain();
+const thudFilter = ctx.createBiquadFilter();
+thud.type = 'sine';
+thud.frequency.setValueAtTime(95 * v(), now + drift);
+thud.frequency.exponentialRampToValueAtTime(38, now + drift + 0.04);
+thudFilter.type = 'lowpass';
+thudFilter.frequency.setValueAtTime(300, now + drift);
+thudFilter.Q.setValueAtTime(0.5, now + drift);
+thudGain.gain.setValueAtTime(0.22, now + drift);
+thudGain.gain.exponentialRampToValueAtTime(0.001, now + drift + 0.055);
+thud.connect(thudFilter).connect(thudGain).connect(ctx.destination);
+thud.start(now + drift); thud.stop(now + drift + 0.06);
+// Layer 2: tactile bump (barely audible)
+const bump = ctx.createOscillator();
+const bumpGain = ctx.createGain();
+const bumpFilter = ctx.createBiquadFilter();
+bump.type = 'triangle';
+bump.frequency.setValueAtTime(420 * v(), now);
+bump.frequency.exponentialRampToValueAtTime(180, now + 0.008);
+bumpFilter.type = 'lowpass';
+bumpFilter.frequency.setValueAtTime(600, now);
+bumpGain.gain.setValueAtTime(0.03, now);
+bumpGain.gain.exponentialRampToValueAtTime(0.001, now + 0.012);
+bump.connect(bumpFilter).connect(bumpGain).connect(ctx.destination);
+bump.start(now); bump.stop(now + 0.012);
+// Layer 3: dampened noise (soft low puff, lube kills scratchiness)
+const bufLen = Math.floor(ctx.sampleRate * 0.03);
+const buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
+const d = buf.getChannelData(0);
+for (let i = 0; i < bufLen; i++) d[i] = Math.random() * 2 - 1;
+const noise = ctx.createBufferSource();
+noise.buffer = buf;
+const noiseLp = ctx.createBiquadFilter();
+noiseLp.type = 'lowpass';
+noiseLp.frequency.setValueAtTime(400 * v(), now + drift);
+noiseLp.Q.setValueAtTime(0.3, now + drift);
+const noiseGain = ctx.createGain();
+noiseGain.gain.setValueAtTime(0.025, now + drift);
+noiseGain.gain.exponentialRampToValueAtTime(0.001, now + drift + 0.025);
+noise.connect(noiseLp).connect(noiseGain).connect(ctx.destination);
+noise.start(now + drift); noise.stop(now + drift + 0.03);
+}`,
 };
 
 interface SoundCardProps {
@@ -277,7 +329,7 @@ function InteractivePreview({ name }: { name: SoundName }) {
             Save Changes
           </Button>
           {successVisible && (
-            <p className="text-center text-xs text-green-600 dark:text-green-400">✓ Saved successfully!</p>
+            <p className="text-center text-xs text-green-600 dark:text-green-400" aria-live="polite">✓ Saved successfully!</p>
           )}
         </div>
       );
@@ -319,7 +371,7 @@ function InteractivePreview({ name }: { name: SoundName }) {
             Delete Item
           </Button>
           {errorVisible && (
-            <p className="text-center text-xs text-red-600 dark:text-red-400">✗ Action failed!</p>
+            <p className="text-center text-xs text-red-600 dark:text-red-400" aria-live="polite">✗ Action failed!</p>
           )}
         </div>
       );
@@ -352,7 +404,7 @@ function InteractivePreview({ name }: { name: SoundName }) {
             Send Notification
           </Button>
           {notifVisible && (
-            <div className="rounded-md bg-primary px-3 py-2 text-xs text-primary-foreground text-center animate-in fade-in slide-in-from-top-1">
+            <div className="rounded-md bg-primary px-3 py-2 text-xs text-primary-foreground text-center animate-in fade-in slide-in-from-top-1" aria-live="polite">
               New message received
             </div>
           )}
@@ -430,6 +482,16 @@ function InteractivePreview({ name }: { name: SoundName }) {
         </div>
       );
 
+    case 'key-press':
+      return (
+        <input
+          type="text"
+          placeholder="Type something…"
+          onKeyDown={(e) => { if (!e.repeat) playSound('key-press'); }}
+          className="w-full rounded-md border border-border bg-background px-3 py-2 text-xs text-foreground outline-none placeholder:text-muted-foreground focus:ring-1 focus:ring-ring"
+        />
+      );
+
     default:
       return (
         <Button
@@ -504,17 +566,17 @@ export function SoundCard({
         <a
           href={mp3Map[name]}
           download
-          title="Download mp3"
+          aria-label="Download mp3"
           onClick={handleDownload}
-          className="absolute right-3 top-3 rounded-md border border-border bg-muted p-1.5 text-muted-foreground transition-colors hover:bg-accent"
+          className="absolute right-3 top-3 rounded-md border border-border bg-muted p-1.5 text-muted-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <DownloadIcon />
         </a>
       ) : (
         <button
           onClick={handleCopyCode}
-          title="Copy code"
-          className="absolute right-3 top-3 rounded-md border border-border bg-muted p-1.5 text-muted-foreground transition-colors hover:bg-accent"
+          aria-label={copied ? 'Copied' : 'Copy code'}
+          className="absolute right-3 top-3 rounded-md border border-border bg-muted p-1.5 text-muted-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           {copied ? <CheckIcon /> : <CopyIcon />}
         </button>

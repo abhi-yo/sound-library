@@ -1,12 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-body {
-  font-family: 'Geist', sans-serif;
-}
 
 @layer utilities {
   .text-balance {
@@ -105,4 +99,12 @@ body {
   animation: none;
   z-index: 9999;
   mix-blend-mode: normal;
+}
+
+/* Honor prefers-reduced-motion (Web Interface Guidelines: Animation) */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
 }

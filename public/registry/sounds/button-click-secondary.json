@@ -1,0 +1,13 @@
+{
+  "name": "button-click-secondary",
+  "type": "mp3",
+  "files": [
+    {
+      "name": "button-click-secondary.ts",
+      "content": "export function play() {\n// Requires click2.mp3 in your public folder\nconst audio = new Audio('/click2.mp3');\naudio.volume = 0.5;\naudio.play();\n}"
+    }
+  ],
+  "assets": [
+    "click2.mp3"
+  ]
+}

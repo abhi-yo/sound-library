@@ -1,7 +1,16 @@
 {
-  "name": "my-project",
-  "version": "0.1.0",
-  "private": true,
+  "name": "sonix",
+  "version": "1.0.0",
+  "description": "Micro UX sound effects for interactive web applications. Zero dependencies, copy-paste ready.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abhi-yo/sound-library.git"
+  },
+  "keywords": ["sound", "audio", "ui", "ux", "web-audio", "sound-effects", "react", "nextjs"],
+  "bin": {
+    "sonix": "./cli/index.mjs"
+  },
   "scripts": {
     "dev": "next dev --turbo",
     "build": "next build",

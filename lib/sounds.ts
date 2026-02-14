@@ -15,11 +15,31 @@ export const SOUND_NAMES = [
   'swoosh',
   'pop',
   'slider-tick',
+  'key-press',
 ] as const;
 
 export type SoundName = (typeof SOUND_NAMES)[number];
 
 let audioCtx: AudioContext | null = null;
+let soundEnabled = true;
+
+// Respect prefers-reduced-motion (Web Interface Guidelines: Animation)
+if (typeof window !== 'undefined') {
+  const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  soundEnabled = !mq.matches;
+  mq.addEventListener('change', (e) => {
+    soundEnabled = !e.matches;
+  });
+}
+
+/** Programmatically enable/disable all sounds */
+export function setSoundEnabled(enabled: boolean) {
+  soundEnabled = enabled;
+}
+
+export function isSoundEnabled() {
+  return soundEnabled;
+}
 
 function getAudioContext(): AudioContext {
   if (!audioCtx) {
@@ -229,16 +249,75 @@ function synthesizeSound(ctx: AudioContext, name: SoundName) {
       osc.stop(now + 0.01);
       break;
     }
+    case 'key-press': {
+      // Lubed Cherry MX Brown — deep muted thock, no click
+      // Per-key variation for natural typing feel
+      const v = () => 0.94 + Math.random() * 0.12; // ±6% pitch drift
+      const drift = Math.random() * 0.0015; // 0–1.5ms jitter
+
+      // Layer 1: bottom-out thock (the main sound — stem hitting dampened housing)
+      // Low sine thud, fast attack, moderate decay — this IS the brown sound
+      const thud = ctx.createOscillator();
+      const thudGain = ctx.createGain();
+      const thudFilter = ctx.createBiquadFilter();
+      thud.type = 'sine';
+      thud.frequency.setValueAtTime(95 * v(), now + drift);
+      thud.frequency.exponentialRampToValueAtTime(38, now + drift + 0.04);
+      thudFilter.type = 'lowpass';
+      thudFilter.frequency.setValueAtTime(300, now + drift);
+      thudFilter.Q.setValueAtTime(0.5, now + drift);
+      thudGain.gain.setValueAtTime(0.22, now + drift);
+      thudGain.gain.exponentialRampToValueAtTime(0.001, now + drift + 0.055);
+      thud.connect(thudFilter).connect(thudGain).connect(ctx.destination);
+      thud.start(now + drift);
+      thud.stop(now + drift + 0.06);
+
+      // Layer 2: tactile bump (barely audible mid-range blip — the brown "bump")
+      // Very quiet, short, no sharp attack
+      const bump = ctx.createOscillator();
+      const bumpGain = ctx.createGain();
+      const bumpFilter = ctx.createBiquadFilter();
+      bump.type = 'triangle';
+      bump.frequency.setValueAtTime(420 * v(), now);
+      bump.frequency.exponentialRampToValueAtTime(180, now + 0.008);
+      bumpFilter.type = 'lowpass';
+      bumpFilter.frequency.setValueAtTime(600, now);
+      bumpGain.gain.setValueAtTime(0.03, now);
+      bumpGain.gain.exponentialRampToValueAtTime(0.001, now + 0.012);
+      bump.connect(bumpFilter).connect(bumpGain).connect(ctx.destination);
+      bump.start(now);
+      bump.stop(now + 0.012);
+
+      // Layer 3: dampened noise (lube kills scratchiness — just a soft low puff)
+      const bufLen = Math.floor(ctx.sampleRate * 0.03);
+      const buf = ctx.createBuffer(1, bufLen, ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i = 0; i < bufLen; i++) d[i] = Math.random() * 2 - 1;
+      const noise = ctx.createBufferSource();
+      noise.buffer = buf;
+      const noiseLp = ctx.createBiquadFilter();
+      noiseLp.type = 'lowpass';
+      noiseLp.frequency.setValueAtTime(400 * v(), now + drift);
+      noiseLp.Q.setValueAtTime(0.3, now + drift);
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.025, now + drift);
+      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + drift + 0.025);
+      noise.connect(noiseLp).connect(noiseGain).connect(ctx.destination);
+      noise.start(now + drift);
+      noise.stop(now + drift + 0.03);
+      break;
+    }
   }
 }
 
 // Helper function to play a sound
 export function playSound(soundName: SoundName) {
+  if (!soundEnabled) return;
   try {
     const ctx = getAudioContext();
     synthesizeSound(ctx, soundName);
   } catch (err) {
-    console.error('[v0] Failed to play sound:', err);
+    console.error('Failed to play sound:', err);
   }
 }
 
