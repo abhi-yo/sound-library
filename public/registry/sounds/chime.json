@@ -1,0 +1,12 @@
+{
+  "name": "chime",
+  "type": "webaudio",
+  "category": "Notification",
+  "description": "Ascending two-note chime",
+  "files": [
+    {
+      "name": "chime.ts",
+      "content": "export function playChime() {\n  const ctx = new AudioContext();\n  const now = ctx.currentTime;\n  const n1 = ctx.createOscillator();\n  const g1 = ctx.createGain();\n  n1.type = 'sine';\n  n1.frequency.setValueAtTime(660, now);\n  g1.gain.setValueAtTime(0.2, now);\n  g1.gain.exponentialRampToValueAtTime(0.001, now + 0.14);\n  n1.connect(g1).connect(ctx.destination);\n  n1.start(now);\n  n1.stop(now + 0.14);\n\n  const n2 = ctx.createOscillator();\n  const g2 = ctx.createGain();\n  n2.type = 'sine';\n  n2.frequency.setValueAtTime(990, now + 0.09);\n  g2.gain.setValueAtTime(0.001, now);\n  g2.gain.setValueAtTime(0.22, now + 0.09);\n  g2.gain.exponentialRampToValueAtTime(0.001, now + 0.28);\n  n2.connect(g2).connect(ctx.destination);\n  n2.start(now + 0.09);\n  n2.stop(now + 0.28);\n}"
+    }
+  ]
+}

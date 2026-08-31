@@ -1,0 +1,12 @@
+{
+  "name": "thud",
+  "type": "webaudio",
+  "category": "Interaction",
+  "description": "Tactile lowpass thock",
+  "files": [
+    {
+      "name": "thud.ts",
+      "content": "export function playThud() {\n  const ctx = new AudioContext();\n  const now = ctx.currentTime;\n  const osc = ctx.createOscillator();\n  const gain = ctx.createGain();\n  const filter = ctx.createBiquadFilter();\n  osc.type = 'sine';\n  osc.frequency.setValueAtTime(95, now);\n  osc.frequency.exponentialRampToValueAtTime(36, now + 0.045);\n  filter.type = 'lowpass';\n  filter.frequency.setValueAtTime(280, now);\n  gain.gain.setValueAtTime(0.24, now);\n  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);\n  osc.connect(filter).connect(gain).connect(ctx.destination);\n  osc.start(now);\n  osc.stop(now + 0.055);\n}"
+    }
+  ]
+}

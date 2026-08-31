@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
 /**
- * sonix CLI — add sounds to your project
+ * Sound Library CLI — add sounds to your project
  *
  * Usage:
- *   npx sonix add <sound-name>       Add a single sound
- *   npx sonix add <s1> <s2> ...      Add multiple sounds
- *   npx sonix list                   List all available sounds
+ *   npx @sound-library/cli add <sound-name>       Add a single sound
+ *   npx @sound-library/cli add <s1> <s2> ...      Add multiple sounds
+ *   npx @sound-library/cli list                   List all available sounds
  *
  * Sounds are fetched from the public registry and written
  * to your project as standalone files — no runtime dependency.
@@ -16,7 +16,7 @@ import { writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 
 const REGISTRY_URL =
-  process.env.SONIX_REGISTRY ||
+  process.env.SOUND_LIBRARY_REGISTRY ||
   "https://abhi-yo.github.io/sound-library/registry";
 
 const COLORS = {
@@ -127,11 +127,11 @@ const command = args[0];
 
 if (!command || command === "help" || command === "--help") {
   log("");
-  log(`${COLORS.bold}sonix${COLORS.reset} — UI sound effects for your app`);
+  log(`${COLORS.bold}sound-library${COLORS.reset} — UI sound effects for your app`);
   log("");
-  log(`  ${COLORS.cyan}npx sonix list${COLORS.reset}              List all sounds`);
-  log(`  ${COLORS.cyan}npx sonix add <name>${COLORS.reset}        Add a sound to your project`);
-  log(`  ${COLORS.cyan}npx sonix add pop swoosh${COLORS.reset}    Add multiple sounds`);
+  log(`  ${COLORS.cyan}npx @sound-library/cli list${COLORS.reset}              List all sounds`);
+  log(`  ${COLORS.cyan}npx @sound-library/cli add <name>${COLORS.reset}        Add a sound to your project`);
+  log(`  ${COLORS.cyan}npx @sound-library/cli add pop swish${COLORS.reset}    Add multiple sounds`);
   log("");
   process.exit(0);
 }
@@ -141,11 +141,11 @@ if (command === "list") {
 } else if (command === "add") {
   const names = args.slice(1);
   if (names.length === 0) {
-    error("Specify at least one sound name. Run `npx sonix list` to see options.");
+    error("Specify at least one sound name. Run `npx @sound-library/cli list` to see options.");
     process.exit(1);
   }
   await addSounds(names);
 } else {
-  error(`Unknown command: ${command}. Run \`npx sonix --help\`.`);
+  error(`Unknown command: ${command}. Run \`npx @sound-library/cli --help\`.`);
   process.exit(1);
 }

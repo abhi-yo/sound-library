@@ -1,10 +1,12 @@
 {
   "name": "pop",
   "type": "webaudio",
+  "category": "Interaction",
+  "description": "Liquid bubble pitch drop",
   "files": [
     {
       "name": "pop.ts",
-      "content": "export function playPop() {\n  const ctx = new AudioContext();\n  const now = ctx.currentTime;\n  const osc = ctx.createOscillator();\n  const gain = ctx.createGain();\n  osc.type = 'sine';\n  osc.frequency.setValueAtTime(950, now);\n  osc.frequency.exponentialRampToValueAtTime(150, now + 0.08);\n  gain.gain.setValueAtTime(0.35, now);\n  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);\n  osc.connect(gain).connect(ctx.destination);\n  osc.start(now);\n  osc.stop(now + 0.08);\n}"
+      "content": "export function playPop() {\n  const ctx = new AudioContext();\n  const now = ctx.currentTime;\n  const osc = ctx.createOscillator();\n  const gain = ctx.createGain();\n  osc.type = 'sine';\n  osc.frequency.setValueAtTime(880, now);\n  osc.frequency.exponentialRampToValueAtTime(140, now + 0.07);\n  gain.gain.setValueAtTime(0.26, now);\n  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);\n  osc.connect(gain).connect(ctx.destination);\n  osc.start(now);\n  osc.stop(now + 0.075);\n}"
     }
   ]
 }

@@ -1,0 +1,12 @@
+{
+  "name": "whoosh",
+  "type": "webaudio",
+  "category": "Navigation",
+  "description": "Spatial transition whoosh",
+  "files": [
+    {
+      "name": "whoosh.ts",
+      "content": "export function playWhoosh() {\n  const ctx = new AudioContext();\n  const now = ctx.currentTime;\n  const size = Math.floor(ctx.sampleRate * 0.38);\n  const buf = ctx.createBuffer(1, size, ctx.sampleRate);\n  const d = buf.getChannelData(0);\n  for (let i = 0; i < size; i++) d[i] = Math.random() * 2 - 1;\n  const src = ctx.createBufferSource();\n  src.buffer = buf;\n  const lp = ctx.createBiquadFilter();\n  lp.type = 'lowpass';\n  lp.frequency.setValueAtTime(320, now);\n  lp.frequency.linearRampToValueAtTime(520, now + 0.15);\n  lp.frequency.linearRampToValueAtTime(220, now + 0.35);\n  const gain = ctx.createGain();\n  gain.gain.setValueAtTime(0.001, now);\n  gain.gain.linearRampToValueAtTime(0.07, now + 0.15);\n  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.36);\n  src.connect(lp).connect(gain).connect(ctx.destination);\n  src.start(now);\n  src.stop(now + 0.38);\n}"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "blip",
+  "type": "webaudio",
+  "category": "Feedback",
+  "description": "Ascending micro blip",
+  "files": [
+    {
+      "name": "blip.ts",
+      "content": "export function playBlip() {\n  const ctx = new AudioContext();\n  const now = ctx.currentTime;\n  const osc = ctx.createOscillator();\n  const gain = ctx.createGain();\n  osc.type = 'sine';\n  osc.frequency.setValueAtTime(1150, now);\n  osc.frequency.exponentialRampToValueAtTime(2300, now + 0.045);\n  gain.gain.setValueAtTime(0.14, now);\n  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);\n  osc.connect(gain).connect(ctx.destination);\n  osc.start(now);\n  osc.stop(now + 0.05);\n}"
+    }
+  ]
+}

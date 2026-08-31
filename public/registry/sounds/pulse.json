@@ -1,0 +1,12 @@
+{
+  "name": "pulse",
+  "type": "webaudio",
+  "category": "System",
+  "description": "Sub-bass haptic pulse",
+  "files": [
+    {
+      "name": "pulse.ts",
+      "content": "export function playPulse() {\n  const ctx = new AudioContext();\n  const now = ctx.currentTime;\n  const osc = ctx.createOscillator();\n  const gain = ctx.createGain();\n  osc.type = 'sine';\n  osc.frequency.setValueAtTime(65, now);\n  gain.gain.setValueAtTime(0.24, now);\n  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);\n  osc.connect(gain).connect(ctx.destination);\n  osc.start(now);\n  osc.stop(now + 0.095);\n}"
+    }
+  ]
+}

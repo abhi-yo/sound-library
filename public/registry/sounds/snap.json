@@ -1,0 +1,12 @@
+{
+  "name": "snap",
+  "type": "webaudio",
+  "category": "Interaction",
+  "description": "Haptic mechanical snap",
+  "files": [
+    {
+      "name": "snap.ts",
+      "content": "export function playSnap() {\n  const ctx = new AudioContext();\n  const now = ctx.currentTime;\n  const osc = ctx.createOscillator();\n  const gain = ctx.createGain();\n  osc.type = 'square';\n  osc.frequency.setValueAtTime(3400, now);\n  osc.frequency.exponentialRampToValueAtTime(900, now + 0.02);\n  gain.gain.setValueAtTime(0.12, now);\n  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.025);\n  osc.connect(gain).connect(ctx.destination);\n  osc.start(now);\n  osc.stop(now + 0.028);\n}"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "toggle-off",
+  "type": "webaudio",
+  "category": "Interaction",
+  "description": "Switch deactivate step",
+  "files": [
+    {
+      "name": "toggle-off.ts",
+      "content": "export function playToggleOff() {\n  const ctx = new AudioContext();\n  const now = ctx.currentTime;\n  const osc = ctx.createOscillator();\n  const gain = ctx.createGain();\n  osc.type = 'sine';\n  osc.frequency.setValueAtTime(820, now);\n  osc.frequency.exponentialRampToValueAtTime(520, now + 0.06);\n  gain.gain.setValueAtTime(0.16, now);\n  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);\n  osc.connect(gain).connect(ctx.destination);\n  osc.start(now);\n  osc.stop(now + 0.075);\n}"
+    }
+  ]
+}

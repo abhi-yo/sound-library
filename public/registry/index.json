@@ -1,92 +1,126 @@
 {
-  "name": "sonix",
+  "name": "bloub-audio",
   "version": "1.0.0",
   "sounds": [
     {
-      "name": "button-click",
-      "type": "mp3",
-      "file": "click1.mp3",
-      "category": "interaction",
-      "description": "Classic click sound for button interactions."
+      "name": "tap",
+      "category": "Interaction",
+      "description": "Capacitive micro tap",
+      "type": "webaudio"
     },
     {
-      "name": "button-click-secondary",
-      "type": "mp3",
-      "file": "click2.mp3",
-      "category": "interaction",
-      "description": "Softer click for secondary actions."
+      "name": "thud",
+      "category": "Interaction",
+      "description": "Tactile lowpass thock",
+      "type": "webaudio"
     },
     {
-      "name": "hover-blip",
-      "type": "webaudio",
-      "category": "feedback",
-      "description": "Quick chirp when hovering over interactive elements."
-    },
-    {
-      "name": "hover-soft",
-      "type": "webaudio",
-      "category": "feedback",
-      "description": "Subtle and gentle hover feedback."
-    },
-    {
-      "name": "success-chime",
-      "type": "webaudio",
-      "category": "notification",
-      "description": "Pleasant chime for successful completion."
-    },
-    {
-      "name": "success-bell",
-      "type": "webaudio",
-      "category": "notification",
-      "description": "Uplifting bell for positive feedback."
-    },
-    {
-      "name": "error-buzz",
-      "type": "webaudio",
-      "category": "alert",
-      "description": "Attention-grabbing buzz for error states."
-    },
-    {
-      "name": "error-beep",
-      "type": "webaudio",
-      "category": "alert",
-      "description": "Clear beep to signal an error."
-    },
-    {
-      "name": "notification-ping",
-      "type": "webaudio",
-      "category": "alert",
-      "description": "Quick ping for notifications."
-    },
-    {
-      "name": "notification-subtle",
-      "type": "webaudio",
-      "category": "alert",
-      "description": "Quiet notification for background alerts."
-    },
-    {
-      "name": "swoosh",
-      "type": "webaudio",
-      "category": "transition",
-      "description": "Smooth whoosh for page transitions."
+      "name": "snap",
+      "category": "Interaction",
+      "description": "Haptic mechanical snap",
+      "type": "webaudio"
     },
     {
       "name": "pop",
-      "type": "webaudio",
-      "category": "interaction",
-      "description": "Playful pop for tooltips and reveals."
+      "category": "Interaction",
+      "description": "Liquid bubble pitch drop",
+      "type": "webaudio"
     },
     {
-      "name": "slider-tick",
-      "type": "webaudio",
-      "category": "interaction",
-      "description": "Subtle tick for sliders and range inputs."
+      "name": "blip",
+      "category": "Feedback",
+      "description": "Ascending micro blip",
+      "type": "webaudio"
     },
     {
-      "name": "key-press",
-      "type": "webaudio",
-      "category": "interaction",
-      "description": "Mechanical switch click for text inputs."
+      "name": "hover-soft",
+      "category": "Feedback",
+      "description": "Gentle sine pulse",
+      "type": "webaudio"
+    },
+    {
+      "name": "chime",
+      "category": "Notification",
+      "description": "Ascending two-note chime",
+      "type": "webaudio"
+    },
+    {
+      "name": "bell",
+      "category": "Notification",
+      "description": "Triad chord bell",
+      "type": "webaudio"
+    },
+    {
+      "name": "ping",
+      "category": "Notification",
+      "description": "Resonant notification ping",
+      "type": "webaudio"
+    },
+    {
+      "name": "tick",
+      "category": "Interaction",
+      "description": "Percussive dial tick",
+      "type": "webaudio"
+    },
+    {
+      "name": "toggle-on",
+      "category": "Interaction",
+      "description": "Switch activate step",
+      "type": "webaudio"
+    },
+    {
+      "name": "toggle-off",
+      "category": "Interaction",
+      "description": "Switch deactivate step",
+      "type": "webaudio"
+    },
+    {
+      "name": "lock",
+      "category": "System",
+      "description": "Mechanical latch lock",
+      "type": "webaudio"
+    },
+    {
+      "name": "unlock",
+      "category": "System",
+      "description": "Mechanical unlatch",
+      "type": "webaudio"
+    },
+    {
+      "name": "swish",
+      "category": "Navigation",
+      "description": "Filtered noise swish",
+      "type": "webaudio"
+    },
+    {
+      "name": "whoosh",
+      "category": "Navigation",
+      "description": "Spatial transition whoosh",
+      "type": "webaudio"
+    },
+    {
+      "name": "shutter",
+      "category": "Interaction",
+      "description": "Camera shutter click",
+      "type": "webaudio"
+    },
+    {
+      "name": "keystroke",
+      "category": "Interaction",
+      "description": "Mechanical keyboard thock",
+      "type": "webaudio"
+    },
+    {
+      "name": "pulse",
+      "category": "System",
+      "description": "Sub-bass haptic pulse",
+      "type": "webaudio"
+    },
+    {
+      "name": "error",
+      "category": "System",
+      "description": "Dissonant alert tone",
+      "type": "webaudio"
     }
   ]
 }

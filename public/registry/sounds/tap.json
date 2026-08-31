@@ -1,0 +1,12 @@
+{
+  "name": "tap",
+  "type": "webaudio",
+  "category": "Interaction",
+  "description": "Capacitive micro tap",
+  "files": [
+    {
+      "name": "tap.ts",
+      "content": "export function playTap() {\n  const ctx = new AudioContext();\n  const now = ctx.currentTime;\n  const osc = ctx.createOscillator();\n  const gain = ctx.createGain();\n  osc.type = 'sine';\n  osc.frequency.setValueAtTime(1800, now);\n  osc.frequency.exponentialRampToValueAtTime(700, now + 0.035);\n  gain.gain.setValueAtTime(0.18, now);\n  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);\n  osc.connect(gain).connect(ctx.destination);\n  osc.start(now);\n  osc.stop(now + 0.04);\n}"
+    }
+  ]
+}

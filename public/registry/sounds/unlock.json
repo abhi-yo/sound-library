@@ -1,0 +1,12 @@
+{
+  "name": "unlock",
+  "type": "webaudio",
+  "category": "System",
+  "description": "Mechanical unlatch",
+  "files": [
+    {
+      "name": "unlock.ts",
+      "content": "export function playUnlock() {\n  const ctx = new AudioContext();\n  const now = ctx.currentTime;\n  const osc = ctx.createOscillator();\n  const gain = ctx.createGain();\n  osc.type = 'triangle';\n  osc.frequency.setValueAtTime(600, now);\n  osc.frequency.exponentialRampToValueAtTime(1400, now + 0.04);\n  gain.gain.setValueAtTime(0.15, now);\n  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);\n  osc.connect(gain).connect(ctx.destination);\n  osc.start(now);\n  osc.stop(now + 0.05);\n}"
+    }
+  ]
+}

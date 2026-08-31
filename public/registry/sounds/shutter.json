@@ -1,0 +1,12 @@
+{
+  "name": "shutter",
+  "type": "webaudio",
+  "category": "Interaction",
+  "description": "Camera shutter click",
+  "files": [
+    {
+      "name": "shutter.ts",
+      "content": "export function playShutter() {\n  const ctx = new AudioContext();\n  const now = ctx.currentTime;\n  const o1 = ctx.createOscillator();\n  const g1 = ctx.createGain();\n  o1.type = 'square';\n  o1.frequency.setValueAtTime(1400, now);\n  g1.gain.setValueAtTime(0.12, now);\n  g1.gain.exponentialRampToValueAtTime(0.001, now + 0.025);\n  o1.connect(g1).connect(ctx.destination);\n  o1.start(now);\n  o1.stop(now + 0.03);\n\n  const o2 = ctx.createOscillator();\n  const g2 = ctx.createGain();\n  o2.type = 'triangle';\n  o2.frequency.setValueAtTime(800, now + 0.035);\n  g2.gain.setValueAtTime(0.001, now);\n  g2.gain.setValueAtTime(0.15, now + 0.035);\n  g2.gain.exponentialRampToValueAtTime(0.001, now + 0.075);\n  o2.connect(g2).connect(ctx.destination);\n  o2.start(now + 0.035);\n  o2.stop(now + 0.08);\n}"
+    }
+  ]
+}

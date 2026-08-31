@@ -1,0 +1,12 @@
+{
+  "name": "keystroke",
+  "type": "webaudio",
+  "category": "Interaction",
+  "description": "Mechanical keyboard thock",
+  "files": [
+    {
+      "name": "keystroke.ts",
+      "content": "export function playKeystroke() {\n  const ctx = new AudioContext();\n  const now = ctx.currentTime;\n  const v = 0.96 + Math.random() * 0.08;\n  const thud = ctx.createOscillator();\n  const thudGain = ctx.createGain();\n  const thudFilter = ctx.createBiquadFilter();\n  thud.type = 'sine';\n  thud.frequency.setValueAtTime(95 * v, now);\n  thud.frequency.exponentialRampToValueAtTime(38, now + 0.04);\n  thudFilter.type = 'lowpass';\n  thudFilter.frequency.setValueAtTime(300, now);\n  thudGain.gain.setValueAtTime(0.22, now);\n  thudGain.gain.exponentialRampToValueAtTime(0.001, now + 0.055);\n  thud.connect(thudFilter).connect(thudGain).connect(ctx.destination);\n  thud.start(now);\n  thud.stop(now + 0.06);\n}"
+    }
+  ]
+}
