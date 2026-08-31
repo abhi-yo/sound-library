@@ -1,0 +1,105 @@
+# UI Sound Library
+
+> Procedural micro-UX sound library for interactive web applications. Zero audio files, zero dependencies, latency-free Web Audio API synthesis.
+
+This library provides 45 copy-paste procedural sound effects synthesized directly in the browser with native Web Audio API oscillators, noise buffers, and dynamic biquad filters.
+
+## Core Documentation
+
+- [Overview & Quickstart](https://abhi-yo.github.io/sound-library/docs): Getting started with procedural UI sounds in under two minutes.
+- [Sound Catalog](https://abhi-yo.github.io/sound-library/docs/sounds): Audition all 45 procedural sounds across 5 categories.
+- [CLI Reference](https://abhi-yo.github.io/sound-library/docs/cli): How to scaffold sound functions directly into your project.
+- [React & Next.js Guide](https://abhi-yo.github.io/sound-library/docs/guides/react): Reusable hooks, event handlers, and Next.js App Router patterns.
+- [Vue & Svelte Guide](https://abhi-yo.github.io/sound-library/docs/guides/vue-svelte): Integration patterns for Vue 3 composables and Svelte runes.
+- [Custom Sound Design](https://abhi-yo.github.io/sound-library/docs/guides/custom-sounds): How to design and synthesize your own micro-audio waveforms.
+
+## Sound Catalog by Category
+
+### 1. Interaction Sounds
+Tactile response for buttons, dials, switches, and typing interactions.
+- `tap`: 35ms sine pitch ramp (1800Hz → 700Hz) — Buttons, list selections
+- `thud`: 50ms filtered sine lowpass (95Hz → 36Hz) — Primary actions, solid clicks
+- `snap`: 25ms square wave burst — Physical toggles, checkboxes
+- `pop`: 70ms sine resonant pitch drop (880Hz → 140Hz) — Dropdown open, menu reveal
+- `tick`: 8ms square wave fast decay (4800Hz → 1100Hz) — Slider scrub, rotary dials
+- `toggle-on`: 75ms sine upward glide (520Hz → 820Hz) — Switch ON state
+- `toggle-off`: 75ms sine downward glide (820Hz → 520Hz) — Switch OFF state
+- `shutter`: 80ms dual noise + sine transient — Screenshot, camera action
+- `keystroke`: 60ms bandpass noise clack (4200Hz) — Mechanical keyboard simulation
+- `bloop`: 90ms liquid sine pitch drop (600Hz → 150Hz) — Playful buttons, reactions
+- `sub-kick`: 160ms sub-bass pitch drop (150Hz → 40Hz) — Major action confirmations
+- `haptic-pop`: 35ms square wave pulse (120Hz → 40Hz) — Mobile haptic tap motor
+- `typewriter-key`: 40ms bandpassed noise clack (2500Hz) — Vintage typewriter key
+- `hollow-thock`: 60ms triangle + sine decay (600Hz / 300Hz) — Wooden percussion clack
+
+### 2. Feedback Sounds
+Auditory confirmation for gestures, ratings, level-ups, and user actions.
+- `blip`: 45ms sine ascending chirp (1150Hz → 2300Hz) — Focus navigation, chip select
+- `hover-soft`: 50ms fixed sine pulse (820Hz) — Subtle hover states
+- `zap`: 110ms lowpass sawtooth zap (1200Hz → 100Hz) — Rapid action, retro cues
+- `spring`: 250ms sine frequency modulation (500Hz - 1100Hz) — Pull-to-refresh
+- `bubble`: 100ms multi-stage sine pitch ramps (400Hz - 800Hz) — Likes, reactions
+- `coin`: 350ms square wave arpeggio (B5 → E6) — Reward collection
+- `power-up`: 400ms triangle wave chord (440Hz → 880Hz) — Upgrade, level up
+- `power-down`: 450ms sawtooth sweep (300Hz → 40Hz) — Deactivation, filter reset
+- `magic-sparkle`: 500ms randomized high-freq sine bursts — AI finish, magic unlock
+- `jump-boing`: 350ms comical pitch envelope — Bouncy gesture, scroll top
+- `arcade-pew`: 200ms retro 8-bit square pitch drop — Quick send, arcade laser
+- `heartbeat`: 500ms dual-stage low-frequency pulse (50Hz → 30Hz) — Timer countdown
+- `sonar-ping`: 1250ms high sine with long echoing decay (1200Hz) — Scanning, ping
+- `typewriter-bell`: 850ms dual sine ring (1600Hz + 1620Hz) — Form submitted
+- `synth-sweep`: 650ms sawtooth + lowpass sweep — Filter sweep, theme toggle
+- `glitch`: 130ms square dropouts + bandpass noise — Error shake, static burst
+- `deep-impact`: 850ms cinematic low-frequency boom — Major release confirmation
+- `success-fanfare`: 650ms triangle major triad (G4, C5, E5) — Achievement unlocked
+
+### 3. Notification Sounds
+Alerts for background completions, messages, and priority updates.
+- `chime`: 280ms dual-tone ascending interval (660Hz → 990Hz) — Task complete, toast
+- `bell`: 300ms three-note major arpeggio (880Hz + 1100Hz + 1320Hz) — Achievement
+- `ping`: 140ms curved frequency resonance (1050Hz → 1750Hz) — Push notification
+- `shimmer`: 250ms multi-layered triangle chord (1.2k - 2.8kHz) — Rewards, unlocks
+- `crystal`: 450ms resonant pure sine tone drop (2400Hz → 1800Hz) — Glass notification
+
+### 4. Navigation Sounds
+Spatial audio cues for route changes, drawer reveals, and sheet transitions.
+- `swish`: 200ms filtered noise sweep (3200Hz → 350Hz) — Drawer slide, sheet transition
+- `whoosh`: 380ms atmospheric bandpass noise sweep — Page navigation, route change
+- `glissando`: 170ms smooth ascending pitch sweep (400Hz → 1200Hz) — Menu reveal
+- `woosh-deep`: 450ms cinematic heavy noise sweep (100Hz → 800Hz) — Fullscreen sheet
+
+### 5. System Sounds
+Confirmation for authentication, security states, and errors.
+- `lock`: 60ms dual-frequency mechanical latch (200Hz + 600Hz) — Security lock
+- `unlock`: 50ms rising triangle pitch sweep (600Hz → 1400Hz) — Biometric auth
+- `pulse`: 95ms sub-bass tactile pulse (65Hz) — Background sync, haptic pulse
+- `error`: 180ms dissonant square alert (380Hz → 280Hz) — Form error, validation fail
+
+## Code Examples
+
+### Standalone Synthesis Function
+```ts
+export function playTap() {
+  const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(1800, now);
+  osc.frequency.exponentialRampToValueAtTime(700, now + 0.035);
+
+  gain.gain.setValueAtTime(0.18, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.04);
+}
+```
+
+### CLI Scaffolding
+```bash
+# Add standalone sound definitions to your project
+npx @sound-library/cli add tap snap chime swish
+```

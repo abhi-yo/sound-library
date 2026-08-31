@@ -1,4 +1,4 @@
-# Sonix — UI Sound Effects Library
+# UI Sound Effects Library
 
 Micro UX audio for interactive web applications. Zero dependencies. Copy-paste ready.
 
@@ -8,10 +8,10 @@ Micro UX audio for interactive web applications. Zero dependencies. Copy-paste r
 
 ## Features
 
-- **14 sounds** — clicks, hovers, success, error, notifications, transitions, and more
+- **45 sounds** — clicks, hovers, success, error, notifications, transitions, and more
 - **Zero dependencies** — every snippet is standalone Web Audio API code
 - **Copy & paste** — hit the copy button on any card to get production-ready code
-- **CLI** — `npx sonix add pop` to scaffold sounds into your project
+- **CLI** — scaffold standalone sound functions directly into your project
 - **Framework agnostic** — works with React, Vue, Svelte, vanilla JS, anything
 - **Dark mode** — with cinematic circular reveal transition
 - **`prefers-reduced-motion`** — respects user accessibility preferences
@@ -56,9 +56,9 @@ function MyButton() {
 Add sounds to any project with the CLI:
 
 ```bash
-npx sonix list              # List all available sounds
-npx sonix add pop           # Add a single sound
-npx sonix add pop swoosh    # Add multiple sounds
+npx @sound-library/cli list              # List all available sounds
+npx @sound-library/cli add pop           # Add a single sound
+npx @sound-library/cli add pop swish     # Add multiple sounds
 ```
 
 Sounds are written to `lib/sounds/` as standalone files — no runtime dependency.
