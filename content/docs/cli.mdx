@@ -1,0 +1,36 @@
+---
+title: CLI Reference
+description: Command-line interface for scaffolding procedural sound functions into your project.
+---
+
+The CLI downloads standalone TypeScript sound definitions directly into your codebase.
+
+```bash
+npx @sound-library/cli [command] [options]
+```
+
+---
+
+## Commands
+
+### `list`
+
+Lists all 45 procedural sound effects organized by interaction category.
+
+```bash
+npx @sound-library/cli list
+```
+
+---
+
+### `add`
+
+Scaffolds specified sound functions into `lib/sounds/`.
+
+```bash
+npx @sound-library/cli add tap snap chime whoosh
+```
+
+<Callout type="info">
+  Each generated file is self-contained and imports no external libraries.
+</Callout>

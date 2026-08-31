@@ -1,0 +1,193 @@
+---
+title: Navigation Sounds
+description: Filtered noise sweeps and spatial air rushes for drawers, sheets, and page transitions.
+---
+
+Navigation sounds accompany layout transitions, giving tactile spatial weight to sliding drawers, modal sheets, and page routing.
+
+---
+
+## Integration Guide
+
+<Steps>
+  <Step>
+    ### Import the Audio Trigger
+    Import `playSound` or paste the standalone function into your navigation component:
+
+    ```ts title="lib/sounds.ts"
+    import { playSound } from '@/lib/sounds';
+    ```
+  </Step>
+
+  <Step>
+    ### Wire to Sheet, Drawer, or Page Routing Handlers
+    Trigger on drawer open or layout animation transitions:
+
+    ```tsx title="components/drawer.tsx"
+    'use client';
+
+    import { playSound } from '@/lib/sounds';
+
+    export function DrawerToggle({ isOpen, onToggle }: { isOpen: boolean; onToggle: () => void }) {
+      return (
+        <button
+          onClick={() => {
+            playSound('swish');
+            onToggle();
+          }}
+          className="rounded-xl border border-border px-3.5 py-1.5 text-xs font-medium"
+        >
+          {isOpen ? 'Close Panel' : 'Open Panel'}
+        </button>
+      );
+    }
+    ```
+  </Step>
+
+  <Step>
+    ### AI Prompting Workflow
+    Click **Prompt LLM** on any sound below to copy a prompt ready for Cursor, ChatGPT, Claude, or v0.
+  </Step>
+</Steps>
+
+---
+
+## Sound Catalog
+
+### Filtered Swish (`swish`)
+
+<SoundPlayButton name="swish" />
+
+Filtered noise sweep with lowpass frequency drop for sheet reveals, modal drawers, and tab switches.
+
+```ts title="lib/sounds/swish.ts"
+export function playSwish() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  
+  const bufferSize = ctx.sampleRate * 0.2;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = Math.random() * 2 - 1;
+  }
+  
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+  
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.setValueAtTime(3200, now);
+  filter.frequency.exponentialRampToValueAtTime(350, now + 0.18);
+  
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0.001, now);
+  gain.gain.linearRampToValueAtTime(0.18, now + 0.04);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+  
+  noise.connect(filter).connect(gain).connect(ctx.destination);
+  noise.start(now);
+  noise.stop(now + 0.2);
+}
+```
+
+---
+
+### Atmospheric Whoosh (`whoosh`)
+
+<SoundPlayButton name="whoosh" />
+
+Atmospheric spatial air rush with resonance sweep for page navigations, router transitions, and dialog reveals.
+
+```ts title="lib/sounds/whoosh.ts"
+export function playWhoosh() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  
+  const bufferSize = ctx.sampleRate * 0.38;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = Math.random() * 2 - 1;
+  }
+  
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+  
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'bandpass';
+  filter.frequency.setValueAtTime(450, now);
+  filter.frequency.exponentialRampToValueAtTime(2400, now + 0.16);
+  filter.frequency.exponentialRampToValueAtTime(280, now + 0.38);
+  filter.Q.setValueAtTime(2.5, now);
+  
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0.001, now);
+  gain.gain.linearRampToValueAtTime(0.22, now + 0.14);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+  
+  noise.connect(filter).connect(gain).connect(ctx.destination);
+  noise.start(now);
+  noise.stop(now + 0.38);
+}
+```
+
+---
+
+### Elegant Glissando (`glissando`)
+
+<SoundPlayButton name="glissando" />
+
+A smooth, elegant ascending sweep perfect for luxury menu reveals, slide-overs, and transitions.
+
+```ts title="lib/sounds/glissando.ts"
+export function playGlissando() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(400, now);
+  osc.frequency.exponentialRampToValueAtTime(1200, now + 0.15);
+  gain.gain.setValueAtTime(0.001, now);
+  gain.gain.linearRampToValueAtTime(0.15, now + 0.05);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.17);
+}
+```
+
+---
+
+### Heavy Woosh (`woosh-deep`)
+
+<SoundPlayButton name="woosh-deep" />
+
+A cinematic, filtered noise sweep for grand page transitions and heavy spatial reveals.
+
+```ts title="lib/sounds/woosh-deep.ts"
+export function playWooshDeep() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const bufSize = Math.floor(ctx.sampleRate * 0.4);
+  const buffer = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'bandpass';
+  filter.frequency.setValueAtTime(100, now);
+  filter.frequency.exponentialRampToValueAtTime(800, now + 0.2);
+  filter.frequency.exponentialRampToValueAtTime(100, now + 0.4);
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0.001, now);
+  gain.gain.linearRampToValueAtTime(0.2, now + 0.2);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+  noise.connect(filter).connect(gain).connect(ctx.destination);
+  noise.start(now);
+  noise.stop(now + 0.45);
+}
+```
+

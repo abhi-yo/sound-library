@@ -1,0 +1,72 @@
+---
+title: Overview
+description: Procedural micro-interaction sound effects for web applications. Zero dependencies, copy-paste ready.
+---
+
+A collection of 45 procedural micro-UX sound effects synthesized directly in the browser with the native Web Audio API. Designed for tactile interface feedback, state confirmation, and fluid spatial transitions.
+
+---
+
+## Core Principles
+
+<Cards>
+  <Card title="Zero Dependencies" description="Synthesized on the fly using native oscillators, noise buffers, and biquad filters. No external assets required." />
+  <Card title="Latency-Free" description="Procedural audio executes synchronously within 5 milliseconds, avoiding network round-trips." />
+  <Card title="Accessible by Default" description="Automatically muted when users request reduced motion. Fully compliant with screen readers." />
+  <Card title="Standalone Code" description="Every sound is a self-contained TypeScript function. Copy and paste snippets directly into any project." />
+</Cards>
+
+---
+
+## Quick Start
+
+Copy any standalone sound function directly into your project:
+
+```ts title="lib/sounds/tap.ts"
+export function playTap() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(1800, now);
+  osc.frequency.exponentialRampToValueAtTime(700, now + 0.035);
+  
+  gain.gain.setValueAtTime(0.18, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+  
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.04);
+}
+```
+
+Trigger it in any component:
+
+```tsx title="components/button.tsx"
+'use client';
+
+import { playTap } from '@/lib/sounds/tap';
+
+export function ActionButton() {
+  return (
+    <button onClick={playTap} className="btn">
+      Confirm Action
+    </button>
+  );
+}
+```
+
+---
+
+## Sound Categories
+
+| Category | Typical Use | Included Sounds |
+| :--- | :--- | :--- |
+| [**Interaction**](/docs/sounds/interaction) | Buttons, toggles, keys, bloops, sub-kicks, haptics | `tap`, `thud`, `snap`, `pop`, `tick`, `toggle-on`, `toggle-off`, `shutter`, `keystroke`, `bloop`, `sub-kick`, `haptic-pop` |
+| [**Feedback**](/docs/sounds/feedback) | Hovers, focus states, reactions, springs, zaps | `blip`, `hover-soft`, `bubble`, `spring`, `zap` |
+| [**Notification**](/docs/sounds/notifications) | Achievements, toasts, alerts, chimes, crystals | `chime`, `bell`, `ping`, `crystal`, `shimmer` |
+| [**Navigation**](/docs/sounds/navigation) | Page transitions, sheet reveals, sweeps | `swish`, `whoosh`, `glissando`, `woosh-deep` |
+| [**System**](/docs/sounds/system) | Security locks, sub-bass haptic pulses, errors | `lock`, `unlock`, `pulse`, `error` |
+| [**Fun & Essentials**](/docs/sounds/essentials) | 8-bit games, retro effects, gamification | `coin`, `power-up`, `power-down`, `magic-sparkle`, `jump-boing`, `arcade-pew`, `heartbeat`, `sonar-ping`, `typewriter-key`, `typewriter-bell`, `synth-sweep`, `glitch`, `deep-impact`, `hollow-thock`, `success-fanfare` |

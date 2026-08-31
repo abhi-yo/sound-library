@@ -1,0 +1,31 @@
+---
+title: Accessibility
+description: Best practices for micro UX audio accessibility and prefers-reduced-motion.
+---
+
+Audio feedback should provide assistance without sensory distraction.
+
+---
+
+## 1. Respecting `prefers-reduced-motion`
+
+When users configure their OS to request reduced motion, bloub automatically mutes all procedural audio synthesis:
+
+```ts title="lib/sounds.ts"
+let soundEnabled = true;
+
+if (typeof window !== 'undefined') {
+  const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  soundEnabled = !mq.matches;
+
+  mq.addEventListener('change', (e) => {
+    soundEnabled = !e.matches;
+  });
+}
+```
+
+---
+
+## 2. Multi-Sensory Redundancy
+
+Audio must never be the sole indicator of state changes. Always pair audio events with visual state transitions, inline error messages, and `aria-live` announcements.

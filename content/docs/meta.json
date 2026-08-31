@@ -1,0 +1,13 @@
+{
+  "title": "Documentation",
+  "pages": [
+    "---Getting Started---",
+    "index",
+    "installation",
+    "cli",
+    "---Sound Catalog---",
+    "sounds",
+    "---Guides---",
+    "guides"
+  ]
+}

@@ -1,0 +1,223 @@
+---
+title: System Sounds
+description: Security latches, sub-bass haptic confirmation pulses, and validation error alerts.
+---
+
+System sounds provide clear acoustic signals for security authentication, background tasks, and error validation.
+
+---
+
+## Integration Guide
+
+<Steps>
+  <Step>
+    ### Import the Audio Trigger
+    Import `playSound` or paste the standalone function into your form or auth component:
+
+    ```ts title="lib/sounds.ts"
+    import { playSound } from '@/lib/sounds';
+    ```
+  </Step>
+
+  <Step>
+    ### Wire to Security & Form Validation Handlers
+    Trigger on error validations or auth lock/unlock state changes:
+
+    ```tsx title="components/auth-form.tsx"
+    'use client';
+
+    import { playSound } from '@/lib/sounds';
+
+    export function LoginForm() {
+      const handleLogin = (isValid: boolean) => {
+        if (!isValid) {
+          playSound('error');
+          return;
+        }
+        playSound('lock');
+      };
+
+      return (
+        <form onSubmit={(e) => { e.preventDefault(); handleLogin(false); }}>
+          <button type="submit">Log In</button>
+        </form>
+      );
+    }
+    ```
+  </Step>
+
+  <Step>
+    ### AI Prompting Workflow
+    Click **Prompt LLM** on any sound below to copy a prompt ready for Cursor, ChatGPT, Claude, or v0.
+  </Step>
+</Steps>
+
+---
+
+## Sound Catalog
+
+### Mechanical Lock (`lock`)
+
+<SoundPlayButton name="lock" />
+
+Two-stage mechanical deadbolt latch — bolt slide followed by a firm metallic seating click.
+
+```ts title="lib/sounds/lock.ts"
+export function playLock() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+
+  // Click 1: bolt sliding
+  const buf1Size = Math.floor(ctx.sampleRate * 0.02);
+  const buf1 = ctx.createBuffer(1, buf1Size, ctx.sampleRate);
+  const d1 = buf1.getChannelData(0);
+  for (let i = 0; i < buf1Size; i++) d1[i] = Math.random() * 2 - 1;
+  const n1 = ctx.createBufferSource();
+  n1.buffer = buf1;
+  const bp1 = ctx.createBiquadFilter();
+  bp1.type = 'bandpass';
+  bp1.frequency.setValueAtTime(2800, now);
+  bp1.Q.setValueAtTime(2, now);
+  const g1 = ctx.createGain();
+  g1.gain.setValueAtTime(0.18, now);
+  g1.gain.exponentialRampToValueAtTime(0.001, now + 0.015);
+  n1.connect(bp1).connect(g1).connect(ctx.destination);
+  n1.start(now);
+  n1.stop(now + 0.02);
+
+  // Click 2: bolt seating
+  const buf2Size = Math.floor(ctx.sampleRate * 0.015);
+  const buf2 = ctx.createBuffer(1, buf2Size, ctx.sampleRate);
+  const d2 = buf2.getChannelData(0);
+  for (let i = 0; i < buf2Size; i++) d2[i] = Math.random() * 2 - 1;
+  const n2 = ctx.createBufferSource();
+  n2.buffer = buf2;
+  const bp2 = ctx.createBiquadFilter();
+  bp2.type = 'bandpass';
+  bp2.frequency.setValueAtTime(1800, now + 0.025);
+  bp2.Q.setValueAtTime(3, now + 0.025);
+  const g2 = ctx.createGain();
+  g2.gain.setValueAtTime(0.001, now);
+  g2.gain.setValueAtTime(0.22, now + 0.025);
+  g2.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+  n2.connect(bp2).connect(g2).connect(ctx.destination);
+  n2.start(now + 0.025);
+  n2.stop(now + 0.045);
+}
+```
+
+---
+
+### Mechanical Unlock (`unlock`)
+
+<SoundPlayButton name="unlock" />
+
+Mechanical deadbolt unlatch — reverse of lock with bolt unseating then sliding back.
+
+```ts title="lib/sounds/unlock.ts"
+export function playUnlock() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+
+  // Click 1: bolt unseating
+  const buf1Size = Math.floor(ctx.sampleRate * 0.015);
+  const buf1 = ctx.createBuffer(1, buf1Size, ctx.sampleRate);
+  const d1 = buf1.getChannelData(0);
+  for (let i = 0; i < buf1Size; i++) d1[i] = Math.random() * 2 - 1;
+  const n1 = ctx.createBufferSource();
+  n1.buffer = buf1;
+  const bp1 = ctx.createBiquadFilter();
+  bp1.type = 'bandpass';
+  bp1.frequency.setValueAtTime(1800, now);
+  bp1.Q.setValueAtTime(3, now);
+  const g1 = ctx.createGain();
+  g1.gain.setValueAtTime(0.22, now);
+  g1.gain.exponentialRampToValueAtTime(0.001, now + 0.012);
+  n1.connect(bp1).connect(g1).connect(ctx.destination);
+  n1.start(now);
+  n1.stop(now + 0.015);
+
+  // Click 2: bolt sliding back
+  const buf2Size = Math.floor(ctx.sampleRate * 0.02);
+  const buf2 = ctx.createBuffer(1, buf2Size, ctx.sampleRate);
+  const d2 = buf2.getChannelData(0);
+  for (let i = 0; i < buf2Size; i++) d2[i] = Math.random() * 2 - 1;
+  const n2 = ctx.createBufferSource();
+  n2.buffer = buf2;
+  const bp2 = ctx.createBiquadFilter();
+  bp2.type = 'bandpass';
+  bp2.frequency.setValueAtTime(2800, now + 0.02);
+  bp2.Q.setValueAtTime(2, now + 0.02);
+  const g2 = ctx.createGain();
+  g2.gain.setValueAtTime(0.001, now);
+  g2.gain.setValueAtTime(0.18, now + 0.02);
+  g2.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+  n2.connect(bp2).connect(g2).connect(ctx.destination);
+  n2.start(now + 0.02);
+  n2.stop(now + 0.04);
+}
+```
+
+---
+
+### Haptic Pulse (`pulse`)
+
+<SoundPlayButton name="pulse" />
+
+Sub-bass tactile confirmation pulse (65Hz) for physical haptic emulation.
+
+```ts title="lib/sounds/pulse.ts"
+export function playPulse() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(65, now);
+  
+  gain.gain.setValueAtTime(0.3, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.095);
+  
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.1);
+}
+```
+
+---
+
+### Dissonant Alert (`error`)
+
+<SoundPlayButton name="error" />
+
+Dual-tone dissonant alert for invalid input, form rejection, and network failure states.
+
+```ts title="lib/sounds/error.ts"
+export function playError() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  
+  const o1 = ctx.createOscillator();
+  const g1 = ctx.createGain();
+  o1.type = 'square';
+  o1.frequency.setValueAtTime(380, now);
+  o1.frequency.exponentialRampToValueAtTime(280, now + 0.18);
+  g1.gain.setValueAtTime(0.14, now);
+  g1.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+  o1.connect(g1).connect(ctx.destination);
+  o1.start(now);
+  o1.stop(now + 0.19);
+
+  const o2 = ctx.createOscillator();
+  const g2 = ctx.createGain();
+  o2.type = 'sawtooth';
+  o2.frequency.setValueAtTime(270, now);
+  o2.frequency.exponentialRampToValueAtTime(200, now + 0.18);
+  g2.gain.setValueAtTime(0.12, now);
+  g2.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+  o2.connect(g2).connect(ctx.destination);
+  o2.start(now);
+  o2.stop(now + 0.19);
+}
+```

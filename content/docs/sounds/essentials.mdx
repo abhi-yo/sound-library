@@ -1,0 +1,521 @@
+---
+title: Fun & Essentials
+description: Playful sounds, classic UI feedback, and retro effects for gamification.
+---
+
+Fun and essential sounds provide engaging interactions, classic game-like feedback, and playful moments to delight your users.
+
+---
+
+## Integration Guide
+
+<Steps>
+  <Step>
+    ### Import the Audio Trigger
+    Import `playSound` or paste the standalone function into your component:
+
+    ```ts title="lib/sounds.ts"
+    import { playSound } from '@/lib/sounds';
+    ```
+  </Step>
+
+  <Step>
+    ### Wire to Interactions
+    Trigger on rewarding actions, level-ups, or playful UI elements:
+
+    ```tsx title="components/reward-button.tsx"
+    'use client';
+
+    import { playSound } from '@/lib/sounds';
+
+    export function RewardButton() {
+      return (
+        <button 
+          onClick={() => playSound('power-up')} 
+          className="rounded-xl bg-purple-500 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-purple-600"
+        >
+          Level Up!
+        </button>
+      );
+    }
+    ```
+  </Step>
+
+  <Step>
+    ### AI Prompting Workflow
+    Click **Prompt LLM** on any sound below to copy a prompt ready for Cursor, ChatGPT, Claude, or v0.
+  </Step>
+</Steps>
+
+---
+
+## Sound Catalog
+
+### 8-bit Coin (`coin`)
+
+<SoundPlayButton name="coin" />
+
+Classic 8-bit coin collection ping for gamified rewards.
+
+```ts title="lib/sounds/coin.ts"
+export function playCoin() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'square';
+  osc.frequency.setValueAtTime(988, now); // B5
+  osc.frequency.setValueAtTime(1318.5, now + 0.08); // E6
+  gain.gain.setValueAtTime(0.1, now);
+  gain.gain.setValueAtTime(0.1, now + 0.08);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.35);
+}
+```
+
+---
+
+### Power Up (`power-up`)
+
+<SoundPlayButton name="power-up" />
+
+Ascending major arpeggio for leveling up, success, and positive reinforcement.
+
+```ts title="lib/sounds/power-up.ts"
+export function playPowerUp() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const freqs = [440, 554.37, 659.25, 880];
+  freqs.forEach((freq, idx) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(freq, now + idx * 0.1);
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.linearRampToValueAtTime(0.15, now + idx * 0.1 + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.1 + 0.2);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(now + idx * 0.1);
+    osc.stop(now + idx * 0.1 + 0.25);
+  });
+}
+```
+
+---
+
+### Power Down (`power-down`)
+
+<SoundPlayButton name="power-down" />
+
+Descending sweep for deactivation, power loss, or failure states.
+
+```ts title="lib/sounds/power-down.ts"
+export function playPowerDown() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(300, now);
+  osc.frequency.exponentialRampToValueAtTime(40, now + 0.4);
+  gain.gain.setValueAtTime(0.2, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.45);
+}
+```
+
+---
+
+### Magic Sparkle (`magic-sparkle`)
+
+<SoundPlayButton name="magic-sparkle" />
+
+Shimmering randomized high-frequency fairy dust.
+
+```ts title="lib/sounds/magic-sparkle.ts"
+export function playMagicSparkle() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  for (let i = 0; i < 8; i++) {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1500 + Math.random() * 2000, now + i * 0.05);
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.linearRampToValueAtTime(0.1, now + i * 0.05 + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.05 + 0.15);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(now + i * 0.05);
+    osc.stop(now + i * 0.05 + 0.2);
+  }
+}
+```
+
+---
+
+### Jump Boing (`jump-boing`)
+
+<SoundPlayButton name="jump-boing" />
+
+Comical pitch-bent bouncy jump for playful navigation.
+
+```ts title="lib/sounds/jump-boing.ts"
+export function playJumpBoing() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'triangle';
+  osc.frequency.setValueAtTime(150, now);
+  osc.frequency.exponentialRampToValueAtTime(600, now + 0.15);
+  osc.frequency.exponentialRampToValueAtTime(200, now + 0.3);
+  gain.gain.setValueAtTime(0.2, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.35);
+}
+```
+
+---
+
+### Arcade Laser (`arcade-pew`)
+
+<SoundPlayButton name="arcade-pew" />
+
+Classic retro 8-bit laser shot.
+
+```ts title="lib/sounds/arcade-pew.ts"
+export function playArcadePew() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'square';
+  osc.frequency.setValueAtTime(880, now);
+  osc.frequency.exponentialRampToValueAtTime(110, now + 0.15);
+  gain.gain.setValueAtTime(0.15, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.2);
+}
+```
+
+---
+
+### Heartbeat Pulse (`heartbeat`)
+
+<SoundPlayButton name="heartbeat" />
+
+Deep, dual-stage low-frequency pulse for tense or vital interactions.
+
+```ts title="lib/sounds/heartbeat.ts"
+export function playHeartbeat() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  [0, 0.2].forEach((delay) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(50, now + delay);
+    osc.frequency.exponentialRampToValueAtTime(30, now + delay + 0.1);
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.linearRampToValueAtTime(0.4, now + delay + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.15);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(now + delay);
+    osc.stop(now + delay + 0.2);
+  });
+}
+```
+
+---
+
+### Sonar Ping (`sonar-ping`)
+
+<SoundPlayButton name="sonar-ping" />
+
+High-pitched ping with a long echoing decay for radar or discovery elements.
+
+```ts title="lib/sounds/sonar-ping.ts"
+export function playSonarPing() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(1200, now);
+  gain.gain.setValueAtTime(0.3, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 1.25);
+}
+```
+
+---
+
+### Typewriter Key (`typewriter-key`)
+
+<SoundPlayButton name="typewriter-key" />
+
+Crisp, vintage mechanical typewriter clack for text reveals.
+
+```ts title="lib/sounds/typewriter-key.ts"
+export function playTypewriterKey() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const bufSize = Math.floor(ctx.sampleRate * 0.04);
+  const buffer = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+  const bp = ctx.createBiquadFilter();
+  bp.type = 'bandpass';
+  bp.frequency.setValueAtTime(2500, now);
+  bp.Q.setValueAtTime(1.5, now);
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0.25, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+  noise.connect(bp).connect(gain).connect(ctx.destination);
+  noise.start(now);
+  noise.stop(now + 0.04);
+}
+```
+
+---
+
+### Typewriter Bell (`typewriter-bell`)
+
+<SoundPlayButton name="typewriter-bell" />
+
+Bright, resonant carriage-return ding.
+
+```ts title="lib/sounds/typewriter-bell.ts"
+export function playTypewriterBell() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(1600, now);
+  gain.gain.setValueAtTime(0.2, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.85);
+  
+  const osc2 = ctx.createOscillator();
+  const gain2 = ctx.createGain();
+  osc2.type = 'sine';
+  osc2.frequency.setValueAtTime(1620, now);
+  gain2.gain.setValueAtTime(0.1, now);
+  gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+  osc2.connect(gain2).connect(ctx.destination);
+  osc2.start(now);
+  osc2.stop(now + 0.65);
+}
+```
+
+---
+
+### Synth Sweep (`synth-sweep`)
+
+<SoundPlayButton name="synth-sweep" />
+
+Dramatic, resonant low-pass filter sweep for transitions.
+
+```ts title="lib/sounds/synth-sweep.ts"
+export function playSynthSweep() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(110, now);
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.setValueAtTime(100, now);
+  filter.frequency.exponentialRampToValueAtTime(4000, now + 0.3);
+  filter.frequency.exponentialRampToValueAtTime(100, now + 0.6);
+  filter.Q.setValueAtTime(5, now);
+  gain.gain.setValueAtTime(0.001, now);
+  gain.gain.linearRampToValueAtTime(0.15, now + 0.1);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+  osc.connect(filter).connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.65);
+}
+```
+
+---
+
+### Digital Glitch (`glitch`)
+
+<SoundPlayButton name="glitch" />
+
+Fast, erratic, randomized noise and square waves for error or cyber themes.
+
+```ts title="lib/sounds/glitch.ts"
+export function playGlitch() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  
+  // 1. Harsh Sawtooth Buzz ("bzzzt")
+  const buzz = ctx.createOscillator();
+  buzz.type = 'sawtooth';
+  // Frequency jumps to simulate digital corruption
+  buzz.frequency.setValueAtTime(60, now);
+  buzz.frequency.setValueAtTime(120, now + 0.06);
+  
+  const buzzGain = ctx.createGain();
+  buzzGain.gain.setValueAtTime(0.3, now);
+  // "chk" stutter
+  buzzGain.gain.setValueAtTime(0, now + 0.02);
+  buzzGain.gain.setValueAtTime(0.3, now + 0.03);
+  buzzGain.gain.setValueAtTime(0, now + 0.05);
+  // main buzz
+  buzzGain.gain.setValueAtTime(0.3, now + 0.06);
+  buzzGain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+  
+  buzz.connect(buzzGain).connect(ctx.destination);
+  buzz.start(now);
+  buzz.stop(now + 0.13);
+
+  // 2. Digital Static ("krrrk")
+  const bufSize = Math.floor(ctx.sampleRate * 0.15);
+  const buffer = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+  
+  // Highpass to make it thin and digital
+  const hp = ctx.createBiquadFilter();
+  hp.type = 'highpass';
+  hp.frequency.setValueAtTime(3000, now);
+  
+  const noiseGain = ctx.createGain();
+  // Sync the stutters with the buzz
+  noiseGain.gain.setValueAtTime(0.4, now);
+  noiseGain.gain.setValueAtTime(0, now + 0.02);
+  noiseGain.gain.setValueAtTime(0.4, now + 0.03);
+  noiseGain.gain.setValueAtTime(0, now + 0.05);
+  noiseGain.gain.setValueAtTime(0.2, now + 0.06);
+  noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+  
+  noise.connect(hp).connect(noiseGain).connect(ctx.destination);
+  noise.start(now);
+  noise.stop(now + 0.13);
+}
+```
+
+---
+
+### Deep Impact (`deep-impact`)
+
+<SoundPlayButton name="deep-impact" />
+
+Cinematic low-frequency boom with a noise tail for heavy reveals.
+
+```ts title="lib/sounds/deep-impact.ts"
+export function playDeepImpact() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(120, now);
+  osc.frequency.exponentialRampToValueAtTime(30, now + 0.5);
+  gain.gain.setValueAtTime(0.4, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.85);
+
+  const bufSize = Math.floor(ctx.sampleRate * 0.3);
+  const buffer = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+  const lp = ctx.createBiquadFilter();
+  lp.type = 'lowpass';
+  lp.frequency.setValueAtTime(400, now);
+  const nGain = ctx.createGain();
+  nGain.gain.setValueAtTime(0.2, now);
+  nGain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+  noise.connect(lp).connect(nGain).connect(ctx.destination);
+  noise.start(now);
+  noise.stop(now + 0.35);
+}
+```
+
+---
+
+### Hollow Thock (`hollow-thock`)
+
+<SoundPlayButton name="hollow-thock" />
+
+Resonant wooden block percussion sound.
+
+```ts title="lib/sounds/hollow-thock.ts"
+export function playHollowThock() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'triangle';
+  osc.frequency.setValueAtTime(600, now);
+  osc.frequency.exponentialRampToValueAtTime(200, now + 0.04);
+  gain.gain.setValueAtTime(0.25, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.06);
+  
+  const osc2 = ctx.createOscillator();
+  const gain2 = ctx.createGain();
+  osc2.type = 'sine';
+  osc2.frequency.setValueAtTime(300, now);
+  osc2.frequency.exponentialRampToValueAtTime(100, now + 0.04);
+  gain2.gain.setValueAtTime(0.15, now);
+  gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+  osc2.connect(gain2).connect(ctx.destination);
+  osc2.start(now);
+  osc2.stop(now + 0.06);
+}
+```
+
+---
+
+### Success Fanfare (`success-fanfare`)
+
+<SoundPlayButton name="success-fanfare" />
+
+Short, triumphant multi-tone chord sequence.
+
+```ts title="lib/sounds/success-fanfare.ts"
+export function playSuccessFanfare() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const freqs = [392.00, 523.25, 659.25]; // G4, C5, E5
+  freqs.forEach((freq, idx) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(freq, now);
+    gain.gain.setValueAtTime(0.1, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.65);
+  });
+}
+```

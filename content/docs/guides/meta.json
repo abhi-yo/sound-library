@@ -1,0 +1,10 @@
+{
+  "title": "Guides",
+  "root": true,
+  "pages": [
+    "react",
+    "vue-svelte",
+    "custom-sounds",
+    "accessibility"
+  ]
+}

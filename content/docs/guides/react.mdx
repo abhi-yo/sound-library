@@ -1,0 +1,64 @@
+---
+title: React & Next.js
+description: Integration patterns for React 19 and Next.js App Router applications.
+---
+
+Guidelines for integrating procedural audio into React components.
+
+---
+
+## Custom Hook (`useSound`)
+
+```tsx title="hooks/use-sound.ts"
+'use client';
+
+import { useCallback, useRef } from 'react';
+import { playSound, type SoundName } from '@/lib/sounds';
+
+export function useSound(name: SoundName, disabled = false) {
+  const disabledRef = useRef(disabled);
+  disabledRef.current = disabled;
+
+  const play = useCallback(() => {
+    if (disabledRef.current) return;
+    playSound(name);
+  }, [name]);
+
+  return { play };
+}
+```
+
+---
+
+## Component Composition
+
+Instead of multiplying boolean props on buttons, compose interactive primitives cleanly:
+
+```tsx title="components/sound-button.tsx"
+'use client';
+
+import React from 'react';
+import { playSound, type SoundName } from '@/lib/sounds';
+
+interface SoundButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  sound?: SoundName;
+}
+
+export function SoundButton({
+  sound = 'tap',
+  onClick,
+  children,
+  ...props
+}: SoundButtonProps) {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    playSound(sound);
+    onClick?.(e);
+  };
+
+  return (
+    <button onClick={handleClick} {...props}>
+      {children}
+    </button>
+  );
+}
+```

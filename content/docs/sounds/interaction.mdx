@@ -1,0 +1,475 @@
+---
+title: Interaction Sounds
+description: Tactile audio feedback for buttons, toggles, dial steppers, range sliders, and mechanical keyboards.
+---
+
+Interaction sounds provide immediate acoustic confirmation of user input, confirming intent without causing visual fatigue.
+
+---
+
+## Integration Guide
+
+<Steps>
+  <Step>
+    ### Import the Audio Trigger
+    Import the central `playSound` utility or copy the standalone function directly into your component:
+
+    ```ts title="lib/sounds.ts"
+    import { playSound } from '@/lib/sounds';
+    ```
+  </Step>
+
+  <Step>
+    ### Wire to Interactive Elements
+    Trigger the sound inside your `onClick` or `onChange` event handlers:
+
+    ```tsx title="components/button.tsx"
+    'use client';
+
+    import { playSound } from '@/lib/sounds';
+
+    export function PrimaryButton({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
+      return (
+        <button
+          onClick={(e) => {
+            playSound('tap');
+            onClick?.();
+          }}
+          className="rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-transform active:scale-95"
+        >
+          {children}
+        </button>
+      );
+    }
+    ```
+  </Step>
+
+  <Step>
+    ### AI Prompting Workflow
+    Click **Prompt LLM** on any sound below to copy a prompt ready for Cursor, ChatGPT, Claude, or v0.
+  </Step>
+</Steps>
+
+---
+
+## Sound Catalog
+
+### Capacitive Tap (`tap`)
+
+<SoundPlayButton name="tap" />
+
+Ultra-clean micro capacitive tap for primary buttons, list selections, and menu items.
+
+```ts title="lib/sounds/tap.ts"
+export function playTap() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(1800, now);
+  osc.frequency.exponentialRampToValueAtTime(700, now + 0.035);
+  
+  gain.gain.setValueAtTime(0.18, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+  
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.04);
+}
+```
+
+---
+
+### Tactile Thud (`thud`)
+
+<SoundPlayButton name="thud" />
+
+Deep dampened low-frequency thock for solid primary actions and destructive confirmations.
+
+```ts title="lib/sounds/thud.ts"
+export function playThud() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  const filter = ctx.createBiquadFilter();
+  
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(95, now);
+  osc.frequency.exponentialRampToValueAtTime(36, now + 0.045);
+  
+  filter.type = 'lowpass';
+  filter.frequency.setValueAtTime(280, now);
+  
+  gain.gain.setValueAtTime(0.24, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+  
+  osc.connect(filter).connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.055);
+}
+```
+
+---
+
+### Haptic Snap (`snap`)
+
+<SoundPlayButton name="snap" />
+
+Crisp finger-snap transient for checkboxes, segmented pills, and sharp tactile feedback.
+
+```ts title="lib/sounds/snap.ts"
+export function playSnap() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+
+  const bufSize = Math.floor(ctx.sampleRate * 0.025);
+  const buffer = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+
+  const bp = ctx.createBiquadFilter();
+  bp.type = 'bandpass';
+  bp.frequency.setValueAtTime(3200, now);
+  bp.Q.setValueAtTime(2.5, now);
+
+  const hp = ctx.createBiquadFilter();
+  hp.type = 'highpass';
+  hp.frequency.setValueAtTime(1200, now);
+
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0.28, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.018);
+
+  noise.connect(bp).connect(hp).connect(gain).connect(ctx.destination);
+  noise.start(now);
+  noise.stop(now + 0.025);
+}
+```
+
+---
+
+### Bubbly Pop (`pop`)
+
+<SoundPlayButton name="pop" />
+
+Punchy bubbly pop for likes, badges, tooltips, and expanding accordions.
+
+```ts title="lib/sounds/pop.ts"
+export function playPop() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(720, now);
+  osc.frequency.exponentialRampToValueAtTime(340, now + 0.04);
+
+  gain.gain.setValueAtTime(0.3, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
+
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.05);
+}
+```
+
+---
+
+### Dial Tick (`tick`)
+
+<SoundPlayButton name="tick" />
+
+Ultra-fast percussive micro-tick for range sliders, rotary dials, and numeric scrubbers.
+
+```ts title="lib/sounds/tick.ts"
+export function playTick() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  
+  osc.type = 'square';
+  osc.frequency.setValueAtTime(4800, now);
+  osc.frequency.exponentialRampToValueAtTime(1100, now + 0.007);
+  
+  gain.gain.setValueAtTime(0.07, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.008);
+  
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.01);
+}
+```
+
+---
+
+### Toggle Activate (`toggle-on`)
+
+<SoundPlayButton name="toggle-on" />
+
+Upward pitch step confirming activation of switches and enabled toggles.
+
+```ts title="lib/sounds/toggle-on.ts"
+export function playToggleOn() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(520, now);
+  osc.frequency.exponentialRampToValueAtTime(820, now + 0.06);
+  
+  gain.gain.setValueAtTime(0.18, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.075);
+  
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.08);
+}
+```
+
+---
+
+### Toggle Deactivate (`toggle-off`)
+
+<SoundPlayButton name="toggle-off" />
+
+Downward pitch step confirming deactivation of switches and disabled toggles.
+
+```ts title="lib/sounds/toggle-off.ts"
+export function playToggleOff() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(820, now);
+  osc.frequency.exponentialRampToValueAtTime(520, now + 0.06);
+  
+  gain.gain.setValueAtTime(0.15, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.075);
+  
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.08);
+}
+```
+
+---
+
+### Camera Shutter (`shutter`)
+
+<SoundPlayButton name="shutter" />
+
+Authentic mechanical camera shutter clap — crisp mirror lift followed by a snappy curtain clap.
+
+```ts title="lib/sounds/shutter.ts"
+export function playShutter() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+
+  // 1. Initial mirror lift & front curtain
+  const buf1Size = Math.floor(ctx.sampleRate * 0.016);
+  const buf1 = ctx.createBuffer(1, buf1Size, ctx.sampleRate);
+  const d1 = buf1.getChannelData(0);
+  for (let i = 0; i < buf1Size; i++) d1[i] = Math.random() * 2 - 1;
+  const n1 = ctx.createBufferSource();
+  n1.buffer = buf1;
+  const bp1 = ctx.createBiquadFilter();
+  bp1.type = 'bandpass';
+  bp1.frequency.setValueAtTime(3800, now);
+  bp1.Q.setValueAtTime(2.0, now);
+  const g1 = ctx.createGain();
+  g1.gain.setValueAtTime(0.24, now);
+  g1.gain.exponentialRampToValueAtTime(0.001, now + 0.014);
+  n1.connect(bp1).connect(g1).connect(ctx.destination);
+  n1.start(now);
+  n1.stop(now + 0.016);
+
+  const osc1 = ctx.createOscillator();
+  const oscGain1 = ctx.createGain();
+  osc1.type = 'triangle';
+  osc1.frequency.setValueAtTime(1100, now);
+  osc1.frequency.exponentialRampToValueAtTime(450, now + 0.012);
+  oscGain1.gain.setValueAtTime(0.12, now);
+  oscGain1.gain.exponentialRampToValueAtTime(0.001, now + 0.014);
+  osc1.connect(oscGain1).connect(ctx.destination);
+  osc1.start(now);
+  osc1.stop(now + 0.016);
+
+  // 2. Main Shutter Curtain Clap & Mirror Return
+  const delay = 0.038;
+  const buf2Size = Math.floor(ctx.sampleRate * 0.028);
+  const buf2 = ctx.createBuffer(1, buf2Size, ctx.sampleRate);
+  const d2 = buf2.getChannelData(0);
+  for (let i = 0; i < buf2Size; i++) d2[i] = Math.random() * 2 - 1;
+  const n2 = ctx.createBufferSource();
+  n2.buffer = buf2;
+  const bp2 = ctx.createBiquadFilter();
+  bp2.type = 'bandpass';
+  bp2.frequency.setValueAtTime(2600, now + delay);
+  bp2.Q.setValueAtTime(1.6, now + delay);
+  const g2 = ctx.createGain();
+  g2.gain.setValueAtTime(0.001, now);
+  g2.gain.setValueAtTime(0.38, now + delay);
+  g2.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.022);
+  n2.connect(bp2).connect(g2).connect(ctx.destination);
+  n2.start(now + delay);
+  n2.stop(now + delay + 0.028);
+
+  const buf3Size = Math.floor(ctx.sampleRate * 0.012);
+  const buf3 = ctx.createBuffer(1, buf3Size, ctx.sampleRate);
+  const d3 = buf3.getChannelData(0);
+  for (let i = 0; i < buf3Size; i++) d3[i] = Math.random() * 2 - 1;
+  const n3 = ctx.createBufferSource();
+  n3.buffer = buf3;
+  const hp3 = ctx.createBiquadFilter();
+  hp3.type = 'highpass';
+  hp3.frequency.setValueAtTime(3200, now + delay + 0.005);
+  const g3 = ctx.createGain();
+  g3.gain.setValueAtTime(0.001, now);
+  g3.gain.setValueAtTime(0.26, now + delay + 0.005);
+  g3.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.016);
+  n3.connect(hp3).connect(g3).connect(ctx.destination);
+  n3.start(now + delay + 0.005);
+  n3.stop(now + delay + 0.018);
+
+  const osc2 = ctx.createOscillator();
+  const oscGain2 = ctx.createGain();
+  osc2.type = 'sine';
+  osc2.frequency.setValueAtTime(580, now + delay);
+  osc2.frequency.exponentialRampToValueAtTime(260, now + delay + 0.018);
+  oscGain2.gain.setValueAtTime(0.001, now);
+  oscGain2.gain.setValueAtTime(0.18, now + delay);
+  oscGain2.gain.exponentialRampToValueAtTime(0.001, now + delay + 0.02);
+  osc2.connect(oscGain2).connect(ctx.destination);
+  osc2.start(now + delay);
+  osc2.stop(now + delay + 0.022);
+}
+```
+
+---
+
+### Mechanical Key (`keystroke`)
+
+<SoundPlayButton name="keystroke" />
+
+Crisp Cherry MX Red linear switch bottom-out clack — pure plastic impact, zero bass.
+
+```ts title="lib/sounds/keystroke.ts"
+export function playKeystroke() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  
+  // Noise burst for plastic-on-plastic clack
+  const bufSize = Math.floor(ctx.sampleRate * 0.018);
+  const buffer = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+
+  // Bandpass to isolate the plasticky clack range
+  const bp = ctx.createBiquadFilter();
+  bp.type = 'bandpass';
+  bp.frequency.setValueAtTime(4200, now);
+  bp.Q.setValueAtTime(1.8, now);
+
+  // Highpass to kill any remaining low end
+  const hp = ctx.createBiquadFilter();
+  hp.type = 'highpass';
+  hp.frequency.setValueAtTime(1800, now);
+
+  const gain = ctx.createGain();
+  gain.gain.setValueAtTime(0.22, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.014);
+
+  noise.connect(bp).connect(hp).connect(gain).connect(ctx.destination);
+  noise.start(now);
+  noise.stop(now + 0.018);
+}
+```
+
+---
+
+### Cute Bloop (`bloop`)
+
+<SoundPlayButton name="bloop" />
+
+A hollow, satisfying liquid drop sound for playful interactions and micro-animations.
+
+```ts title="lib/sounds/bloop.ts"
+export function playBloop() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(600, now);
+  osc.frequency.exponentialRampToValueAtTime(150, now + 0.08);
+  gain.gain.setValueAtTime(0.3, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.09);
+}
+```
+
+---
+
+### Deep Sub-Kick (`sub-kick`)
+
+<SoundPlayButton name="sub-kick" />
+
+A heavy, satisfying low-frequency kick for confirming major primary actions.
+
+```ts title="lib/sounds/sub-kick.ts"
+export function playSubKick() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(150, now);
+  osc.frequency.exponentialRampToValueAtTime(40, now + 0.1);
+  gain.gain.setValueAtTime(0.4, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.16);
+}
+```
+
+---
+
+### Haptic Pop (`haptic-pop`)
+
+<SoundPlayButton name="haptic-pop" />
+
+A sharp, immediate micro-interaction sound mimicking high-end physical haptic feedback engines.
+
+```ts title="lib/sounds/haptic-pop.ts"
+export function playHapticPop() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'square';
+  osc.frequency.setValueAtTime(120, now);
+  osc.frequency.exponentialRampToValueAtTime(40, now + 0.02);
+  gain.gain.setValueAtTime(0.3, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.035);
+}
+```
+

@@ -1,0 +1,103 @@
+---
+title: Designing Custom Web Audio Sounds
+description: Master Web Audio API synthesis principles including Oscillators, ADSR gain envelopes, biquad filters, and noise generation to design your own interface sounds.
+---
+
+Learn the fundamental audio synthesis building blocks used to craft tailored micro-UX audio interactions without external audio files.
+
+---
+
+## The Synthesis Pipeline
+
+In the browser's native Web Audio API, sound flows from an audio generator through shaping nodes to the output destination:
+
+1. **Oscillator / Noise Generator** — Produces the raw pitch or frequency spectrum.
+2. **Biquad Filter** — Shapes the timbre (e.g. lowpass to soften harsh high frequencies).
+3. **Gain Node** — Controls the ADSR volume envelope and decay duration.
+4. **AudioDestination** — Routes the sound to the device's speakers.
+
+---
+
+## 1. Waveforms (`OscillatorNode`)
+
+The Web Audio API provides 4 fundamental periodic waveform types:
+
+- **`sine`**: Pure tone with zero harmonics. Ideal for clean clicks, chimes, and bubbles (`tap`, `pop`, `chime`).
+- **`triangle`**: Warm tone with gentle odd harmonics. Ideal for physical keypresses and soft thuds.
+- **`square`**: Rich, percussive harmonic spectrum. Great for tactile snaps and mechanical toggles.
+- **`sawtooth`**: Sharp, buzzy tone with all integer harmonics. Used for alarms and validation errors.
+
+```ts title="Example: Oscillator Setup"
+const osc = ctx.createOscillator();
+osc.type = 'sine';
+osc.frequency.setValueAtTime(1200, now);
+osc.frequency.exponentialRampToValueAtTime(400, now + 0.04);
+```
+
+---
+
+## 2. Gain Envelopes (`GainNode`)
+
+The volume envelope determines the snappy feel of interface sounds. For micro-interactions, use **instant attack** with **exponential decay**:
+
+```ts title="Example: Exponential Decay Envelope"
+const gain = ctx.createGain();
+gain.gain.setValueAtTime(0.2, now);
+gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+```
+
+---
+
+## 3. Tone Sculpting (`BiquadFilterNode`)
+
+Filters attenuate harsh frequencies to create dampened acoustic textures:
+
+```ts title="Example: Lowpass Tone Filter"
+const filter = ctx.createBiquadFilter();
+filter.type = 'lowpass';
+filter.frequency.setValueAtTime(320, now);
+```
+
+---
+
+## Step-by-Step: Crafting a "Glass Tap" Sound
+
+Here is a complete zero-dependency function synthesizing a high-frequency metallic tap:
+
+<Steps>
+  <Step>
+    ### Initialize the Web Audio Context
+    ```ts
+    const ctx = new AudioContext();
+    const now = ctx.currentTime;
+    ```
+  </Step>
+
+  <Step>
+    ### Configure the Frequency Ramp
+    ```ts
+    const osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(2400, now);
+    osc.frequency.exponentialRampToValueAtTime(800, now + 0.035);
+    ```
+  </Step>
+
+  <Step>
+    ### Add the Fast-Decay Envelope
+    ```ts
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.18, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+    ```
+  </Step>
+
+  <Step>
+    ### Connect and Trigger
+    ```ts
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.04);
+    ```
+  </Step>
+</Steps>

@@ -1,0 +1,71 @@
+---
+title: All Sounds
+description: Complete reference of all 35 procedural micro-UX sound effects organized by interaction category.
+---
+
+Browse the complete collection of zero-dependency Web Audio API procedural sound effects. Click any category below to audition individual sounds, explore framework integration guides, and copy standalone source code.
+
+---
+
+## Browse by Category
+
+<Cards>
+  <Card title="Interaction Sounds" href="/docs/sounds/interaction" description="Buttons, thuds, snaps, bubbles, toggles, dial ticks, camera shutter, mechanical keystrokes, bloops, sub-kicks, and haptic pops." />
+  <Card title="Feedback Sounds" href="/docs/sounds/feedback" description="Ascending chirps, muted pulses, organic bubbles, elastic springs, and futuristic laser zaps." />
+  <Card title="Notification Sounds" href="/docs/sounds/notifications" description="Harmonic chimes, celebration bells, resonant pings, glassy crystals, and magical shimmers." />
+  <Card title="Navigation Sounds" href="/docs/sounds/navigation" description="Filtered noise sweeps, elegant glissandos, atmospheric whooshes, and deep spatial reveals." />
+  <Card title="System Sounds" href="/docs/sounds/system" description="Security latches, sub-bass haptic pulses, and validation errors." />
+  <Card title="Fun & Essentials" href="/docs/sounds/essentials" description="Playful sounds, classic 8-bit UI feedback, and retro effects for gamification." />
+</Cards>
+
+---
+
+## Acoustic Reference Specifications
+
+| Sound | Category | Duration | Synthesis Method |
+| :--- | :--- | :--- | :--- |
+| [`tap`](/docs/sounds/interaction#capacitive-tap-tap) | Interaction | 35ms | Sine pitch ramp (1800Hz → 700Hz) |
+| [`thud`](/docs/sounds/interaction#tactile-thud-thud) | Interaction | 50ms | Lowpass sine thock (95Hz → 36Hz) |
+| [`snap`](/docs/sounds/interaction#haptic-snap-snap) | Interaction | 25ms | Square wave fast decay |
+| [`pop`](/docs/sounds/interaction#bubbly-pop-pop) | Interaction | 70ms | Resonant pitch drop (880Hz → 140Hz) |
+| [`tick`](/docs/sounds/interaction#dial-tick-tick) | Interaction | 8ms | Square fast decay (4800Hz → 1100Hz) |
+| [`toggle-on`](/docs/sounds/interaction#toggle-activate-toggle-on) | Interaction | 75ms | Sine upward glide (520Hz → 820Hz) |
+| [`toggle-off`](/docs/sounds/interaction#toggle-deactivate-toggle-off) | Interaction | 75ms | Sine downward glide (820Hz → 520Hz) |
+| [`shutter`](/docs/sounds/interaction#camera-shutter-shutter) | Interaction | 80ms | Dual mechanical transient |
+| [`keystroke`](/docs/sounds/interaction#mechanical-key-keystroke) | Interaction | 60ms | 3-layer tactile switch bottom-out |
+| [`bloop`](/docs/sounds/interaction#cute-bloop-bloop) | Interaction | 90ms | Sine resonant drop (600Hz → 150Hz) |
+| [`sub-kick`](/docs/sounds/interaction#deep-sub-kick-sub-kick) | Interaction | 160ms | Deep sine kick (150Hz → 40Hz) |
+| [`haptic-pop`](/docs/sounds/interaction#haptic-pop-haptic-pop) | Interaction | 35ms | Sharp immediate haptic square |
+| [`blip`](/docs/sounds/feedback#hover-blip-blip) | Feedback | 45ms | Ascending sine chirp (1150Hz → 2300Hz) |
+| [`hover-soft`](/docs/sounds/feedback#soft-pulse-hover-soft) | Feedback | 50ms | Fixed sine pulse (820Hz) |
+| [`bubble`](/docs/sounds/feedback#liquid-bubbles-bubble) | Feedback | 100ms | Rapid sequence of liquid pops |
+| [`spring`](/docs/sounds/feedback#bouncy-spring-spring) | Feedback | 250ms | Sine frequency modulation |
+| [`zap`](/docs/sounds/feedback#laser-zap-zap) | Feedback | 110ms | Sharp sawtooth lowpass sweep |
+| [`chime`](/docs/sounds/notifications#ascending-chime-chime) | Notification | 280ms | Dual-tone ascending interval (660Hz + 990Hz) |
+| [`bell`](/docs/sounds/notifications#triad-bell-bell) | Notification | 300ms | Triad chord arpeggio (880Hz + 1100Hz + 1320Hz) |
+| [`ping`](/docs/sounds/notifications#resonant-ping-ping) | Notification | 140ms | Curved frequency resonance (1050Hz → 1750Hz) |
+| [`crystal`](/docs/sounds/notifications#glassy-crystal-crystal) | Notification | 450ms | Long resonant pure tone (2400Hz → 1800Hz) |
+| [`shimmer`](/docs/sounds/notifications#magical-shimmer-shimmer) | Notification | 250ms | Multi-layered triangle chord |
+| [`swish`](/docs/sounds/navigation#filtered-swish-swish) | Navigation | 200ms | Filtered noise sweep with lowpass |
+| [`whoosh`](/docs/sounds/navigation#atmospheric-whoosh-whoosh) | Navigation | 380ms | Atmospheric spatial noise sweep |
+| [`glissando`](/docs/sounds/navigation#elegant-glissando-glissando) | Navigation | 170ms | Sine exponential swipe (400Hz → 1200Hz) |
+| [`woosh-deep`](/docs/sounds/navigation#heavy-woosh-woosh-deep) | Navigation | 450ms | Filtered heavy spatial noise sweep |
+| [`lock`](/docs/sounds/system#mechanical-lock-lock) | System | 60ms | Dual-frequency mechanical latch |
+| [`unlock`](/docs/sounds/system#mechanical-unlock-unlock) | System | 50ms | Triangle pitch rise (600Hz → 1400Hz) |
+| [`pulse`](/docs/sounds/system#haptic-pulse-pulse) | System | 95ms | Sub-bass tactile pulse (65Hz) |
+| [`error`](/docs/sounds/system#dissonant-alert-error) | System | 180ms | Dissonant square alert (380Hz → 280Hz) |
+| [`coin`](/docs/sounds/essentials#8-bit-coin-coin) | Fun & Essentials | 350ms | 8-bit square arpeggio |
+| [`power-up`](/docs/sounds/essentials#power-up-power-up) | Fun & Essentials | 400ms | Major arpeggio |
+| [`power-down`](/docs/sounds/essentials#power-down-power-down) | Fun & Essentials | 450ms | Sawtooth sweep |
+| [`magic-sparkle`](/docs/sounds/essentials#magic-sparkle-magic-sparkle) | Fun & Essentials | 500ms | Random sine bursts |
+| [`jump-boing`](/docs/sounds/essentials#jump-boing-jump-boing) | Fun & Essentials | 350ms | Triangle pitch bend |
+| [`arcade-pew`](/docs/sounds/essentials#arcade-laser-arcade-pew) | Fun & Essentials | 200ms | Square pitch drop |
+| [`heartbeat`](/docs/sounds/essentials#heartbeat-pulse-heartbeat) | Fun & Essentials | 500ms | Dual sine pulse |
+| [`sonar-ping`](/docs/sounds/essentials#sonar-ping-sonar-ping) | Fun & Essentials | 1250ms | Echoing high sine |
+| [`typewriter-key`](/docs/sounds/essentials#typewriter-key-typewriter-key) | Fun & Essentials | 40ms | Bandpassed noise click |
+| [`typewriter-bell`](/docs/sounds/essentials#typewriter-bell-typewriter-bell) | Fun & Essentials | 850ms | Dual sine ring |
+| [`synth-sweep`](/docs/sounds/essentials#synth-sweep-synth-sweep) | Fun & Essentials | 650ms | Sawtooth filter sweep |
+| [`glitch`](/docs/sounds/essentials#digital-glitch-glitch) | Fun & Essentials | 120ms | Erratic random square |
+| [`deep-impact`](/docs/sounds/essentials#deep-impact-deep-impact) | Fun & Essentials | 850ms | Low sine + noise boom |
+| [`hollow-thock`](/docs/sounds/essentials#hollow-thock-hollow-thock) | Fun & Essentials | 60ms | Triangle percussion |
+| [`success-fanfare`](/docs/sounds/essentials#success-fanfare-success-fanfare) | Fun & Essentials | 650ms | Triumphant chord |

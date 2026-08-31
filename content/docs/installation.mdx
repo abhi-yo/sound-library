@@ -1,0 +1,92 @@
+---
+title: Installation
+description: Zero-dependency integration guide for procedural Web Audio micro-interactions.
+---
+
+This sound library requires **zero package installations** or external npm dependencies. Every sound is synthesized natively in the browser using the Web Audio API.
+
+---
+
+## 1. 1-Click AI Prompting (Cursor, Claude, ChatGPT, v0)
+
+If you use an AI coding assistant, click the **Prompt** button on any sound in the [Sounds Catalog](/docs/sounds) to copy a structured prompt ready to paste into your chat:
+
+```text title="Example AI Prompt"
+Implement the "Capacitive Tap" (tap) micro-interaction sound effect in my React / Next.js web application.
+1. Add this standalone zero-dependency Web Audio API function to my project:
+[TypeScript Web Audio code]
+2. Wire up playTap() to trigger on button click.
+```
+
+---
+
+## 2. Standalone Copy-Paste
+
+Every sound in the catalog is completely self-contained. Copy the TypeScript function directly into your project's `lib/sounds/` directory:
+
+```ts title="lib/sounds/tap.ts"
+export function playTap() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(1800, now);
+  osc.frequency.exponentialRampToValueAtTime(700, now + 0.035);
+  
+  gain.gain.setValueAtTime(0.18, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+  
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.04);
+}
+```
+
+Trigger it in any component:
+
+```tsx title="components/button.tsx"
+'use client';
+
+import { playTap } from '@/lib/sounds/tap';
+
+export function Button() {
+  return (
+    <button onClick={playTap} className="btn">
+      Click Me
+    </button>
+  );
+}
+```
+
+---
+
+## 3. Central Audio Manager
+
+For production applications with multiple sounds, a single shared `AudioContext` with a dynamics compressor guarantees uniform volume levels and zero audio latency across all components:
+
+```ts title="lib/sounds.ts"
+let audioCtx: AudioContext | null = null;
+let masterCompressor: DynamicsCompressorNode | null = null;
+
+export function getAudioContext(): AudioContext {
+  if (!audioCtx) {
+    audioCtx = new AudioContext();
+    masterCompressor = audioCtx.createDynamicsCompressor();
+    masterCompressor.threshold.setValueAtTime(-18, audioCtx.currentTime);
+    masterCompressor.ratio.setValueAtTime(6, audioCtx.currentTime);
+    masterCompressor.connect(audioCtx.destination);
+  }
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+  return audioCtx;
+}
+```
+
+---
+
+## Browser Autoplay Handling
+
+Browsers require a user interaction (such as a click or keypress) before audio can play. Calling your sound function inside any standard event handler (`onClick`, `onKeyDown`, `onPointerDown`) automatically satisfies this requirement.

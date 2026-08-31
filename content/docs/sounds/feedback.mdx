@@ -1,0 +1,197 @@
+---
+title: Feedback Sounds
+description: Subtle acoustic feedback for mouse hovers, focus changes, and navigation pills.
+---
+
+Feedback sounds provide light acoustic cues when interactive elements become focused, hovered, or selected.
+
+---
+
+## Integration Guide
+
+<Steps>
+  <Step>
+    ### Import the Audio Trigger
+    Import `playSound` or paste the standalone function directly into your component:
+
+    ```ts title="lib/sounds.ts"
+    import { playSound } from '@/lib/sounds';
+    ```
+  </Step>
+
+  <Step>
+    ### Attach to Hover and Focus States
+    Trigger on `onMouseEnter` or `onFocus` for interactive navigation items and cards:
+
+    ```tsx title="components/nav-item.tsx"
+    'use client';
+
+    import { playSound } from '@/lib/sounds';
+
+    export function NavItem({ title, href }: { title: string; href: string }) {
+      return (
+        <a
+          href={href}
+          onMouseEnter={() => playSound('blip')}
+          className="rounded-lg px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+        >
+          {title}
+        </a>
+      );
+    }
+    ```
+  </Step>
+
+  <Step>
+    ### AI Prompting Workflow
+    Click **Prompt LLM** on any sound below to copy a prompt ready for Cursor, ChatGPT, Claude, or v0.
+  </Step>
+</Steps>
+
+---
+
+## Sound Catalog
+
+### Hover Blip (`blip`)
+
+<SoundPlayButton name="blip" />
+
+Ascending micro chirp for hover states, focus changes, and navigation pills.
+
+```ts title="lib/sounds/blip.ts"
+export function playBlip() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(1150, now);
+  osc.frequency.exponentialRampToValueAtTime(2300, now + 0.045);
+  
+  gain.gain.setValueAtTime(0.14, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
+  
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.05);
+}
+```
+
+---
+
+### Soft Pulse (`hover-soft`)
+
+<SoundPlayButton name="hover-soft" />
+
+Subtle low-energy sine pulse for quiet navigation hovers and subtle card elevations.
+
+```ts title="lib/sounds/hover-soft.ts"
+export function playHoverSoft() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(820, now);
+  
+  gain.gain.setValueAtTime(0.07, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+  
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.055);
+}
+```
+
+---
+
+### Liquid Bubbles (`bubble`)
+
+<SoundPlayButton name="bubble" />
+
+A rapid sequence of organic liquid pops that feels incredibly organic and satisfying for reactions and likes.
+
+```ts title="lib/sounds/bubble.ts"
+export function playBubble() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  [400, 600, 800].forEach((freq, idx) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+    osc.frequency.exponentialRampToValueAtTime(freq * 1.5, now + idx * 0.06 + 0.04);
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.setValueAtTime(0.2, now + idx * 0.06);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.06);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(now + idx * 0.06);
+    osc.stop(now + idx * 0.06 + 0.1);
+  });
+}
+```
+
+---
+
+### Bouncy Spring (`spring`)
+
+<SoundPlayButton name="spring" />
+
+Multi-bounce decaying spring oscillation for elastic gestures, rebound animations, and pull-to-refresh.
+
+```ts title="lib/sounds/spring.ts"
+export function playSpring() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(600, now);
+  osc.frequency.exponentialRampToValueAtTime(1100, now + 0.03);
+  osc.frequency.exponentialRampToValueAtTime(500, now + 0.07);
+  osc.frequency.exponentialRampToValueAtTime(900, now + 0.1);
+  osc.frequency.exponentialRampToValueAtTime(550, now + 0.14);
+  osc.frequency.exponentialRampToValueAtTime(750, now + 0.17);
+  osc.frequency.exponentialRampToValueAtTime(620, now + 0.2);
+
+  gain.gain.setValueAtTime(0.22, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.25);
+}
+```
+
+---
+
+### Laser Zap (`zap`)
+
+<SoundPlayButton name="zap" />
+
+A sharp, futuristic lowpass sawtooth zap for rapid selections and tech UI feedback.
+
+```ts title="lib/sounds/zap.ts"
+export function playZap() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(1200, now);
+  osc.frequency.exponentialRampToValueAtTime(100, now + 0.08);
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.setValueAtTime(3000, now);
+  filter.frequency.exponentialRampToValueAtTime(200, now + 0.08);
+  gain.gain.setValueAtTime(0.12, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+  osc.connect(filter).connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.11);
+}
+```
+

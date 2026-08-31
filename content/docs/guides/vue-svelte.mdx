@@ -1,0 +1,70 @@
+---
+title: Vue, Svelte & Vanilla JS
+description: Framework-agnostic usage guide for Vue 3, Svelte 5, and vanilla JavaScript applications.
+---
+
+Because this library relies entirely on the standard browser **Web Audio API**, it works out of the box with any frontend framework.
+
+---
+
+## Vue 3 (Composition API)
+
+```vue title="components/SoundButton.vue"
+<script setup lang="ts">
+import { playSound } from '@/lib/sounds';
+
+const props = defineProps<{
+  sound?: string;
+}>();
+
+const trigger = () => {
+  playSound(props.sound || 'button-click');
+};
+</script>
+
+<template>
+  <button @click="trigger" class="btn-primary">
+    <slot />
+  </button>
+</template>
+```
+
+---
+
+## Svelte 5 (Runes)
+
+```svelte title="SoundButton.svelte"
+<script lang="ts">
+  import { playSound } from '$lib/sounds';
+
+  let { sound = 'pop', children } = $props();
+
+  function handleClick() {
+    playSound(sound);
+  }
+</script>
+
+<button onclick={handleClick} class="btn">
+  {@render children?.()}
+</button>
+```
+
+---
+
+## Vanilla JavaScript
+
+You can trigger sounds on standard DOM elements with simple event listeners:
+
+```js title="main.js"
+import { playHoverBlip, playPop } from './sounds.js';
+
+// Attach hover blip to all cards
+document.querySelectorAll('.interactive-card').forEach((card) => {
+  card.addEventListener('mouseenter', () => playHoverBlip());
+});
+
+// Attach pop to like buttons
+document.querySelectorAll('.like-btn').forEach((btn) => {
+  btn.addEventListener('click', () => playPop());
+});
+```

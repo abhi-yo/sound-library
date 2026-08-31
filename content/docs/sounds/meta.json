@@ -1,0 +1,13 @@
+{
+  "title": "Sound Catalog",
+  "root": true,
+  "pages": [
+    "index",
+    "interaction",
+    "feedback",
+    "notifications",
+    "navigation",
+    "system",
+    "essentials"
+  ]
+}
