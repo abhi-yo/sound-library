@@ -1,72 +1,124 @@
 ---
 title: Overview
-description: Procedural micro-interaction sound effects for web applications. Zero dependencies, copy-paste ready.
+description: Procedural micro UX sounds for the web — npm package sound-library, zero runtime deps, Web Audio API + CLI.
 ---
 
-A collection of 45 procedural micro-UX sound effects synthesized directly in the browser with the native Web Audio API. Designed for tactile interface feedback, state confirmation, and fluid spatial transitions.
+**sound-library** (Sound Bits) is a zero-runtime-dependency package of procedural micro UX sounds. Everything is synthesized in the browser with the Web Audio API — no audio files, no CDN assets.
 
----
-
-## Core Principles
-
-<Cards>
-  <Card title="Zero Dependencies" description="Synthesized on the fly using native oscillators, noise buffers, and biquad filters. No external assets required." />
-  <Card title="Latency-Free" description="Procedural audio executes synchronously within 5 milliseconds, avoiding network round-trips." />
-  <Card title="Accessible by Default" description="Automatically muted when users request reduced motion. Fully compliant with screen readers." />
-  <Card title="Standalone Code" description="Every sound is a self-contained TypeScript function. Copy and paste snippets directly into any project." />
-</Cards>
-
----
-
-## Quick Start
-
-Copy any standalone sound function directly into your project:
-
-```ts title="lib/sounds/tap.ts"
-export function playTap() {
-  const ctx = new AudioContext();
-  const now = ctx.currentTime;
-  const osc = ctx.createOscillator();
-  const gain = ctx.createGain();
-  
-  osc.type = 'sine';
-  osc.frequency.setValueAtTime(1800, now);
-  osc.frequency.exponentialRampToValueAtTime(700, now + 0.035);
-  
-  gain.gain.setValueAtTime(0.18, now);
-  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
-  
-  osc.connect(gain).connect(ctx.destination);
-  osc.start(now);
-  osc.stop(now + 0.04);
-}
+```bash
+npm i sound-library
 ```
 
-Trigger it in any component:
+Then:
 
-```tsx title="components/button.tsx"
+```tsx
 'use client';
 
-import { playTap } from '@/lib/sounds/tap';
+import { playSound } from 'sound-library';
+import { SoundButton } from 'sound-library/react';
 
-export function ActionButton() {
+export function Example() {
   return (
-    <button onClick={playTap} className="btn">
-      Confirm Action
-    </button>
+    <>
+      <button type="button" onClick={() => playSound('tap')}>
+        Tap
+      </button>
+      <SoundButton sound="chime">Notify</SoundButton>
+    </>
   );
 }
 ```
 
+Call audio only from user gestures (`click` / `pointerdown` / `keydown`). Playback auto-mutes when `prefers-reduced-motion: reduce`.
+
 ---
 
-## Sound Categories
+## Where to go next
 
-| Category | Typical Use | Included Sounds |
-| :--- | :--- | :--- |
-| [**Interaction**](/docs/sounds/interaction) | Buttons, toggles, keys, bloops, sub-kicks, haptics | `tap`, `thud`, `snap`, `pop`, `tick`, `toggle-on`, `toggle-off`, `shutter`, `keystroke`, `bloop`, `sub-kick`, `haptic-pop` |
-| [**Feedback**](/docs/sounds/feedback) | Hovers, focus states, reactions, springs, zaps | `blip`, `hover-soft`, `bubble`, `spring`, `zap` |
-| [**Notification**](/docs/sounds/notifications) | Achievements, toasts, alerts, chimes, crystals | `chime`, `bell`, `ping`, `crystal`, `shimmer` |
-| [**Navigation**](/docs/sounds/navigation) | Page transitions, sheet reveals, sweeps | `swish`, `whoosh`, `glissando`, `woosh-deep` |
-| [**System**](/docs/sounds/system) | Security locks, sub-bass haptic pulses, errors | `lock`, `unlock`, `pulse`, `error` |
-| [**Fun & Essentials**](/docs/sounds/essentials) | 8-bit games, retro effects, gamification | `coin`, `power-up`, `power-down`, `magic-sparkle`, `jump-boing`, `arcade-pew`, `heartbeat`, `sonar-ping`, `typewriter-key`, `typewriter-bell`, `synth-sweep`, `glitch`, `deep-impact`, `hollow-thock`, `success-fanfare` |
+<Cards>
+  <Card title="Installation" description="npm / pnpm / yarn / bun, React helpers, and browser notes." href="/docs/installation" />
+  <Card title="Sound catalog" description="Audition every sound with play, copy, and AI prompts." href="/docs/sounds" />
+  <Card title="CLI" description="Scaffold standalone files with npx sound-library add." href="/docs/cli" />
+  <Card title="AI agents" description="Install the skills.sh package so coding agents use the library correctly." href="/docs/skills" />
+</Cards>
+
+---
+
+## Core API
+
+| Export | From | What it does |
+| --- | --- | --- |
+| `playSound(name, options?)` | `sound-library` | Play a named procedural sound |
+| `playTap`, `playChime`, … | `sound-library` | Per-sound convenience wrappers |
+| `setSoundEnabled` / `isSoundEnabled` | `sound-library` | Global mute |
+| `SOUND_NAMES` / `SOUNDS_METADATA` | `sound-library` | Typed ids + titles / categories |
+| `SoundButton` / `useSound` | `sound-library/react` | React helpers (`'use client'` in Next.js) |
+
+```ts
+import { playSound, setSoundEnabled, SOUND_NAMES } from 'sound-library';
+
+playSound('pop', { volume: 0.6 });
+setSoundEnabled(false);
+```
+
+Prefer the package over hand-rolled Web Audio unless you intentionally want a custom synthesis.
+
+---
+
+## Patterns
+
+**Button / confirm**
+
+```tsx
+<button type="button" onClick={() => playSound('button-click')}>
+  Save
+</button>
+```
+
+**Toggle**
+
+```tsx
+<button
+  type="button"
+  onClick={() => playSound(on ? 'toggle-off' : 'toggle-on')}
+>
+  Toggle
+</button>
+```
+
+**Toast / success**
+
+```tsx
+playSound('chime');
+```
+
+**Scaffold without a runtime dependency**
+
+```bash
+npx sound-library add tap chime pop
+```
+
+---
+
+## Catalog by category
+
+| Category | Use for | Examples |
+| --- | --- | --- |
+| [Interaction](/docs/sounds/interaction) | Buttons, toggles, keys | `tap`, `thud`, `snap`, `button-click` |
+| [Feedback](/docs/sounds/feedback) | Hover, focus, reactions | `blip`, `bubble`, `zap` |
+| [Notifications](/docs/sounds/notifications) | Toasts, success | `chime`, `bell`, `crystal` |
+| [Navigation](/docs/sounds/navigation) | Sheets, page transitions | `swish`, `whoosh`, `glissando` |
+| [System](/docs/sounds/system) | Lock, unlock, errors | `lock`, `unlock`, `error` |
+| [Essentials](/docs/sounds/essentials) | Gamey / retro accents | `coin`, `power-up`, `glitch` |
+
+Open any sound page to play it, copy the CLI command, grab TypeScript, or copy an agent prompt that installs via npm.
+
+---
+
+## Agent skill
+
+```bash
+npx skills add abhi-yo/sound-library
+```
+
+See [AI agents](/docs/skills) for Cursor, Claude Code, Copilot, Windsurf, and more.
