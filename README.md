@@ -1,123 +1,96 @@
-# UI Sound Effects Library
+# sound-library
 
-Micro UX audio for interactive web applications. Zero dependencies. Copy-paste ready.
+Procedural micro UX sound effects for the web. **Zero runtime dependencies.** Synthesized with the Web Audio API.
 
-[Live Demo](https://abhi-yo.github.io/sound-library) · [Browse Sounds](#available-sounds) · [CLI](#cli)
+Also known as **Sound Bits** in the docs/UI.
+
+[GitHub](https://github.com/abhi-yo/sound-library) · [Live demo](https://abhi-yo.github.io/sound-library)
 
 ---
 
-## Features
+## Install
 
-- **45 sounds** — clicks, hovers, success, error, notifications, transitions, and more
-- **Zero dependencies** — every snippet is standalone Web Audio API code
-- **Copy & paste** — hit the copy button on any card to get production-ready code
-- **CLI** — scaffold standalone sound functions directly into your project
-- **Framework agnostic** — works with React, Vue, Svelte, vanilla JS, anything
-- **Dark mode** — with cinematic circular reveal transition
-- **`prefers-reduced-motion`** — respects user accessibility preferences
+### Library
 
-## Quick Start
 
-### Web Audio (no files needed)
-
-```js
-const ctx = new AudioContext();
-const osc = ctx.createOscillator();
-const gain = ctx.createGain();
-osc.type = 'sine';
-osc.frequency.setValueAtTime(800, ctx.currentTime);
-gain.gain.setValueAtTime(0.25, ctx.currentTime);
-gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
-osc.connect(gain).connect(ctx.destination);
-osc.start();
-osc.stop(ctx.currentTime + 0.15);
+```bash
+npm install sound-library
+# or
+pnpm add sound-library
+# or
+yarn add sound-library
+# or
+bun add sound-library
 ```
 
-### MP3 (for button clicks)
+### Agent skill ([skills.sh](https://skills.sh))
 
-```js
-const audio = new Audio('/click1.mp3');
-audio.volume = 0.5;
-audio.play();
+```bash
+npx skills add abhi-yo/sound-library
 ```
 
-### React Hook
+## Quick start
+
+```ts
+import { playSound, playTap } from 'sound-library';
+
+playSound('pop');
+playTap();
+```
+
+### React
 
 ```tsx
-import { playSound } from './lib/sounds';
+'use client';
 
-function MyButton() {
-  return <button onClick={() => playSound('pop')}>Click</button>;
+import { playSound } from 'sound-library';
+import { SoundButton } from 'sound-library/react';
+
+export function Example() {
+  return (
+    <>
+      <button onClick={() => playSound('chime')}>Chime</button>
+      <SoundButton sound="tap">Tap</SoundButton>
+    </>
+  );
 }
 ```
 
 ## CLI
 
-Add sounds to any project with the CLI:
+Scaffold standalone sound files into your project (no runtime dependency on this package):
 
 ```bash
-npx @sound-library/cli list              # List all available sounds
-npx @sound-library/cli add pop           # Add a single sound
-npx @sound-library/cli add pop swish     # Add multiple sounds
+npx sound-library list
+npx sound-library add tap chime pop
+npx sound-library add all
+npx sound-library init
 ```
 
-Sounds are written to `lib/sounds/` as standalone files — no runtime dependency.
+`sound-bits` is an alias for the same CLI:
 
-## Available Sounds
+```bash
+npx sound-bits add tap
+```
 
-| Name | Category | Source | Use Case |
-|------|----------|--------|----------|
-| `button-click` | Interaction | MP3 | Primary button presses |
-| `button-click-secondary` | Interaction | MP3 | Secondary / ghost buttons |
-| `hover-blip` | Feedback | Web Audio | Hovering over interactive elements |
-| `hover-soft` | Feedback | Web Audio | Subtle hover feedback |
-| `success-chime` | Notification | Web Audio | Form submissions, saves |
-| `success-bell` | Notification | Web Audio | Achievements, milestones |
-| `error-buzz` | Alert | Web Audio | Validation errors, failed actions |
-| `error-beep` | Alert | Web Audio | Warnings, blocked actions |
-| `notification-ping` | Alert | Web Audio | New messages, alerts |
-| `notification-subtle` | Alert | Web Audio | Background updates |
-| `swoosh` | Transition | Web Audio | Page transitions, panel slides |
-| `pop` | Interaction | Web Audio | Tooltips, popovers, reveals |
-| `slider-tick` | Interaction | Web Audio | Sliders, range inputs |
-| `key-press` | Interaction | Web Audio | Text inputs, keyboards |
+## API
+
+| Export | Description |
+| --- | --- |
+| `playSound(name, options?)` | Play a named procedural sound |
+| `playTap`, `playPop`, … | Convenience wrappers for each sound |
+| `useSound(name)` | React-friendly trigger helper |
+| `setSoundEnabled` / `isSoundEnabled` | Mute / unmute (also respects `prefers-reduced-motion`) |
+| `getAudioContext` / `getAudioAnalyser` | Shared Web Audio graph |
+| `SOUNDS_METADATA` | Titles, categories, durations |
+| `SOUND_NAMES` | Typed list of sound ids |
+
+React entry: `sound-library/react` → `SoundButton`, `useSound`.
 
 ## Accessibility
 
-All sounds respect `prefers-reduced-motion: reduce`. When the user has requested reduced motion, sounds are automatically silenced.
-
-To manually control sound:
-
-```js
-// Check user preference
-const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-if (!prefersReducedMotion) {
-  playSound('pop');
-}
-```
-
-## Development
-
-```bash
-pnpm install
-pnpm dev
-```
-
-## Build
-
-```bash
-pnpm build
-```
-
-## Registry
-
-The project includes a shadcn-style registry at `public/registry/`. To rebuild:
-
-```bash
-node scripts/build-registry.mjs
-```
+Playback respects `prefers-reduced-motion: reduce` and stays silent when it matches.
 
 ## License
 
-MIT — see [LICENSE](./LICENSE).
+MIT

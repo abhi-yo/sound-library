@@ -101,5 +101,5 @@ export function playTap() {
 ### CLI Scaffolding
 ```bash
 # Add standalone sound definitions to your project
-npx @sound-library/cli add tap snap chime swish
+npx sound-library add tap snap chime swish
 ```
