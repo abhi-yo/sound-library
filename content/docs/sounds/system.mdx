@@ -221,3 +221,105 @@ export function playError() {
   o2.stop(now + 0.19);
 }
 ```
+
+
+---
+
+### Soft Warning (`warning`)
+
+<SoundPlayButton name="warning" />
+
+Gentle two-tone caution for non-fatal alerts and risk confirmation.
+
+```ts title="lib/sounds/warning.ts"
+export function playWarning() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  [520, 390].forEach((freq, idx) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(freq, now + idx * 0.11);
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.setValueAtTime(0.11, now + idx * 0.11);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.11 + 0.14);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(now + idx * 0.11);
+    osc.stop(now + idx * 0.11 + 0.15);
+  });
+}
+```
+
+
+---
+
+### Short Success (`success`)
+
+<SoundPlayButton name="success" />
+
+Brief major-interval confirm for saves, submits, and completed actions.
+
+```ts title="lib/sounds/success.ts"
+export function playSuccess() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  [523.25, 659.25].forEach((freq, idx) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, now + idx * 0.055);
+    gain.gain.setValueAtTime(0.001, now);
+    gain.gain.setValueAtTime(0.14, now + idx * 0.055);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.055 + 0.16);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(now + idx * 0.055);
+    osc.stop(now + idx * 0.055 + 0.18);
+  });
+}
+```
+
+
+---
+
+### Delete Confirm (`delete`)
+
+<SoundPlayButton name="delete" />
+
+Descending destructive confirm for trash, remove, and discard actions.
+
+```ts title="lib/sounds/delete.ts"
+export function playDelete() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(220, now);
+  osc.frequency.exponentialRampToValueAtTime(70, now + 0.12);
+  gain.gain.setValueAtTime(0.12, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+  const lp = ctx.createBiquadFilter();
+  lp.type = 'lowpass';
+  lp.frequency.setValueAtTime(900, now);
+  osc.connect(lp).connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.15);
+
+  const bufSize = Math.floor(ctx.sampleRate * 0.04);
+  const buffer = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+  const hp = ctx.createBiquadFilter();
+  hp.type = 'highpass';
+  hp.frequency.setValueAtTime(2500, now);
+  const ng = ctx.createGain();
+  ng.gain.setValueAtTime(0.08, now);
+  ng.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+  noise.connect(hp).connect(ng).connect(ctx.destination);
+  noise.start(now);
+  noise.stop(now + 0.045);
+}
+```
+

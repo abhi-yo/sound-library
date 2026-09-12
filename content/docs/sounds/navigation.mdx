@@ -191,3 +191,38 @@ export function playWooshDeep() {
 }
 ```
 
+
+---
+
+### Swipe Gesture (`swipe`)
+
+<SoundPlayButton name="swipe" />
+
+Horizontal bandpass sweep for carousel and gesture swipes.
+
+```ts title="lib/sounds/swipe.ts"
+export function playSwipe() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const bufSize = Math.floor(ctx.sampleRate * 0.22);
+  const buffer = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+  const bp = ctx.createBiquadFilter();
+  bp.type = 'bandpass';
+  bp.frequency.setValueAtTime(900, now);
+  bp.frequency.exponentialRampToValueAtTime(3200, now + 0.1);
+  bp.frequency.exponentialRampToValueAtTime(600, now + 0.2);
+  bp.Q.setValueAtTime(3.5, now);
+  const ng = ctx.createGain();
+  ng.gain.setValueAtTime(0.001, now);
+  ng.gain.linearRampToValueAtTime(0.16, now + 0.05);
+  ng.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+  noise.connect(bp).connect(ng).connect(ctx.destination);
+  noise.start(now);
+  noise.stop(now + 0.23);
+}
+```
+

@@ -473,3 +473,110 @@ export function playHapticPop() {
 }
 ```
 
+
+---
+
+### Send Whoosh (`send`)
+
+<SoundPlayButton name="send" />
+
+Quick rising whoosh with soft landing blip for message send and submit.
+
+```ts title="lib/sounds/send.ts"
+export function playSend() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const bufSize = Math.floor(ctx.sampleRate * 0.14);
+  const buffer = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+  const bp = ctx.createBiquadFilter();
+  bp.type = 'bandpass';
+  bp.frequency.setValueAtTime(500, now);
+  bp.frequency.exponentialRampToValueAtTime(2800, now + 0.12);
+  bp.Q.setValueAtTime(2.2, now);
+  const ng = ctx.createGain();
+  ng.gain.setValueAtTime(0.001, now);
+  ng.gain.linearRampToValueAtTime(0.14, now + 0.04);
+  ng.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+  noise.connect(bp).connect(ng).connect(ctx.destination);
+  noise.start(now);
+  noise.stop(now + 0.15);
+
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(880, now + 0.1);
+  gain.gain.setValueAtTime(0.001, now);
+  gain.gain.setValueAtTime(0.1, now + 0.1);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now + 0.1);
+  osc.stop(now + 0.24);
+}
+```
+
+
+---
+
+### Item Select (`select`)
+
+<SoundPlayButton name="select" />
+
+Crisp ascending micro-tone for radio, checkbox, and list selection.
+
+```ts title="lib/sounds/select.ts"
+export function playSelect() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'triangle';
+  osc.frequency.setValueAtTime(1400, now);
+  osc.frequency.exponentialRampToValueAtTime(2100, now + 0.03);
+  gain.gain.setValueAtTime(0.12, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.055);
+}
+```
+
+
+---
+
+### Drop Land (`drop`)
+
+<SoundPlayButton name="drop" />
+
+Soft thud with muted tick for drag-and-drop landings.
+
+```ts title="lib/sounds/drop.ts"
+export function playDrop() {
+  const ctx = new AudioContext();
+  const now = ctx.currentTime;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(180, now);
+  osc.frequency.exponentialRampToValueAtTime(55, now + 0.08);
+  gain.gain.setValueAtTime(0.22, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+  osc.connect(gain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.11);
+
+  const tick = ctx.createOscillator();
+  const tg = ctx.createGain();
+  tick.type = 'square';
+  tick.frequency.setValueAtTime(900, now + 0.02);
+  tg.gain.setValueAtTime(0.04, now + 0.02);
+  tg.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+  tick.connect(tg).connect(ctx.destination);
+  tick.start(now + 0.02);
+  tick.stop(now + 0.055);
+}
+```
+
