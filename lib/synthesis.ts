@@ -1,4 +1,4 @@
-import type { SoundName } from './sounds';
+import type { SoundName } from './sound-names';
 import { masterGain } from './sounds';
 
 export function getMasterOutput(ctx: AudioContext): AudioNode {
@@ -6,9 +6,18 @@ export function getMasterOutput(ctx: AudioContext): AudioNode {
 }
 
 /** Sound synthesis definitions using native Web Audio API */
-export function synthesize(ctx: AudioContext, name: SoundName) {
+export function synthesize(ctx: AudioContext, name: SoundName, volume?: number) {
   const now = ctx.currentTime;
-  const out = getMasterOutput(ctx);
+  const masterOut = getMasterOutput(ctx);
+  const out =
+    volume !== undefined && volume !== 1
+      ? (() => {
+          const vNode = ctx.createGain();
+          vNode.gain.setValueAtTime(Math.max(0, Math.min(2, volume)), now);
+          vNode.connect(masterOut);
+          return vNode;
+        })()
+      : masterOut;
   const jitter = (range = 0.04) => 1 + (Math.random() * 2 - 1) * range;
 
   switch (name) {
@@ -95,7 +104,7 @@ export function synthesize(ctx: AudioContext, name: SoundName) {
       osc.type = 'sine';
       osc.frequency.setValueAtTime(1150 * jitter(0.02), now);
       osc.frequency.exponentialRampToValueAtTime(2300, now + 0.045);
-      gain.gain.setValueAtTime(0.14, now);
+      gain.gain.setValueAtTime(0.09, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
       osc.connect(gain).connect(out);
       osc.start(now);
@@ -150,7 +159,7 @@ export function synthesize(ctx: AudioContext, name: SoundName) {
         osc.type = 'sine';
         osc.frequency.setValueAtTime(freq, now + idx * 0.07);
         gain.gain.setValueAtTime(0.001, now);
-        gain.gain.setValueAtTime(0.16, now + idx * 0.07);
+        gain.gain.setValueAtTime(0.065, now + idx * 0.07);
         gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.18);
         osc.connect(gain).connect(out);
         osc.start(now + idx * 0.07);
@@ -182,7 +191,7 @@ export function synthesize(ctx: AudioContext, name: SoundName) {
       osc.type = 'square';
       osc.frequency.setValueAtTime(4800, now);
       osc.frequency.exponentialRampToValueAtTime(1100, now + 0.006);
-      gain.gain.setValueAtTime(0.09, now);
+      gain.gain.setValueAtTime(0.11, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.008);
       osc.connect(gain).connect(out);
       osc.start(now);
@@ -197,7 +206,7 @@ export function synthesize(ctx: AudioContext, name: SoundName) {
       osc.type = 'sine';
       osc.frequency.setValueAtTime(520, now);
       osc.frequency.exponentialRampToValueAtTime(820, now + 0.06);
-      gain.gain.setValueAtTime(0.18, now);
+      gain.gain.setValueAtTime(0.12, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
       osc.connect(gain).connect(out);
       osc.start(now);
@@ -212,7 +221,7 @@ export function synthesize(ctx: AudioContext, name: SoundName) {
       osc.type = 'sine';
       osc.frequency.setValueAtTime(820, now);
       osc.frequency.exponentialRampToValueAtTime(520, now + 0.06);
-      gain.gain.setValueAtTime(0.16, now);
+      gain.gain.setValueAtTime(0.11, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
       osc.connect(gain).connect(out);
       osc.start(now);
@@ -681,8 +690,8 @@ export function synthesize(ctx: AudioContext, name: SoundName) {
       osc.type = 'square';
       osc.frequency.setValueAtTime(988, now); // B5
       osc.frequency.setValueAtTime(1318.5, now + 0.08); // E6
-      gain.gain.setValueAtTime(0.1, now);
-      gain.gain.setValueAtTime(0.1, now + 0.08);
+      gain.gain.setValueAtTime(0.085, now);
+      gain.gain.setValueAtTime(0.085, now + 0.08);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
       osc.connect(gain).connect(out);
       osc.start(now);
@@ -976,6 +985,467 @@ export function synthesize(ctx: AudioContext, name: SoundName) {
         osc.connect(gain).connect(out);
         osc.start(now);
         osc.stop(now + 0.65);
+      });
+      break;
+    }
+
+    case 'ethereal-reveal':
+    case 'cinematic-reveal': {
+      // Multi-layer video-editor style text reveal:
+      // Layer 1: Smooth spatial airy whoosh sweep (motion riser)
+      const bufSize = Math.floor(ctx.sampleRate * 0.35);
+      const buffer = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+
+      const bp = ctx.createBiquadFilter();
+      bp.type = 'bandpass';
+      bp.frequency.setValueAtTime(250 * jitter(0.02), now);
+      bp.frequency.exponentialRampToValueAtTime(1800, now + 0.18);
+      bp.frequency.exponentialRampToValueAtTime(320, now + 0.35);
+      bp.Q.setValueAtTime(1.8, now);
+
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.0001, now);
+      noiseGain.gain.linearRampToValueAtTime(0.042, now + 0.14);
+      noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
+
+      noise.connect(bp).connect(noiseGain).connect(out);
+      noise.start(now);
+      noise.stop(now + 0.36);
+
+      // Layer 2: Crystalline glass chime accent (reveal transient)
+      const chimeTime = now + 0.08;
+      const chimeNotes = [1480.0, 1864.0, 2217.0]; // F#6, A#6, C#7
+      chimeNotes.forEach((freq, idx) => {
+        const t = chimeTime + idx * 0.035;
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq * jitter(0.005), t);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.linearRampToValueAtTime(0.022, t + 0.015);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + 0.45);
+        osc.connect(g).connect(out);
+        osc.start(t);
+        osc.stop(t + 0.5);
+      });
+
+      // Layer 3: Warm sub-bass landing bloom (anchors text arrival)
+      const subOsc = ctx.createOscillator();
+      const subGain = ctx.createGain();
+      const subFilter = ctx.createBiquadFilter();
+      subOsc.type = 'sine';
+      subOsc.frequency.setValueAtTime(90 * jitter(0.02), now + 0.05);
+      subOsc.frequency.exponentialRampToValueAtTime(38, now + 0.35);
+      subFilter.type = 'lowpass';
+      subFilter.frequency.setValueAtTime(150, now);
+      subGain.gain.setValueAtTime(0.0001, now + 0.05);
+      subGain.gain.linearRampToValueAtTime(0.055, now + 0.12);
+      subGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.38);
+      subOsc.connect(subFilter).connect(subGain).connect(out);
+      subOsc.start(now + 0.05);
+      subOsc.stop(now + 0.4);
+      break;
+    }
+
+    case 'whoosh-shimmer': {
+      // Kinetic airy silk whoosh + multi-tap micro crystal shimmer (perfect for letter-by-letter kinetic reveals)
+      const bufSize = Math.floor(ctx.sampleRate * 0.28);
+      const buffer = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+
+      const hp = ctx.createBiquadFilter();
+      hp.type = 'highpass';
+      hp.frequency.setValueAtTime(1200, now);
+
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.0001, now);
+      noiseGain.gain.linearRampToValueAtTime(0.038, now + 0.1);
+      noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+
+      noise.connect(hp).connect(noiseGain).connect(out);
+      noise.start(now);
+      noise.stop(now + 0.3);
+
+      // Micro-sparkle cascade (E6, A6, E7, A7)
+      const notes = [1318.5, 1760.0, 2637.0, 3520.0];
+      notes.forEach((freq, idx) => {
+        const t = now + idx * 0.03;
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq * jitter(0.006), t);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.linearRampToValueAtTime(0.02, t + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + 0.35);
+        osc.connect(g).connect(out);
+        osc.start(t);
+        osc.stop(t + 0.38);
+      });
+      break;
+    }
+
+    case 'tactile-reveal': {
+      // Mechanical precision camera/shutter click with filtered air sweep (perfect for zero-deps / tech statements)
+      const bufSize = Math.floor(ctx.sampleRate * 0.25);
+      const buffer = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+
+      const bp = ctx.createBiquadFilter();
+      bp.type = 'bandpass';
+      bp.frequency.setValueAtTime(800, now);
+      bp.frequency.exponentialRampToValueAtTime(2400, now + 0.08);
+      bp.frequency.exponentialRampToValueAtTime(400, now + 0.22);
+      bp.Q.setValueAtTime(2, now);
+
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.0001, now);
+      noiseGain.gain.linearRampToValueAtTime(0.045, now + 0.06);
+      noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
+
+      noise.connect(bp).connect(noiseGain).connect(out);
+      noise.start(now);
+      noise.stop(now + 0.26);
+
+      // Mechanical dual-micro click transient
+      [now + 0.02, now + 0.07].forEach((t, i) => {
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(i === 0 ? 1600 : 900, t);
+        osc.frequency.exponentialRampToValueAtTime(i === 0 ? 800 : 300, t + 0.015);
+        g.gain.setValueAtTime(0.06, t);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + 0.018);
+        osc.connect(g).connect(out);
+        osc.start(t);
+        osc.stop(t + 0.022);
+      });
+      break;
+    }
+
+    case 'soothing-tone': {
+      // Ethereal, velvety celestial glass chime chord (Ebmaj9/Bb) for signature brand identity
+      const chord = [
+        { freq: 233.08, delay: 0.00, gain: 0.052 }, // Bb3
+        { freq: 293.66, delay: 0.07, gain: 0.046 }, // D4
+        { freq: 349.23, delay: 0.14, gain: 0.042 }, // F4
+        { freq: 440.00, delay: 0.21, gain: 0.038 }, // A4
+        { freq: 587.33, delay: 0.28, gain: 0.032 }, // D5
+        { freq: 932.33, delay: 0.36, gain: 0.022 }, // Bb5 stardust shimmer
+      ];
+
+      chord.forEach(({ freq, delay, gain: noteVolume }) => {
+        const noteTime = now + delay;
+        const osc = ctx.createOscillator();
+        const oscWarmth = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const filter = ctx.createBiquadFilter();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq * jitter(0.002), noteTime);
+
+        // Warm harmonic sub-layer
+        oscWarmth.type = 'triangle';
+        oscWarmth.frequency.setValueAtTime(freq, noteTime);
+        oscWarmth.detune.setValueAtTime(3, noteTime);
+
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(1600, noteTime);
+        filter.frequency.exponentialRampToValueAtTime(520, noteTime + 2.5);
+        filter.Q.setValueAtTime(0.8, noteTime);
+
+        gain.gain.setValueAtTime(0.0001, noteTime);
+        gain.gain.linearRampToValueAtTime(noteVolume, noteTime + 0.045);
+        gain.gain.exponentialRampToValueAtTime(0.0001, noteTime + 2.6);
+
+        osc.connect(filter);
+        oscWarmth.connect(filter);
+        filter.connect(gain).connect(out);
+
+        osc.start(noteTime);
+        oscWarmth.start(noteTime);
+        osc.stop(noteTime + 2.7);
+        oscWarmth.stop(noteTime + 2.7);
+      });
+      break;
+    }
+
+    case 'ambient-wash': {
+      // Gentle evolving ambient pad — warm, soothing, and relaxing
+      const duration = 3.5;
+      const padGain = ctx.createGain();
+      padGain.gain.setValueAtTime(0.0001, now);
+      padGain.gain.linearRampToValueAtTime(0.035, now + 1.0);
+      padGain.gain.setValueAtTime(0.035, now + 2.0);
+      padGain.gain.exponentialRampToValueAtTime(0.001, now + duration);
+      padGain.connect(out);
+
+      const chordFreqs = [130.81, 196.00, 261.63, 329.63]; // C3, G3, C4, E4
+      chordFreqs.forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const voiceGain = ctx.createGain();
+        const filter = ctx.createBiquadFilter();
+        osc.type = idx % 2 === 0 ? 'sine' : 'triangle';
+        osc.frequency.setValueAtTime(freq * jitter(0.005), now);
+        osc.detune.setValueAtTime((idx - 1.5) * 4, now);
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(550, now);
+        filter.frequency.linearRampToValueAtTime(800, now + 1.5);
+        filter.frequency.linearRampToValueAtTime(350, now + duration);
+        filter.Q.setValueAtTime(0.5, now);
+        voiceGain.gain.setValueAtTime(0.025, now);
+        osc.connect(filter).connect(voiceGain).connect(padGain);
+        osc.start(now);
+        osc.stop(now + duration + 0.1);
+      });
+      break;
+    }
+
+    case 'button-click': {
+      // Ultra-crisp tactile micro-click (like a premium mechanical switch / haptic motor)
+      // 1. High-frequency micro-transient
+      const bufSize = Math.floor(ctx.sampleRate * 0.006);
+      const buffer = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+      const bp = ctx.createBiquadFilter();
+      bp.type = 'bandpass';
+      bp.frequency.setValueAtTime(3400 * jitter(0.02), now);
+      bp.Q.setValueAtTime(3, now);
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.09, now);
+      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.006);
+      noise.connect(bp).connect(noiseGain).connect(out);
+      noise.start(now);
+      noise.stop(now + 0.008);
+
+      // 2. Damped tactile body
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(380 * jitter(0.02), now);
+      osc.frequency.exponentialRampToValueAtTime(120, now + 0.016);
+      gain.gain.setValueAtTime(0.11, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.018);
+      osc.connect(gain).connect(out);
+      osc.start(now);
+      osc.stop(now + 0.022);
+      break;
+    }
+
+    case 'button-hover': {
+      // Disabled / Silent per user request to remove hover beeps
+      break;
+    }
+
+    case 'bg-click': {
+      // Gentle, deep acoustic cushion tap — quiet sensory feedback for background
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const filter = ctx.createBiquadFilter();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(70 * jitter(0.02), now);
+      osc.frequency.exponentialRampToValueAtTime(32, now + 0.035);
+      filter.type = 'lowpass';
+      filter.frequency.setValueAtTime(140, now);
+      gain.gain.setValueAtTime(0.045, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+      osc.connect(filter).connect(gain).connect(out);
+      osc.start(now);
+      osc.stop(now + 0.045);
+      break;
+    }
+
+    case 'warning': {
+      // Soft caution — gentler than error, still attention-grabbing
+      [520, 390].forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq * jitter(0.01), now + idx * 0.11);
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.setValueAtTime(0.11, now + idx * 0.11);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.11 + 0.14);
+        osc.connect(gain).connect(out);
+        osc.start(now + idx * 0.11);
+        osc.stop(now + idx * 0.11 + 0.15);
+      });
+      break;
+    }
+
+    case 'success': {
+      // Short major confirm (not the long fanfare)
+      [523.25, 659.25].forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.055);
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.setValueAtTime(0.14, now + idx * 0.055);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.055 + 0.16);
+        osc.connect(gain).connect(out);
+        osc.start(now + idx * 0.055);
+        osc.stop(now + idx * 0.055 + 0.18);
+      });
+      break;
+    }
+
+    case 'delete': {
+      // Destructive confirm — descending body + thin noise crumb
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(220 * jitter(0.02), now);
+      osc.frequency.exponentialRampToValueAtTime(70, now + 0.12);
+      gain.gain.setValueAtTime(0.12, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+      const lp = ctx.createBiquadFilter();
+      lp.type = 'lowpass';
+      lp.frequency.setValueAtTime(900, now);
+      osc.connect(lp).connect(gain).connect(out);
+      osc.start(now);
+      osc.stop(now + 0.15);
+
+      const bufSize = Math.floor(ctx.sampleRate * 0.04);
+      const buffer = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+      const hp = ctx.createBiquadFilter();
+      hp.type = 'highpass';
+      hp.frequency.setValueAtTime(2500, now);
+      const ng = ctx.createGain();
+      ng.gain.setValueAtTime(0.08, now);
+      ng.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+      noise.connect(hp).connect(ng).connect(out);
+      noise.start(now);
+      noise.stop(now + 0.045);
+      break;
+    }
+
+    case 'send': {
+      // Message / submit — quick rise whoosh + soft landing blip
+      const bufSize = Math.floor(ctx.sampleRate * 0.14);
+      const buffer = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+      const bp = ctx.createBiquadFilter();
+      bp.type = 'bandpass';
+      bp.frequency.setValueAtTime(500, now);
+      bp.frequency.exponentialRampToValueAtTime(2800, now + 0.12);
+      bp.Q.setValueAtTime(2.2, now);
+      const ng = ctx.createGain();
+      ng.gain.setValueAtTime(0.001, now);
+      ng.gain.linearRampToValueAtTime(0.14, now + 0.04);
+      ng.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+      noise.connect(bp).connect(ng).connect(out);
+      noise.start(now);
+      noise.stop(now + 0.15);
+
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(880, now + 0.1);
+      gain.gain.setValueAtTime(0.001, now);
+      gain.gain.setValueAtTime(0.1, now + 0.1);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+      osc.connect(gain).connect(out);
+      osc.start(now + 0.1);
+      osc.stop(now + 0.24);
+      break;
+    }
+
+    case 'select': {
+      // Crisp item / radio / checkbox select
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(1400 * jitter(0.015), now);
+      osc.frequency.exponentialRampToValueAtTime(2100, now + 0.03);
+      gain.gain.setValueAtTime(0.12, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+      osc.connect(gain).connect(out);
+      osc.start(now);
+      osc.stop(now + 0.055);
+      break;
+    }
+
+    case 'drop': {
+      // Drag-drop land — soft thud + muted tick
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(180 * jitter(0.02), now);
+      osc.frequency.exponentialRampToValueAtTime(55, now + 0.08);
+      gain.gain.setValueAtTime(0.22, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+      osc.connect(gain).connect(out);
+      osc.start(now);
+      osc.stop(now + 0.11);
+
+      const tick = ctx.createOscillator();
+      const tg = ctx.createGain();
+      tick.type = 'square';
+      tick.frequency.setValueAtTime(900, now + 0.02);
+      tg.gain.setValueAtTime(0.04, now + 0.02);
+      tg.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+      tick.connect(tg).connect(out);
+      tick.start(now + 0.02);
+      tick.stop(now + 0.055);
+      break;
+    }
+
+    case 'swipe': {
+      // Horizontal gesture — distinct from swish/glissando
+      const bufSize = Math.floor(ctx.sampleRate * 0.22);
+      const buffer = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+      const bp = ctx.createBiquadFilter();
+      bp.type = 'bandpass';
+      bp.frequency.setValueAtTime(900, now);
+      bp.frequency.exponentialRampToValueAtTime(3200, now + 0.1);
+      bp.frequency.exponentialRampToValueAtTime(600, now + 0.2);
+      bp.Q.setValueAtTime(3.5, now);
+      const ng = ctx.createGain();
+      ng.gain.setValueAtTime(0.001, now);
+      ng.gain.linearRampToValueAtTime(0.16, now + 0.05);
+      ng.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+      noise.connect(bp).connect(ng).connect(out);
+      noise.start(now);
+      noise.stop(now + 0.23);
+      break;
+    }
+
+    case 'notification': {
+      // Soft push notification — two gentle pips
+      [880, 1174.66].forEach((freq, idx) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, now + idx * 0.12);
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.setValueAtTime(0.13, now + idx * 0.12);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.12 + 0.28);
+        osc.connect(gain).connect(out);
+        osc.start(now + idx * 0.12);
+        osc.stop(now + idx * 0.12 + 0.3);
       });
       break;
     }
