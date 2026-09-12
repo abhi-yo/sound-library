@@ -1,57 +1,12 @@
 // bloub / audio — Procedural Micro UX Sound Library
 // Standalone Web Audio API sound synthesis with zero runtime dependencies.
 
-export const SOUND_NAMES = [
-  'tap',
-  'thud',
-  'snap',
-  'pop',
-  'blip',
-  'hover-soft',
-  'chime',
-  'bell',
-  'ping',
-  'tick',
-  'toggle-on',
-  'toggle-off',
-  'lock',
-  'unlock',
-  'swish',
-  'whoosh',
-  'shutter',
-  'keystroke',
-  'pulse',
-  'error',
-  // Premium
-  'glissando',
-  'shimmer',
-  'bloop',
-  'sub-kick',
-  'crystal',
-  'woosh-deep',
-  'zap',
-  'spring',
-  'bubble',
-  'haptic-pop',
-  // Fun & Essentials
-  'coin',
-  'power-up',
-  'power-down',
-  'magic-sparkle',
-  'jump-boing',
-  'arcade-pew',
-  'heartbeat',
-  'sonar-ping',
-  'typewriter-key',
-  'typewriter-bell',
-  'synth-sweep',
-  'glitch',
-  'deep-impact',
-  'hollow-thock',
-  'success-fanfare',
-] as const;
-
-export type SoundName = (typeof SOUND_NAMES)[number];
+export {
+  SOUND_NAMES,
+  type SoundName,
+  type PlaySoundOptions,
+} from './sound-names';
+import type { SoundName, PlaySoundOptions } from './sound-names';
 
 let audioCtx: AudioContext | null = null;
 let masterCompressor: DynamicsCompressorNode | null = null;
@@ -116,20 +71,50 @@ export function getAudioContext(): AudioContext {
   return audioCtx;
 }
 
-export async function playSound(name: SoundName) {
+let lastSoundPlayTime = 0;
+let lastSoundName = '';
+let lastCopySoundTime = 0;
+
+/**
+ * Plays the 'unlock' sound specifically for copy button clicks.
+ * Enforces strict single-sound deduplication so that no two sounds can fire
+ * on a single button click (drops duplicate events within 120ms).
+ */
+export function playCopySound() {
+  const now = typeof performance !== 'undefined' ? performance.now() : Date.now();
+  // Prevent duplicate triggers within 120ms window
+  if (now - lastCopySoundTime < 120) return;
+  lastCopySoundTime = now;
+  playSound('unlock');
+}
+
+export async function playSound(name: SoundName, options?: PlaySoundOptions) {
   if (!soundEnabled) return;
+  const now = typeof performance !== 'undefined' ? performance.now() : Date.now();
+
+  // If unlock sound was triggered for a copy button, suppress any conflicting generic sound within 120ms
+  if (name !== 'unlock' && now - lastCopySoundTime < 120) {
+    return;
+  }
+
+  // Prevent accidental duplicate triggering of the exact same sound within 35ms
+  if (name === lastSoundName && now - lastSoundPlayTime < 35) return;
+
+  lastSoundPlayTime = now;
+  lastSoundName = name;
+
   try {
     const ctx = getAudioContext();
     const { synthesize } = await import('./synthesis');
-    synthesize(ctx, name);
+    synthesize(ctx, name, options?.volume);
   } catch (err) {
     console.error('Audio playback error:', err);
   }
 }
 
 /** Hook for React components */
-export function useSound(name: SoundName) {
+export function useSound(name: SoundName, options?: PlaySoundOptions) {
   return {
-    play: () => playSound(name),
+    play: () => playSound(name, options),
   };
 }
