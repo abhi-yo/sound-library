@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { playCopySound } from '@/lib/lazy-sounds';
 
 export function UsageGuide() {
   const [copied, setCopied] = useState(false);
@@ -47,13 +48,16 @@ export function playTap() {
           <span>lib/sounds/tap.ts</span>
           <button
             type="button"
+            data-copy-button="true"
+            title="Copy code snippet"
             onClick={() => {
               navigator.clipboard.writeText(sampleSnippet).then(() => {
+                playCopySound();
                 setCopied(true);
                 setTimeout(() => setCopied(false), 1800);
               });
             }}
-            className="rounded border border-border bg-background px-2 py-0.5 text-[11px] text-foreground hover:bg-accent transition-colors"
+            className="rounded border border-border bg-background px-2 py-0.5 text-[11px] text-foreground hover:bg-accent transition-colors cursor-pointer select-none"
           >
             {copied ? 'copied' : 'copy'}
           </button>

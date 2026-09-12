@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useEffect } from 'react';
-import { getAudioAnalyser } from '@/lib/sounds';
+import { getAudioAnalyser } from '@/lib/lazy-sounds';
 
 export function AudioVisualizer({ className = 'h-24 w-full' }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -14,11 +14,14 @@ export function AudioVisualizer({ className = 'h-24 w-full' }: { className?: str
     if (!ctx) return;
 
     let phase = 0;
+    let analyser: AnalyserNode | null = null;
+    void getAudioAnalyser().then((a) => {
+      analyser = a;
+    });
 
     const render = () => {
       const width = canvas.width;
       const height = canvas.height;
-      const analyser = getAudioAnalyser();
 
       ctx.clearRect(0, 0, width, height);
 
@@ -74,11 +77,11 @@ export function AudioVisualizer({ className = 'h-24 w-full' }: { className?: str
         }
       }
 
-      // Draw Oscilloscope Beam with Glowing Phosphor
-      ctx.lineWidth = isAudioActive ? 2.5 : 1.5;
+      // Draw Oscilloscope Beam (clean crisp line, zero phosphor glow)
+      ctx.lineWidth = isAudioActive ? 2 : 1.5;
       ctx.strokeStyle = isAudioActive ? '#10b981' : '#059669';
-      ctx.shadowBlur = isAudioActive ? 12 : 4;
-      ctx.shadowColor = isAudioActive ? '#10b981' : '#10b98188';
+      ctx.shadowBlur = 0;
+      ctx.shadowColor = 'transparent';
 
       ctx.beginPath();
 

@@ -151,7 +151,7 @@ export function InstallCard() {
           <span>zsh</span>
         </div>
         <div className="truncate">
-          <span className='text-green-400'>$</span> pnpm add sound-lib
+          <span className='text-green-400'>$</span> npm i sound-library
         </div>
       </div>
     </div>

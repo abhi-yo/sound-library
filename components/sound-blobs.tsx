@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { playSound } from '@/lib/lazy-sounds';
-import type { SoundName } from '@/lib/sounds';
+import type { SoundName } from '@/lib/sound-names';
 
 interface SoundBlobConfig {
   id: string;
