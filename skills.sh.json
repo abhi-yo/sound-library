@@ -1,0 +1,10 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "groupings": [
+    {
+      "title": "Audio",
+      "description": "Procedural micro UX sounds for the web.",
+      "skills": ["sound-library"]
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+---
+title: AI agents
+description: Install the sound-library skill package for Cursor, Claude Code, Codex, Copilot, Windsurf, and 60+ agents via skills.sh.
+---
+
+The skill is a **package** in the [skills.sh](https://skills.sh) ecosystem — same idea as npm, for agent context. One install wires it into Cursor, Claude Code, Codex, Copilot, Windsurf, and [dozens more](https://github.com/vercel-labs/skills#supported-agents).
+
+## Install the skill package
+
+```bash
+npx skills add abhi-yo/sound-library
+```
+
+That pulls `skills/sound-library/SKILL.md` from the GitHub repo and installs it for your agent(s). Options:
+
+```bash
+# global (all projects)
+npx skills add abhi-yo/sound-library -g
+
+# list skills in the package
+npx skills add abhi-yo/sound-library --list
+
+# only this skill
+npx skills add abhi-yo/sound-library --skill sound-library -y
+```
+
+Discover more: [skills.sh](https://skills.sh) · `npx skills find sound`
+
+## What it teaches the agent
+
+- `npm i sound-library` (or `npx sound-library add <name>` to scaffold files)
+- `playSound` / `SoundButton` / `useSound` — not hand-rolled Web Audio
+- Wire sounds onto the exact UI you asked for
+- Gesture-only playback + `prefers-reduced-motion`
+
+## Manual downloads (optional)
+
+If you cannot use the CLI, grab the same files:
+
+<Cards>
+  <Card title="SKILL.md" description="Agent Skills format (YAML frontmatter)." href="/skills/sound-library/SKILL.md" />
+  <Card title="AGENTS.md" description="Same brief without frontmatter — paste into any agent rules file." href="/skills/sound-library/AGENTS.md" />
+  <Card title="llms.txt" description="Compact doc index." href="/llms.txt" />
+  <Card title="llms-full.txt" description="Full pasteable context." href="/llms-full.txt" />
+</Cards>
+
+## One-liner
+
+```text
+Use npm package sound-library for UI sounds. Install with `npm i sound-library` (or `npx sound-library add <name>` to scaffold). Prefer playSound / SoundButton. Call audio only from user gestures. Wire onto the exact UI I named.
+```
