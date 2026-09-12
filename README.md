@@ -1,26 +1,18 @@
 # sound-library
 
-Procedural micro UX sound effects for the web. **Zero runtime dependencies.** Synthesized with the Web Audio API.
+Procedural micro UX sounds for the web. **Zero runtime dependencies.** Everything is synthesized in the browser with the Web Audio API — no audio files, no CDN assets.
 
-Also known as **Sound Bits** in the docs/UI.
+Also known as **Sound Bits** in the site UI.
 
-[GitHub](https://github.com/abhi-yo/sound-library) · [Live demo](https://abhi-yo.github.io/sound-library)
+[npm](https://www.npmjs.com/package/sound-library) · [GitHub](https://github.com/abhi-yo/sound-library)
 
 ---
 
 ## Install
 
-### Library
-
-
 ```bash
-npm install sound-library
-# or
-pnpm add sound-library
-# or
-yarn add sound-library
-# or
-bun add sound-library
+npm i sound-library
+# pnpm add sound-library / yarn add sound-library / bun add sound-library
 ```
 
 ### Agent skill ([skills.sh](https://skills.sh))
@@ -34,23 +26,32 @@ npx skills add abhi-yo/sound-library
 ```ts
 import { playSound, playTap } from 'sound-library';
 
+// Only from a user gesture (click / pointerdown / keydown)
 playSound('pop');
 playTap();
+playSound('chime', { volume: 0.6 });
 ```
 
-### React
+### React / Next.js
 
 ```tsx
 'use client';
 
 import { playSound } from 'sound-library';
-import { SoundButton } from 'sound-library/react';
+import { SoundButton, useSound } from 'sound-library/react';
 
 export function Example() {
+  const { play } = useSound('tap');
+
   return (
     <>
-      <button onClick={() => playSound('chime')}>Chime</button>
+      <button type="button" onClick={() => playSound('chime')}>
+        Chime
+      </button>
       <SoundButton sound="tap">Tap</SoundButton>
+      <button type="button" onClick={() => play()}>
+        Tap via hook
+      </button>
     </>
   );
 }
@@ -75,22 +76,47 @@ npx sound-bits add tap
 
 ## API
 
-| Export | Description |
+| Export | From | Description |
+| --- | --- | --- |
+| `playSound(name, options?)` | `sound-library` | Play a named procedural sound |
+| `playTap`, `playPop`, `playSuccess`, … | `sound-library` | Convenience wrappers per sound |
+| `playCopySound()` | `sound-library` | Unlock cue for copy buttons |
+| `setSoundEnabled` / `isSoundEnabled` | `sound-library` | Mute / unmute |
+| `SOUND_NAMES` / `SOUNDS_METADATA` | `sound-library` | Typed ids + titles / categories |
+| `getAudioContext` / `getAudioAnalyser` | `sound-library` | Shared Web Audio graph |
+| `SoundButton` / `useSound` | `sound-library/react` | React helpers |
+
+## Sound mapping cheatsheet
+
+| UI moment | Try |
 | --- | --- |
-| `playSound(name, options?)` | Play a named procedural sound |
-| `playTap`, `playPop`, … | Convenience wrappers for each sound |
-| `useSound(name)` | React-friendly trigger helper |
-| `setSoundEnabled` / `isSoundEnabled` | Mute / unmute (also respects `prefers-reduced-motion`) |
-| `getAudioContext` / `getAudioAnalyser` | Shared Web Audio graph |
-| `SOUNDS_METADATA` | Titles, categories, durations |
-| `SOUND_NAMES` | Typed list of sound ids |
+| Button / list select | `tap`, `button-click`, `haptic-pop`, `select` |
+| Toggle / switch | `toggle-on`, `toggle-off` |
+| Hover / focus | `blip`, `hover-soft` |
+| Copy / unlock | `playCopySound()`, `unlock` |
+| Success / save | `success`, `success-fanfare`, `chime` |
+| Error / validation | `error`, `warning` |
+| Delete / remove | `delete` |
+| Send / submit | `send` |
+| Soft notification | `notification`, `bell`, `ping` |
+| Swipe / drop | `swipe`, `drop` |
 
-React entry: `sound-library/react` → `SoundButton`, `useSound`.
+There are **60+** named sounds across interaction, feedback, notification, navigation, system, and essentials.
 
-## Accessibility
+## Rules of thumb
 
-Playback respects `prefers-reduced-motion: reduce` and stays silent when it matches.
+- Call audio only from user gestures — never on mount.
+- Auto-mutes when `prefers-reduced-motion: reduce`.
+- Same-sound de-dupe is ~35ms; wire one fitting sound per control, not a sound on every hover.
+
+## Local site (docs + demos)
+
+```bash
+pnpm install
+pnpm dev
+# http://localhost:3000
+```
 
 ## License
 
-MIT
+MIT · Contact: [akshatsing11@gmail.com](mailto:akshatsing11@gmail.com)
