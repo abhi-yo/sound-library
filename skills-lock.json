@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "skills": {
+    "migrate-radix-to-base": {
+      "source": "shadcn/ui",
+      "sourceType": "github",
+      "skillPath": "skills/migrate-radix-to-base/SKILL.md",
+      "computedHash": "e1f2030ee5059be3dff0812ca0e4b995ee9fa3132176f049ebe6c90346a6755e"
+    },
+    "product-launch-video": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "skillPath": "skills/product-launch-video/SKILL.md",
+      "computedHash": "c4e7809259c7858767d52bc6684b50f52a8d32bd80fd0ec33228f8e8104e884d"
+    },
+    "shadcn": {
+      "source": "shadcn/ui",
+      "sourceType": "github",
+      "skillPath": "skills/shadcn/SKILL.md",
+      "computedHash": "f615de216e085a84e31593ad0fa9062232adc40cd87b7c7ab2b8e49abf6500be"
+    },
+    "sound-library": {
+      "source": "abhi-yo/sound-library",
+      "sourceType": "github",
+      "skillPath": "skills/sound-library/SKILL.md",
+      "computedHash": "52fe02f322685ec0809a9c215381221fbcfdf32f850ad31caa6cd6841f3dbf99"
+    }
+  }
+}

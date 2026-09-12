@@ -95,7 +95,13 @@ Next.js App Router: keep in `'use client'` files only.
 | Toggle / checkbox | `toggle-on`, `toggle-off`, `snap` |
 | Hover / focus | `blip`, `hover-soft` |
 | Toast / success | `chime`, `bell`, `crystal`, `shimmer` |
-| Error / validation | `error` |
+| Error / validation | `error`, `warning` |
+| Success / save | `success`, `success-fanfare` |
+| Delete / remove | `delete` |
+| Send / submit | `send` |
+| Select / drop | `select`, `drop` |
+| Swipe | `swipe` |
+| Soft notification | `notification`, `bell`, `ping` |
 | Nav / drawer / sheet | `swish`, `whoosh`, `woosh-deep`, `glissando` |
 | Copy / unlock | `playCopySound()`, `unlock` |
 | Playful / gamey | `coin`, `pop`, `bloop`, `jump-boing` |
