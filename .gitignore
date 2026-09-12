@@ -9,3 +9,7 @@ node_modules/
 
 scratch.tsx
 .source/
+.originkit/
+dist/
+*.tgz
+tsconfig.tsbuildinfo
