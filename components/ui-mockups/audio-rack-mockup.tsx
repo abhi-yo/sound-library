@@ -1,8 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { playSound } from '@/lib/lazy-sounds';
-import { getAudioContext } from '@/lib/sounds';
+import { playSound, getAudioContext } from '@/lib/lazy-sounds';
 
 type WaveType = 'sine' | 'triangle' | 'square' | 'sawtooth';
 
@@ -39,8 +38,9 @@ export function AudioRackMockup() {
   const playCustomNote = useCallback(
     (freq: number, noteName: string) => {
       if (isMuted) return;
+      void (async () => {
       try {
-        const ctx = getAudioContext();
+        const ctx = await getAudioContext();
         const now = ctx.currentTime;
 
         const osc = ctx.createOscillator();
@@ -71,6 +71,7 @@ export function AudioRackMockup() {
       } catch (e) {
         console.error(e);
       }
+      })();
     },
     [waveType, cutoffFreq, decayTime, gainVol, isMuted]
   );
@@ -126,10 +127,10 @@ export function AudioRackMockup() {
       const isPlaying = activeNote !== null || lastActuator !== null;
       phase += isPlaying ? 0.08 : 0.025;
 
-      ctx.lineWidth = isPlaying ? 2.5 : 1.5;
+      ctx.lineWidth = isPlaying ? 2 : 1.5;
       ctx.strokeStyle = isPlaying ? '#10b981' : '#059669';
-      ctx.shadowBlur = isPlaying ? 10 : 3;
-      ctx.shadowColor = '#10b981';
+      ctx.shadowBlur = 0;
+      ctx.shadowColor = 'transparent';
 
       ctx.beginPath();
       const midY = h / 2;

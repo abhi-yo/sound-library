@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useCallback, useMemo } from 'react';
-import { playSound } from '@/lib/lazy-sounds';
-import { SOUND_NAMES, type SoundName } from '@/lib/sounds';
-import { SOUNDS_METADATA, generateSoundLLMPrompt } from '../sound-player';
+import { playSound, playCopySound } from '@/lib/lazy-sounds';
+import { SOUND_NAMES, type SoundName } from '@/lib/sound-names';
+import { SOUNDS_METADATA, generateSoundLLMPrompt } from '@/lib/sounds-metadata';
 
 const CATEGORIES = ['All', 'Interaction', 'Feedback', 'Notification', 'Navigation', 'System'] as const;
 
@@ -47,6 +47,7 @@ export function SoundStudio() {
     if (!meta) return;
     const prompt = generateSoundLLMPrompt(meta);
     navigator.clipboard.writeText(prompt).then(() => {
+      playCopySound();
       setCopiedSound(name);
       setTimeout(() => setCopiedSound(null), 2000);
     });
@@ -240,6 +241,8 @@ export function SoundStudio() {
 
             <button
               onClick={() => handleCopyCode(selectedSound)}
+              data-copy-button="true"
+              title="Copy TypeScript Function"
               className="inline-flex items-center gap-1.5 rounded-xl bg-foreground px-4 py-2 text-xs font-medium text-background hover:opacity-90 active:scale-95 transition-all shadow-sm"
             >
               <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

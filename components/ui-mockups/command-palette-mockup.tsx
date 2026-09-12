@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { useTheme } from 'next-themes';
-import { playSound } from '@/lib/sounds';
+import { playSound, type SoundName } from '@/lib/lazy-sounds';
 
 interface ActionItem {
   id: string;
@@ -11,7 +10,7 @@ interface ActionItem {
   title: string;
   subtitle: string;
   icon: 'plus' | 'link' | 'theme' | 'heart' | 'book' | 'archive';
-  sound: 'tap' | 'thud' | 'snap' | 'chime' | 'pop';
+  sound: SoundName;
   execute: () => void;
 }
 
@@ -27,7 +26,6 @@ interface Particle {
 
 export function CommandPaletteMockup() {
   const router = useRouter();
-  const { theme, setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -118,27 +116,12 @@ export function CommandPaletteMockup() {
       title: 'Copy share link',
       subtitle: 'Copy application URL to clipboard',
       icon: 'link',
-      sound: 'chime',
+      sound: 'unlock',
       execute: () => {
         const url = typeof window !== 'undefined' ? window.location.href : 'https://sound-library.dev';
         navigator.clipboard.writeText(url).then(() => {
           showToast('Copied URL to clipboard!');
         });
-      },
-    },
-    {
-      id: 'toggle-theme',
-      category: 'Preferences',
-      title: 'Toggle color theme',
-      subtitle: mounted
-        ? `Currently ${resolvedTheme === 'dark' ? 'Dark' : 'Light'} mode — switch to ${resolvedTheme === 'dark' ? 'Light' : 'Dark'}`
-        : 'Switch between light and dark mode',
-      icon: 'theme',
-      sound: 'snap',
-      execute: () => {
-        const next = resolvedTheme === 'dark' ? 'light' : 'dark';
-        setTheme(next);
-        showToast(`Theme switched to ${next} mode`);
       },
     },
     {
