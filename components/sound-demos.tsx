@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 import { playSound } from '@/lib/lazy-sounds';
-import { type SoundName } from '@/lib/sounds';
+import type { SoundName } from '@/lib/sound-names';
 
 /* ─── Shared ─── */
 function DemoShell({ label, children, className = '' }: { label: string; children: React.ReactNode; className?: string }) {

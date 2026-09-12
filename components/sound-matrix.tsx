@@ -1,24 +1,31 @@
 'use client';
 
-import React, { useState, useCallback, useEffect } from 'react';
-import { playSound } from '@/lib/lazy-sounds';
-import { SOUND_NAMES, type SoundName } from '@/lib/sounds';
-import { SOUNDS_METADATA, generateSoundLLMPrompt } from './sound-player';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import { playSound, playCopySound } from '@/lib/lazy-sounds';
+import { SOUND_NAMES, type SoundName } from '@/lib/sound-names';
+import { SOUNDS_METADATA, generateSoundLLMPrompt } from '@/lib/sounds-metadata';
 import { AudioVisualizer } from './audio-visualizer';
 
 const CATEGORIES = ['All', 'Interaction', 'Feedback', 'Notification', 'Navigation', 'System'] as const;
+const PAGE_SIZE = 12;
 
 export function SoundMatrix() {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [activeSound, setActiveSound] = useState<SoundName | null>(null);
   const [copiedSound, setCopiedSound] = useState<string | null>(null);
   const [expandedCodeSound, setExpandedCodeSound] = useState<SoundName | null>(null);
 
-  const filteredSounds = SOUND_NAMES.filter((name) => {
-    if (selectedCategory === 'All') return true;
-    const meta = SOUNDS_METADATA[name];
-    return meta && meta.category === selectedCategory;
-  });
+  const filteredSounds = useMemo(() => {
+    return SOUND_NAMES.filter((name) => {
+      if (selectedCategory === 'All') return true;
+      const meta = SOUNDS_METADATA[name];
+      return meta && meta.category === selectedCategory;
+    });
+  }, [selectedCategory]);
+
+  const visibleSounds = filteredSounds.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredSounds.length;
 
   const handleTrigger = useCallback((name: SoundName) => {
     setActiveSound(name);
@@ -34,6 +41,7 @@ export function SoundMatrix() {
     if (!meta) return;
     const prompt = generateSoundLLMPrompt(meta);
     navigator.clipboard.writeText(prompt).then(() => {
+      playCopySound();
       setCopiedSound(name);
       setTimeout(() => setCopiedSound(null), 1600);
     });
@@ -54,7 +62,7 @@ export function SoundMatrix() {
   }, [filteredSounds, handleTrigger]);
 
   return (
-    <div className="my-8 flex flex-col gap-4 rounded-2xl border border-border/80 bg-card/20 p-5 shadow-sm">
+    <div className="my-8 flex flex-col gap-4 rounded-2xl border border-border/80 bg-card/20 p-5">
       {/* Live Real-time Oscilloscope Console */}
       <AudioVisualizer className="h-14 w-full" />
 
@@ -71,7 +79,7 @@ export function SoundMatrix() {
             <button
               key={cat}
               type="button"
-              onClick={() => setSelectedCategory(cat)}
+              onClick={() => { playSound('select'); setSelectedCategory(cat); setVisibleCount(PAGE_SIZE); }}
               className={`rounded-md px-2.5 py-1 text-xs transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                 selectedCategory === cat
                   ? 'bg-foreground text-background font-medium'
@@ -86,7 +94,7 @@ export function SoundMatrix() {
 
       {/* Tactile Sound Cells Grid */}
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 pt-1">
-        {filteredSounds.map((name, index) => {
+        {visibleSounds.map((name, index) => {
           const meta = SOUNDS_METADATA[name];
           const isActive = activeSound === name;
           const isCopied = copiedSound === name;
@@ -98,7 +106,7 @@ export function SoundMatrix() {
               onClick={() => handleTrigger(name)}
               className={`group relative flex flex-col justify-between rounded-xl border p-3.5 text-left cursor-pointer transition-all duration-150 active:scale-[0.98] select-none ${
                 isActive
-                  ? 'border-foreground bg-foreground text-background shadow-md'
+                  ? 'border-foreground bg-foreground text-background'
                   : 'border-border/70 bg-background/60 hover:border-foreground/40 hover:bg-accent/40 text-foreground'
               }`}
             >
@@ -112,34 +120,13 @@ export function SoundMatrix() {
                 </span>
 
                 <div className="flex items-center gap-1.5">
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setExpandedCodeSound(isExpanded ? null : name);
-                    }}
-                    title="View code"
-                    className={`rounded p-1 text-[10px] font-mono transition-opacity ${
-                      isActive
-                        ? 'text-background/80 hover:text-background'
-                        : 'text-muted-foreground opacity-60 hover:opacity-100 hover:text-foreground'
+                  <span
+                    className={`text-[10px] font-mono tabular-nums ${
+                      isActive ? 'text-background/80' : 'text-muted-foreground'
                     }`}
                   >
-                    {isExpanded ? 'hide' : 'code'}
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={(e) => handleCopyCode(e, name)}
-                    title="Copy code snippet"
-                    className={`rounded p-1 text-[10px] font-mono transition-opacity ${
-                      isActive
-                        ? 'text-background/80 hover:text-background'
-                        : 'text-muted-foreground opacity-60 hover:opacity-100 hover:text-foreground'
-                    }`}
-                  >
-                    {isCopied ? 'copied' : 'copy'}
-                  </button>
+                    {meta?.duration}
+                  </span>
                 </div>
               </div>
 
@@ -158,6 +145,18 @@ export function SoundMatrix() {
           );
         })}
       </div>
+
+      {hasMore && (
+        <div className="flex justify-center pt-1">
+          <button
+            type="button"
+            onClick={() => { playSound('tick'); setVisibleCount((n) => n + PAGE_SIZE); }}
+            className="rounded-md border border-border/70 bg-background/60 px-3 py-1.5 text-xs text-muted-foreground hover:border-foreground/40 hover:text-foreground"
+          >
+            Show more ({filteredSounds.length - visibleCount} remaining)
+          </button>
+        </div>
+      )}
 
       {/* Expanded Code View */}
       {expandedCodeSound && (

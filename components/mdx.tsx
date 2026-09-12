@@ -5,14 +5,8 @@ import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 import { Step, Steps } from 'fumadocs-ui/components/steps';
 import { TypeTable } from 'fumadocs-ui/components/type-table';
 import { Accordion, Accordions } from 'fumadocs-ui/components/accordion';
-import { SoundPlayer } from '@/components/sound-player';
-import { SoundPlayButton } from '@/components/sound-header';
-import { SoundMatrix } from '@/components/sound-matrix';
-import { SoundShowcase } from '@/components/sound-showcase';
-import { CommandPaletteMockup } from '@/components/ui-mockups/command-palette-mockup';
-import { AudioRackMockup } from '@/components/ui-mockups/audio-rack-mockup';
-import { InteractiveOsMockup } from '@/components/ui-mockups/interactive-os-mockup';
-import { SoundStudio } from '@/components/ui-mockups/sound-studio';
+import { CodeBlock } from '@/components/docs/code-block';
+import { SoundPlayButton } from '@/components/mdx-client';
 
 function CompactCards({ children, className, ...props }: React.ComponentProps<'div'>) {
   return (
@@ -66,9 +60,86 @@ function CompactCard({
   );
 }
 
+function extractText(node: React.ReactNode): string {
+  if (node == null || typeof node === 'boolean') return '';
+  if (typeof node === 'string' || typeof node === 'number') return String(node);
+  if (Array.isArray(node)) return node.map(extractText).join('');
+  if (React.isValidElement(node)) {
+    const props = node.props as { children?: React.ReactNode };
+    return extractText(props.children);
+  }
+  return '';
+}
+
+function MdxPre(props: React.ComponentProps<'pre'> & { children?: React.ReactNode }) {
+  const { children } = props;
+  let rawCode = '';
+  let language = '';
+  let filename: string | undefined;
+
+  if (React.isValidElement(children)) {
+    const codeProps = children.props as any;
+    rawCode = extractText(codeProps?.children);
+    const className = codeProps?.className || props.className || '';
+    const match = /language-([a-zA-Z0-9_-]+)/.exec(className);
+    if (match) language = match[1];
+    filename = codeProps?.['data-filename'] || codeProps?.title;
+  } else {
+    rawCode = extractText(children);
+  }
+
+  if (rawCode && rawCode.trim()) {
+    const trimmed = rawCode.trim();
+    const isPkgInstall =
+      (trimmed.includes('npm install') ||
+        trimmed.includes('pnpm add') ||
+        trimmed.includes('bun add') ||
+        trimmed.includes('yarn add')) &&
+      !trimmed.includes('import ') &&
+      !trimmed.includes('export ');
+
+    if (isPkgInstall) {
+      return (
+        <div className="not-prose my-4">
+          <CodeBlock isPackageManager={true} packageName="sound-library" />
+        </div>
+      );
+    }
+
+    const isShell =
+      language === 'bash' ||
+      language === 'sh' ||
+      language === 'shell' ||
+      trimmed.startsWith('npx ') ||
+      trimmed.startsWith('npm ') ||
+      trimmed.startsWith('pnpm ') ||
+      trimmed.startsWith('bun ');
+
+    const finalLanguage = language || (isShell ? 'bash' : 'tsx');
+    const isSingleLine = !trimmed.includes('\n');
+
+    return (
+      <div className="not-prose my-4">
+        <CodeBlock
+          code={trimmed}
+          language={finalLanguage}
+          filename={filename}
+          showLineNumbers={!isShell && !isSingleLine}
+          showHeader={!!filename}
+        />
+      </div>
+    );
+  }
+
+  const DefaultPre = defaultMdxComponents.pre as any;
+  return DefaultPre ? <DefaultPre {...props}>{children}</DefaultPre> : <pre {...props}>{children}</pre>;
+}
+
 export function getMDXComponents() {
   return {
     ...defaultMdxComponents,
+    pre: MdxPre,
+    CodeBlock,
     Callout,
     Tab,
     Tabs,
@@ -79,13 +150,7 @@ export function getMDXComponents() {
     TypeTable,
     Accordion,
     Accordions,
-    SoundPlayer,
     SoundPlayButton,
-    SoundMatrix,
-    SoundShowcase,
-    CommandPaletteMockup,
-    AudioRackMockup,
-    InteractiveOsMockup,
-    SoundStudio,
-  };
+    SoundActions: SoundPlayButton,
+  } as any;
 }
