@@ -17,5 +17,9 @@
     "lib": "@/lib",
     "hooks": "@/hooks"
   },
-  "iconLibrary": "lucide"
+  "iconLibrary": "lucide",
+  "registries": {
+    "@efferd": "https://efferd.com/r/{style}/{name}.json",
+    "@heroicons-animated": "https://www.heroicons-animated.com/r/{name}.json"
+  }
 }

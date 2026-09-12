@@ -1,0 +1,31 @@
+# website / tooling — never ship in the library tarball
+.app
+app
+components
+content
+hooks
+public
+scripts
+.next
+.source
+.agents
+.originkit
+node_modules
+pnpm-lock.yaml
+package-lock.json
+tsconfig.tsbuildinfo
+*.map
+.next
+.git
+.DS_Store
+skills-lock.json
+components.json
+next.config.mjs
+next-env.d.ts
+postcss.config.mjs
+source.config.ts
+tailwind.config.ts
+tsconfig.json
+# keep src out of tarball; dist is the publish surface
+src
+tsup.config.ts

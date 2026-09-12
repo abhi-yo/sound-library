@@ -1,11 +1,11 @@
 {
   "name": "sound-library",
   "version": "1.0.0",
-  "description": "Micro UX sound effects for interactive web applications. Zero dependencies, copy-paste ready.",
+  "description": "Procedural micro UX sound effects for the web. Zero runtime dependencies. Web Audio API + CLI scaffolding.",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/abhi-yo/sound-library.git"
+    "url": "git+https://github.com/abhi-yo/sound-library.git"
   },
   "keywords": [
     "sound",
@@ -14,24 +14,67 @@
     "ux",
     "web-audio",
     "sound-effects",
+    "micro-interactions",
     "react",
     "nextjs",
-    "fumadocs"
+    "cli",
+    "procedural-audio",
+    "sound-bits",
+    "sound-library"
   ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "bin": {
-    "sound-library": "./cli/index.mjs"
+    "sound-library": "cli/index.mjs",
+    "sound-bits": "cli/index.mjs"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "import": "./dist/react.mjs",
+      "require": "./dist/react.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "cli",
+    "README.md",
+    "LICENSE",
+    "!dist/**/*.map"
+  ],
+  "peerDependencies": {
+    "react": ">=18.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
   },
   "scripts": {
-    "dev": "next dev --webpack -p 3000",
-    "build": "next build --webpack",
+    "dev": "NODE_OPTIONS=--max-old-space-size=8192 next dev --webpack -p 3000",
+    "build": "NODE_OPTIONS='--max-old-space-size=8192' next build --webpack",
+    "build:lib": "tsup",
+    "prepack": "pnpm run build:lib",
     "start": "next start -p 3000",
     "lint": "next lint",
     "predev": "fumadocs-mdx",
-    "prebuild": "fumadocs-mdx"
+    "prebuild": "fumadocs-mdx",
+    "pack:check": "npm pack --dry-run",
+    "release": "pnpm run build:lib && npm publish --access public"
   },
-  "dependencies": {
+  "devDependencies": {
+    "@bible-strong/avatar-react": "^0.1.0",
     "@blobatar/react": "^2.7.0",
     "@hookform/resolvers": "^3.9.1",
+    "@mintlify/components": "^1.0.19",
+    "@phosphor-icons/react": "^2.1.10",
     "@radix-ui/react-accordion": "1.2.2",
     "@radix-ui/react-alert-dialog": "1.1.4",
     "@radix-ui/react-aspect-ratio": "1.1.1",
@@ -59,7 +102,13 @@
     "@radix-ui/react-toggle": "1.1.1",
     "@radix-ui/react-toggle-group": "1.1.1",
     "@radix-ui/react-tooltip": "1.1.6",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/canvas-confetti": "^1.9.0",
     "@types/mdx": "^2.0.14",
+    "@types/node": "^22",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "@types/three": "^0.185.4",
     "@vercel/analytics": "^1.6.1",
     "autoprefixer": "^10.4.20",
     "blobatar": "^2.7.0",
@@ -69,43 +118,55 @@
     "cmdk": "1.1.1",
     "date-fns": "4.1.0",
     "embla-carousel-react": "8.5.1",
-    "fumadocs-core": "^16.15.4",
+    "fumadocs-core": "^16.15.7",
     "fumadocs-mdx": "^15.4.0",
-    "fumadocs-ui": "^16.15.4",
+    "fumadocs-ui": "^16.15.7",
     "gsap": "^3.15.0",
     "input-otp": "1.4.1",
     "lucide-react": "^0.544.0",
     "motion": "^13.1.1",
     "next": "16.1.6",
     "next-themes": "^0.4.6",
+    "ogl": "^1.0.11",
+    "postcss": "^8.5",
+    "postprocessing": "^6.39.4",
+    "prism-react-renderer": "^2.4.1",
     "react": "19.2.3",
     "react-day-picker": "8.10.1",
     "react-dom": "19.2.3",
     "react-hook-form": "^7.54.1",
     "react-resizable-panels": "^2.1.7",
     "recharts": "2.15.0",
+    "simple-icons": "^16.30.0",
     "sonner": "^1.7.1",
     "swapy": "^1.0.5",
     "tailwind-merge": "^2.5.5",
+    "tailwindcss": "^4.3.3",
     "tailwindcss-animate": "^1.0.7",
+    "three": "^0.185.1",
+    "tsup": "^8.5.1",
+    "typescript": "5.7.3",
     "vaul": "^1.1.2",
     "vgpu": "^0.3.1",
     "zod": "^3.24.1"
-  },
-  "devDependencies": {
-    "@tailwindcss/postcss": "^4.3.3",
-    "@types/canvas-confetti": "^1.9.0",
-    "@types/node": "^22",
-    "@types/react": "19.2.7",
-    "@types/react-dom": "19.2.3",
-    "postcss": "^8.5",
-    "tailwindcss": "^4.3.3",
-    "typescript": "5.7.3"
   },
   "pnpm": {
     "overrides": {
       "@types/react": "19.2.7",
       "@types/react-dom": "19.2.3"
     }
+  },
+  "author": "abhi-yo",
+  "homepage": "https://github.com/abhi-yo/sound-library#readme",
+  "bugs": {
+    "url": "https://github.com/abhi-yo/sound-library/issues"
+  },
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
   }
 }

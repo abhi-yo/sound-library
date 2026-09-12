@@ -23,16 +23,10 @@ const nextConfig = {
       '@radix-ui/react-tabs',
       '@radix-ui/react-slider',
       '@radix-ui/react-switch',
+      '@phosphor-icons/react',
     ],
   },
-  webpack: (config, { dev }) => {
-    if (dev) {
-      // Avoid eval()-based source maps that cause OOM on large modules
-      // like lib/sounds.ts (39KB switch statement)
-      config.devtool = 'cheap-module-source-map';
-    }
-    return config;
-  },
+
 };
 
 const withMDX = createMDX();
