@@ -2,6 +2,7 @@ import React from 'react';
 import { DocsLayout } from 'fumadocs-ui/layouts/docs';
 import { source } from '@/lib/source';
 import { BloubAvatar } from '@/components/bloub-avatar';
+import { SidebarClickSound } from '@/components/sidebar-click-sound';
 
 export default function RootDocsLayout({
   children,
@@ -11,14 +12,22 @@ export default function RootDocsLayout({
   return (
     <DocsLayout
       tree={source.pageTree}
+      themeSwitch={{
+        enabled: false,
+      }}
       nav={{
         title: (
-          <div className="flex items-center gap-2.5 text-[13px] text-foreground tracking-tight group">
-            <BloubAvatar size={22} className="shrink-0" />
-            <span className="font-medium">Sound Library</span>
+          <div className="flex items-center gap-2.5 group font-helvetica-neue select-none">
+            <BloubAvatar size={24} className="shrink-0 transition-transform group-hover:scale-105" />
+            <span className="font-medium text-[16px] tracking-[-0.3px] text-white leading-none">
+              sound bits
+            </span>
           </div>
         ),
         url: '/docs',
+      }}
+      sidebar={{
+        collapsible: true,
       }}
       links={[
         {
@@ -26,8 +35,8 @@ export default function RootDocsLayout({
           url: '/docs/sounds',
         },
         {
-          text: 'Guides',
-          url: '/docs/guides/react',
+          text: 'AI agents',
+          url: '/docs/skills',
         },
         {
           text: 'GitHub',
@@ -36,6 +45,7 @@ export default function RootDocsLayout({
         },
       ]}
     >
+      <SidebarClickSound />
       {children}
     </DocsLayout>
   );
