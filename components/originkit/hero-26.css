@@ -1,0 +1,359 @@
+/* hero-26 — scoped with ok-h26- to avoid collisions in shared preview docs. */
+/* Orange-accented variant for sound-bits */
+
+@import url("https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&family=Inter+Tight:wght@400&display=swap");
+
+.ok-h26-hero,
+.ok-h26-hero * {
+  box-sizing: border-box;
+}
+
+.ok-h26-hero {
+  position: relative;
+  width: 100%;
+  min-height: 100svh;
+  height: 100svh;
+  flex-shrink: 0;
+  background: #010101;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+
+.ok-h26-hero a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ok-h26-hero button,
+.ok-h26-hero p,
+.ok-h26-hero h1 {
+  margin: 0;
+}
+
+.ok-h26-hero button {
+  border: 0;
+  background: none;
+  color: inherit;
+}
+
+/* ---------- Nav ---------- */
+
+.ok-h26-nav {
+  width: 100%;
+  max-width: 1710px;
+  margin: 0 auto;
+  height: 56px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.ok-h26-logo {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+}
+
+.ok-h26-logomark {
+  position: absolute;
+  left: 3.72px;
+  top: 0.96px;
+  width: 24.56px;
+  height: 30.08px;
+}
+
+.ok-h26-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ok-h26-nav-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #383838;
+  padding: 6px 8px;
+  font-family: "Geist Mono", monospace;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.1;
+  color: #fff;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.15s ease;
+}
+
+.ok-h26-nav-pill:hover {
+  background: #4f4f4f;
+}
+
+.ok-h26-nav-pill--cta {
+  padding: 0;
+  background: #cc2d00;
+  gap: 0;
+}
+
+.ok-h26-nav-pill--cta:hover {
+  background: #ff3700;
+}
+
+.ok-h26-nav-pill--cta .ok-h26-nav-pill__label {
+  padding: 6px 8px;
+  border-right: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.ok-h26-nav-pill__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 27px;
+  height: 27px;
+}
+
+.ok-h26-nav-pill__icon img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.ok-h26-nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 1;
+  transition: opacity 0.15s ease;
+}
+
+.ok-h26-nav-toggle:hover {
+  opacity: 0.7;
+}
+
+.ok-h26-nav-toggle img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ---------- Hero media ---------- */
+
+.ok-h26-hero-media {
+  position: relative;
+  flex: 1;
+  margin: 0 20px 20px 20px;
+  overflow: hidden;
+  background: #000;
+}
+
+.ok-h26-hero-media__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.ok-h26-hero-media__gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(204, 45, 0, 0) 50%,
+    #992200 81.545%
+  );
+  pointer-events: none;
+}
+
+.ok-h26-hero-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1710px;
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-end;
+}
+
+/* ---------- Hero content ---------- */
+
+.ok-h26-hero-content {
+  position: relative;
+  z-index: 1;
+  width: 620px;
+  max-width: calc(100% - 96px);
+  margin: 0 48px 48px 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  box-sizing: border-box;
+}
+
+.ok-h26-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  padding: 6px 8px;
+  font-family: "Geist Mono", monospace;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.1;
+  color: #fff;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.ok-h26-hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.ok-h26-hero-text h1 {
+  font-family: "Inter Tight", sans-serif;
+  font-weight: 400;
+  font-size: 68px;
+  line-height: 1.1;
+  letter-spacing: -1.68px;
+  color: #fff;
+  width: 100%;
+}
+
+.ok-h26-hero-text p {
+  font-family: "Inter Tight", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.4;
+  color: #ffb088;
+  text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.4);
+  width: 100%;
+}
+
+.ok-h26-cta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ok-h26-btn {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.ok-h26-btn__label {
+  padding: 6px 8px;
+  font-family: "Geist Mono", monospace;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: normal;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border-right: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.ok-h26-btn__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+}
+
+.ok-h26-btn__icon img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.ok-h26-btn--white {
+  background: #fff;
+}
+
+.ok-h26-btn--white .ok-h26-btn__label {
+  color: #cc2d00;
+}
+
+.ok-h26-btn--white:hover {
+  background: #ffe8de;
+}
+
+.ok-h26-btn--blue {
+  background: #cc2d00;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.ok-h26-btn--blue .ok-h26-btn__label {
+  color: #ffb088;
+}
+
+.ok-h26-btn--blue:hover {
+  background: #ff3700;
+}
+
+/* ---------- Tablet ---------- */
+
+@media (max-width: 1024px) {
+  .ok-h26-nav-links {
+    display: none;
+  }
+
+  .ok-h26-nav-toggle {
+    display: flex;
+  }
+
+  .ok-h26-hero-content {
+    width: 512px;
+    max-width: calc(100% - 96px);
+    margin: 0 48px 40px 48px;
+    gap: 16px;
+  }
+
+  .ok-h26-hero-text h1 {
+    font-size: 48px;
+    letter-spacing: -1.44px;
+  }
+
+  .ok-h26-hero-text p {
+    text-shadow: none;
+  }
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 640px) {
+  .ok-h26-hero-content {
+    width: auto;
+    max-width: calc(100% - 48px);
+    margin: 0 24px 40px 24px;
+  }
+
+  .ok-h26-badge {
+    font-size: 14px;
+  }
+
+  .ok-h26-hero-text h1 {
+    font-size: 40px;
+    letter-spacing: -1.2px;
+  }
+}
