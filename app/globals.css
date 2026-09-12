@@ -1,11 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap");
 @import 'tailwindcss';
+@import "./originkit-section-themes.css";
+@import "./originkit-section-theme.css";
 @import 'blobatar/motion.css';
 @import 'fumadocs-ui/css/neutral.css';
 @import 'fumadocs-ui/css/preset.css';
 
-@source '../node_modules/fumadocs-ui/dist/**/*.js';
-@source '../components/**/*.{ts,tsx}';
-@source '../app/**/*.{ts,tsx}';
 
 @layer utilities {
   .text-balance {
@@ -87,50 +87,66 @@
 }
 
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --codebg: #f1f1f1f0;
-    --primary-base: #fcfcfc;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-  }
-
+  :root,
   .dark {
-    --background: 0 0% 0%;
-    --foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 10% 4%;
-    --border: 240 5% 12%;
-    --input: 240 5% 12%;
-    --ring: 240 5% 84%;
+    --background: 240 6% 6%;
+    --foreground: 0 0% 95%;
+    --primary: 13 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --border: 240 5% 14%;
+    --input: 240 5% 14%;
+    --ring: 13 100% 50%;
     --radius: 0.5rem;
     --muted: 240 4% 9%;
     --muted-foreground: 240 5% 65%;
-    --codebg: #09090b;
-    --primary-base: #000000;
+    --codebg: #141416;
+    --primary-base: #0f0f11;
     --accent: 240 5% 12%;
     --accent-foreground: 0 0% 98%;
-    --card: 240 6% 4%;
+    --card: 240 5% 8%;
     --card-foreground: 0 0% 98%;
-    --popover: 240 6% 4%;
+    --popover: 240 5% 8%;
     --popover-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
+
+    color-scheme: dark;
+  }
+
+  :root, .dark {
+    --color-fd-background: #0f0f11;
+    --color-fd-foreground: #ededed;
+    --color-fd-muted: #161618;
+    --color-fd-muted-foreground: #a1a1aa;
+    --color-fd-popover: #141416;
+    --color-fd-popover-foreground: #ededed;
+    --color-fd-card: #141416;
+    --color-fd-card-foreground: #ededed;
+    --color-fd-border: rgba(255, 255, 255, 0.08);
+    --color-fd-primary: #ff3700;
+    --color-fd-primary-foreground: #ffffff;
+    --color-fd-secondary: #18181b;
+    --color-fd-secondary-foreground: #ededed;
+    --color-fd-accent: rgba(255, 55, 0, 0.1);
+    --color-fd-accent-foreground: #ff3700;
+    --color-fd-ring: #ff3700;
+
+    --fd-background: #0f0f11;
+    --fd-foreground: #ededed;
+    --fd-muted: #161618;
+    --fd-muted-foreground: #a1a1aa;
+    --fd-popover: #141416;
+    --fd-popover-foreground: #ededed;
+    --fd-card: #141416;
+    --fd-card-foreground: #ededed;
+    --fd-border: rgba(255, 255, 255, 0.08);
+    --fd-primary: #ff3700;
+    --fd-primary-foreground: #ffffff;
+    --fd-secondary: #18181b;
+    --fd-secondary-foreground: #ededed;
+    --fd-accent: rgba(255, 55, 0, 0.1);
+    --fd-accent-foreground: #ff3700;
+    --fd-ring: #ff3700;
   }
 }
 
@@ -148,51 +164,71 @@
 
 /* Clean Modern Typography Hierarchy */
 [data-page-title] {
-  font-size: 1.5rem;
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  line-height: 1.25;
-  margin-bottom: 0.35rem;
+  font-size: 1.875rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
 }
 
 .prose h2 {
-  font-size: 1.15rem;
+  font-size: 1.35rem;
   font-weight: 600;
-  letter-spacing: -0.02em;
-  margin-top: 1.75rem;
-  margin-bottom: 0.5rem;
-  padding-bottom: 0.25rem;
-  border-bottom: 1px solid hsl(var(--border) / 0.5);
+  letter-spacing: -0.025em;
+  color: #ffffff;
+  margin-top: 2.25rem;
+  margin-bottom: 0.75rem;
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
 .prose h3 {
-  font-size: 0.95rem;
+  font-size: 1.05rem;
   font-weight: 600;
-  letter-spacing: -0.015em;
-  margin-top: 1.25rem;
-  margin-bottom: 0.35rem;
+  letter-spacing: -0.02em;
+  color: #f4f4f5;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
-.prose p, .prose li {
-  font-size: 0.875rem;
-  line-height: 1.55;
-  color: hsl(var(--muted-foreground));
+.prose p,
+.prose li {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: #d4d4d8;
+  letter-spacing: -0.01em;
 }
 
 .prose p + p {
-  margin-top: 0.75rem;
+  margin-top: 1rem;
 }
 
 .prose strong {
   font-weight: 600;
-  color: hsl(var(--foreground));
+  color: #ffffff;
 }
 
 .prose code:not(pre code) {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
   font-size: 0.8125rem;
-  border-radius: 0.25rem;
-  padding: 0.15rem 0.35rem;
-  background-color: hsl(var(--muted) / 0.8);
+  font-weight: 500;
+  color: #ff3700;
+  background-color: rgba(255, 55, 0, 0.08);
+  border: 1px solid rgba(255, 55, 0, 0.2);
+  border-radius: 0.375rem;
+  padding: 0.12rem 0.4rem;
+}
+
+.prose a:not([data-card]) {
+  color: #ff3700;
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(255, 55, 0, 0.35);
+  transition: border-color 0.15s ease;
+}
+
+.prose a:not([data-card]):hover {
+  border-bottom-color: #ff3700;
 }
 
 /* Fumadocs Accordion Refinement for sleek, compact collapsed view */
@@ -201,30 +237,122 @@
   margin-bottom: 0.75rem !important;
 }
 
-/* Seamless Line-Free Header Styling */
-#nd-nav,
-header.sticky {
-  border-bottom: none !important;
+/* Fumadocs Sidebar Hook / Dotted Rail Navigation */
+#nd-sidebar {
+  background-color: #0f0f11 !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.06) !important;
 }
 
-h1[id], h2[id], h3[id], h4[id], h5[id], h6[id] {
-  scroll-margin-top: 5rem;
+#nd-sidebar-mobile {
+  background-color: #0f0f11 !important;
 }
 
-::view-transition-old(root) {
-  animation: none;
-  z-index: 1;
+/* Vertical dashed rail on sidebar lists */
+#nd-sidebar ul:has(a) {
+  border-left: 1px dashed rgba(255, 255, 255, 0.1) !important;
+  margin-left: 0.65rem !important;
+  padding-left: 0.5rem !important;
 }
 
-::view-transition-new(root) {
-  animation: none;
-  z-index: 9999;
-  mix-blend-mode: normal;
+/* Sidebar navigation links */
+#nd-sidebar a {
+  position: relative;
+  font-size: 0.8125rem;
+  letter-spacing: -0.01em;
+  color: #a1a1aa;
+  transition: all 0.15s ease;
+  border-radius: 0.5rem;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none !important;
+#nd-sidebar a:hover {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+/* Active sidebar item with glowing hook/dot indicator */
+#nd-sidebar a[data-active='true'] {
+  color: #ffffff !important;
+  font-weight: 500;
+  background-color: rgba(255, 55, 0, 0.08) !important;
+}
+
+#nd-sidebar a[data-active='true']::before {
+  content: '';
+  position: absolute;
+  left: -0.55rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #ff3700;
+  box-shadow: none !important;
+}
+
+/* Clean Fumadocs Table of Contents - Remove unnecessary full-height vertical line */
+#nd-toc,
+[grid-area='toc'],
+#nd-toc-placeholder,
+aside:has(#nd-toc) {
+  border-left: none !important;
+  border-right: none !important;
+}
+
+#nd-toc a[data-active='true'] {
+  color: #ff3700 !important;
+  font-weight: 500;
+}
+
+/* Completely remove any glow, bloom, text-shadow or colored box-shadows in Docs UI */
+#nd-sidebar *,
+#nd-sidebar a:hover,
+#nd-sidebar a:active,
+#nd-toc *,
+#nd-toc a:hover,
+#nd-toc a:active,
+.fd-page *,
+.fd-page a:hover,
+.fd-page a:active,
+.fd-page button:hover,
+.fd-page button:active,
+[data-sound-audition] {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+/* Permanently hide all theme switchers and mode toggles */
+[data-theme-toggle],
+.fd-theme-toggle,
+[aria-label*="theme" i],
+[aria-label*="mode" i],
+[title*="theme" i] {
+  display: none !important;
+}
+
+
+
+
+/* sound-bits layout polish */
+.fd-page article,
+#nd-page article {
+  padding-inline: clamp(1rem, 3vw, 1.75rem);
+}
+
+.fd-page article > *:first-child,
+#nd-page article > *:first-child {
+  margin-top: 0;
+}
+
+/* Tighten card grids that felt cramped on sm */
+.sound-card-grid {
+  display: grid;
+  gap: 0.875rem;
+}
+
+@media (min-width: 640px) {
+  .sound-card-grid {
+    gap: 1rem;
   }
 }
+
