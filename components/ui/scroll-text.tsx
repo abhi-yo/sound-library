@@ -3,8 +3,9 @@
 
 import { cn } from '@/lib/utils';
 import { motion } from 'motion/react';
-import React from 'react';
+import React, { useRef, useCallback } from 'react';
 import type { JSX } from 'react';
+import { playSound } from '@/lib/lazy-sounds';
 
 type Direction = 'up' | 'down' | 'left' | 'right';
 
@@ -42,7 +43,7 @@ const generateVariants = (direction: Direction): { hidden: any; visible: any } =
   };
 };
 
-const defaultViewport = { amount: 0.25, once: true };
+const defaultViewport = { amount: 0.35, once: true };
 
 type TextAnimationProps = {
   as?: keyof JSX.IntrinsicElements;
@@ -54,6 +55,8 @@ type TextAnimationProps = {
   direction?: Direction;
   letterAnime?: boolean;
   lineAnime?: boolean;
+  playSoundOnReveal?: boolean;
+  soundType?: 'cinematic' | 'whoosh-shimmer' | 'tactile' | 'ethereal';
 };
 
 const TextAnimation = ({
@@ -66,10 +69,29 @@ const TextAnimation = ({
   direction = 'up',
   letterAnime = false,
   lineAnime = false,
+  playSoundOnReveal = false,
+  soundType,
 }: TextAnimationProps) => {
   const Tag = as as any;
   const finalVariants = variants || generateVariants(direction);
   const finalClassName = cn(classname, className);
+  const hasSounded = useRef(false);
+
+  const onReveal = useCallback(() => {
+    if (playSoundOnReveal && !hasSounded.current) {
+      hasSounded.current = true;
+      const soundName =
+        soundType === 'whoosh-shimmer' || (!soundType && letterAnime)
+          ? 'whoosh-shimmer'
+          : soundType === 'tactile'
+          ? 'tactile-reveal'
+          : soundType === 'ethereal'
+          ? 'ethereal-reveal'
+          : 'cinematic-reveal';
+
+      playSound(soundName);
+    }
+  }, [playSoundOnReveal, soundType, letterAnime]);
 
   if (letterAnime) {
     const words = text.split(' ');
@@ -81,6 +103,7 @@ const TextAnimation = ({
         viewport={viewport}
         variants={containerVariants}
         className="will-change-transform"
+        onViewportEnter={onReveal}
       >
         <Tag className={cn(finalClassName, 'break-words')}>
           {words.map((word, wIdx) => {
@@ -118,6 +141,7 @@ const TextAnimation = ({
         viewport={viewport}
         variants={containerVariants}
         className="will-change-transform"
+        onViewportEnter={onReveal}
       >
         <Tag className={finalClassName}>
           {lines.map((line, i) => (
@@ -143,6 +167,7 @@ const TextAnimation = ({
       viewport={viewport}
       variants={containerVariants}
       className="will-change-transform"
+      onViewportEnter={onReveal}
     >
       <Tag className={finalClassName}>
         {words.map((word, i) => (
@@ -163,3 +188,5 @@ const TextAnimation = ({
 };
 
 export default TextAnimation;
+
+
