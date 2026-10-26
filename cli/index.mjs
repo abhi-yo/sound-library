@@ -11,7 +11,7 @@
  *   npx sound-library init
  */
 
-import { writeFileSync, mkdirSync, existsSync, readFileSync } from "node:fs";
+import { writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { SOUNDS_DATA } from "./sounds-data.mjs";
 
@@ -102,19 +102,16 @@ export function isSoundEnabled() {
 `;
 
   const targetFile = join(outDir, "index.ts");
-  const existing = existsSync(targetFile) ? readFileSync(targetFile, "utf8") : "";
-  if (!existing.includes("export function getAudioContext")) {
-    writeFileSync(targetFile, managerCode);
-  }
-  success(`Created central audio manager at ${COLORS.cyan}components/sonix/index.ts${COLORS.reset}`);
+  writeFileSync(targetFile, managerCode);
+  success(`Created central audio manager at ${COLORS.cyan}lib/sounds/index.ts${COLORS.reset}`);
 }
 
 function addSounds(names) {
-  const outDir = join(process.cwd(), "components", "sonix");
+  const outDir = join(process.cwd(), "lib", "sounds");
 
   if (!existsSync(outDir)) {
     mkdirSync(outDir, { recursive: true });
-    success(`Created ${COLORS.cyan}components/sonix/${COLORS.reset}`);
+    success(`Created ${COLORS.cyan}lib/sounds/${COLORS.reset}`);
   }
 
   const soundsToAdd = names.includes("all")
@@ -142,25 +139,15 @@ ${found.code}
 `;
 
     writeFileSync(filePath, fileContent);
-    success(`Added ${COLORS.cyan}components/sonix/${found.name}.ts${COLORS.reset}`);
+    success(`Added ${COLORS.cyan}lib/sounds/${found.name}.ts${COLORS.reset}`);
     added.push(found.name);
   }
 
   if (added.length > 0) {
-    const indexPath = join(outDir, "index.ts");
-    const currentIndex = existsSync(indexPath) ? readFileSync(indexPath, "utf8") : "";
-    const exports = SOUNDS_DATA
-      .filter((sound) => existsSync(join(outDir, `${sound.name}.ts`)))
-      .map((sound) => `export { play${toPascal(sound.name)} } from "./${sound.name}";`)
-      .join("\n");
-    const exportBlock = `\n// Individual sound exports\n${exports}\n`;
-    const withoutExports = currentIndex.replace(/\n\/\/ Individual sound exports[\s\S]*$/m, "");
-    writeFileSync(indexPath, `${withoutExports.trimEnd()}\n${exportBlock}`);
-    success(`Updated ${COLORS.cyan}components/sonix/index.ts${COLORS.reset}`);
     log("");
     log(`${COLORS.bold}Import and trigger in any component:${COLORS.reset}`);
     log(
-      `${COLORS.dim}  import { play${toPascal(added[0])} } from '@/components/sonix';${COLORS.reset}`
+      `${COLORS.dim}  import { play${toPascal(added[0])} } from './lib/sounds/${added[0]}';${COLORS.reset}`
     );
     log(`${COLORS.dim}  <button onClick={play${toPascal(added[0])}}>Click Me</button>${COLORS.reset}`);
     log("");
@@ -180,7 +167,7 @@ if (!command || command === "help" || command === "--help" || command === "-h") 
   log(`  ${COLORS.cyan}npx sound-library add tap pop bell${COLORS.reset}   Add multiple sounds`);
   log(`  ${COLORS.cyan}npx sound-library add all${COLORS.reset}            Add all 45+ sounds`);
   log(`  ${COLORS.cyan}npx sound-library list${COLORS.reset}               List all available sounds`);
-  log(`  ${COLORS.cyan}npx sound-library init${COLORS.reset}               Initialize audio manager at components/sonix/index.ts`);
+  log(`  ${COLORS.cyan}npx sound-library init${COLORS.reset}               Initialize audio manager at lib/sounds/index.ts`);
   log("");
   process.exit(0);
 }
@@ -188,7 +175,7 @@ if (!command || command === "help" || command === "--help" || command === "-h") 
 if (command === "list") {
   listSounds();
 } else if (command === "init") {
-  const outDir = join(process.cwd(), "components", "sonix");
+  const outDir = join(process.cwd(), "lib", "sounds");
   initSoundsManager(outDir);
 } else if (command === "add") {
   const names = args.slice(1);
