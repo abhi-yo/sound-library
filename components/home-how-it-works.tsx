@@ -41,7 +41,7 @@ const STEPS = [
         title="Click to test live sound"
         className="rounded-[12px] bg-[#161616] hover:bg-[#1c1c1c] border border-[#242424] hover:border-[#ff3700]/40 px-3.5 py-2.5 flex items-center justify-between font-mono text-[12px] ipad:text-[13px] text-white/90 transition-all cursor-pointer group/test w-full"
       >
-        <span>playSound(&apos;button-click&apos;)</span>
+        <span className="min-w-0 truncate">playSound(&apos;button-click&apos;)</span>
         <span className="inline-flex items-center gap-1 text-[11px] font-tight text-[#ff3700] bg-[#ff3700]/10 px-2 py-0.5 rounded-full font-medium transition-transform group-hover/test:scale-105">
           <Volume2 className="w-3 h-3" /> Test
         </span>
@@ -70,7 +70,7 @@ export function HomeHowItWorks() {
         </div>
       </header>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 ipad:gap-5 items-stretch">
+      <div className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-3 ipad:gap-5 items-stretch">
         {STEPS.map((s) => {
           const IconComponent = s.icon;
           return (
@@ -78,7 +78,7 @@ export function HomeHowItWorks() {
               key={s.n}
               className="flex flex-col rounded-[20px] bg-[#1a1a1a] p-[6px] ipad:p-[8px] border border-[#262626]/50"
             >
-              <div className="rounded-[16px] bg-[#111111] p-5 ipad:p-6 flex flex-col justify-between gap-6 drop-shadow-[0px_0px_6px_rgba(0,0,0,0.5)] flex-1 min-h-[200px]">
+              <div className="min-w-0 rounded-[16px] bg-[#111111] p-5 ipad:p-6 flex flex-col justify-between gap-6 drop-shadow-[0px_0px_6px_rgba(0,0,0,0.5)] flex-1 min-h-[200px]">
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <span className="font-tight text-[12px] font-bold tracking-wider text-[#ff3700] uppercase">

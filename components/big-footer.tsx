@@ -56,7 +56,7 @@ export const BigFooter = React.memo(function BigFooter() {
                   <SoundBitsLogo size={54} color="#ff3700" className="inline-block shrink-0" />
                 </span>
               </h2>
-              <span className="font-tight text-[11px] sm:text-[12px] font-medium tracking-wider text-[#ff3700] px-2 py-0.5 rounded-full bg-[#ff3700]/10 border border-[#ff3700]/20">
+              <span className="shrink-0 font-tight text-[11px] sm:text-[12px] font-medium tracking-wider text-[#ff3700] px-2 py-0.5 rounded-full bg-[#ff3700]/10 border border-[#ff3700]/20">
                 AUDIO
               </span>
             </div>
@@ -156,7 +156,7 @@ export const BigFooter = React.memo(function BigFooter() {
               className="inline-flex items-center gap-2 font-tight text-[14px] font-medium text-white/80 hover:text-[#ff3700] transition-colors group pt-1"
             >
               <span className="text-base text-[#ff3700] transition-transform group-hover:translate-x-0.5">↳</span>
-              <span className="underline underline-offset-4 decoration-white/30 group-hover:decoration-[#ff3700]">
+              <span className="break-all underline underline-offset-4 decoration-white/30 group-hover:decoration-[#ff3700]">
                 akshatsing11@gmail.com
               </span>
             </a>

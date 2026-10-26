@@ -661,14 +661,14 @@ export default function BrowsePage() {
   const activeDef = DEFS.find((d) => d.id === activeId);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#000000] text-neutral-100 font-sans selection:bg-white selection:text-neutral-900 overflow-x-hidden">
+    <div className="min-h-screen min-w-0 flex flex-col overflow-x-clip bg-[#000000] text-neutral-100 font-sans selection:bg-white selection:text-neutral-900">
       <HomeHeader />
 
       <main className="relative w-full flex-1 overflow-hidden bg-[#0a0a0a]">
         <div className="relative mx-auto w-full overflow-hidden max-w-[1440px] px-0 pt-10 pb-16 sm:pt-14 sm:pb-20">
           <EdgeDotBands />
 
-          <div className="relative mx-auto w-full max-w-[960px] px-4 sm:px-6">
+          <div className="relative mx-auto w-full min-w-0 max-w-[960px] px-4 sm:px-6">
             <div className="flex items-center justify-between font-mono text-[11px] text-white/20 mb-10 pb-4 border-b border-white/[0.05]">
               <div className="flex items-center gap-2.5">
                 <span className="relative flex h-1.5 w-1.5">
@@ -680,7 +680,7 @@ export default function BrowsePage() {
               <span className="tracking-[0.15em] text-white/15">{DEFS.length} COMPONENTS</span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 items-stretch">
+            <div className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 items-stretch">
               <CardShell def={DEFS[0]} onExpand={() => setActiveId('button')}>
                 <NeoBrutalistButton size="compact" />
               </CardShell>

@@ -941,7 +941,7 @@ export function DotmatrixHero({
   joinLabel = "GitHub",
 }: DotmatrixHeroProps = {}) {
   return (
-    <section className="ok-h26-hero" style={{ minHeight: 'calc(100svh - 56px)', height: 'calc(100svh - 56px)' }}>
+    <section className="ok-h26-hero" style={{ minHeight: 'calc(100svh - 56px)', height: 'auto' }}>
 
       <div className="ok-h26-hero-media">
         <div className="ok-h26-hero-media__bg">

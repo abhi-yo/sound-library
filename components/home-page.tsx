@@ -38,7 +38,7 @@ const BigFooter = dynamic(
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col bg-black text-neutral-100 font-sans selection:bg-white selection:text-neutral-900 overflow-x-hidden">
+    <div className="min-h-screen min-w-0 flex flex-col overflow-x-clip bg-black text-neutral-100 font-sans selection:bg-white selection:text-neutral-900">
       <HomeHeader />
       <Hero26 />
       <Features04 />

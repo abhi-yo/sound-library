@@ -115,12 +115,12 @@ export function CtaSection({
           onClick={handleCopy}
           data-copy-button="true"
           title="Click to copy"
-          className="relative z-10 mt-7 sm:mt-8 inline-flex items-center gap-[10px] rounded-[100px] bg-[#161616]/90 hover:bg-[#202020] border border-[#2a2a2a] hover:border-[#ff3700]/50 px-[20px] py-[12px] backdrop-blur-md transition-all duration-150 cursor-pointer group shadow-lg pointer-events-auto"
+          className="relative z-10 mt-7 sm:mt-8 flex max-w-full min-w-0 items-center gap-[10px] rounded-[100px] bg-[#161616]/90 hover:bg-[#202020] border border-[#2a2a2a] hover:border-[#ff3700]/50 px-[16px] py-[12px] sm:px-[20px] backdrop-blur-md transition-all duration-150 cursor-pointer group shadow-lg pointer-events-auto"
         >
           <span className="font-tight text-[14px] font-semibold text-[#ff3700] select-none">
             $
           </span>
-          <span className="font-dm-mono text-[13px] sm:text-[14px] text-white/90 tracking-normal">
+          <span className="min-w-0 truncate font-dm-mono text-[13px] sm:text-[14px] text-white/90 tracking-normal">
             {command}
           </span>
           <span className="ml-[6px] flex items-center text-white/40 group-hover:text-white/80 transition-colors">
