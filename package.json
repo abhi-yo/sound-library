@@ -1,6 +1,6 @@
 {
   "name": "sound-library",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Procedural micro UX sound effects for the web. Zero runtime dependencies. Web Audio API + CLI scaffolding.",
   "license": "MIT",
   "repository": {
