@@ -5,7 +5,8 @@ import { useEffect, useRef, type CSSProperties } from "react";
 const DEFAULT_IMAGE =
     "https://imagedelivery.net/IEUjvl3YUlxY-MrTpOAWDQ/e4476503-c1e3-4358-3ff6-539deda1f800/w=800";
 
-type ColorMode = "mono" | "image";
+/** "accent": mono ink, except saturated (orange) pixels keep their own colour. */
+type ColorMode = "mono" | "image" | "accent";
 type Fit = "cover" | "contain";
 
 interface RevealOptions {
@@ -210,7 +211,10 @@ export default function AsciiImage(props: AsciiImageProps) {
                                   255,
                                   gg + 30
                               )}, ${Math.min(255, bb + 30)})`
-                            : inkColor;
+                            : colorMode === "accent" &&
+                                Math.max(rr, gg, bb) - Math.min(rr, gg, bb) > 60
+                              ? `rgb(${rr}, ${gg}, ${bb})`
+                              : inkColor;
                     octx.fillText(ch, c * cellW, r * cellH);
                 }
             }

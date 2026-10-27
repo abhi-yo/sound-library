@@ -55,7 +55,7 @@ export function CtaSection({
       {/* Unified CTA Card with PixelBlast background */}
       <div className="relative flex flex-col items-center justify-center text-center rounded-[20px] bg-[#0c0c0c] border border-[#222222] px-5 sm:px-8 py-14 sm:py-20 md:py-24 overflow-hidden shadow-2xl">
         {/* PixelBlast Background covering 100% of the card with matching fiery orange */}
-        <div className="absolute inset-0 z-0 pointer-events-auto overflow-hidden opacity-85">
+        <div className="absolute inset-0 z-0 pointer-events-auto overflow-hidden opacity-[0.32] sm:opacity-85">
           <PixelBlast
             variant="square"
             pixelSize={4}

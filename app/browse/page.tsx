@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import HomeHeader from '@/components/home-header';
 import { playSound, playCopySound } from '@/lib/lazy-sounds';
 import type { SoundName } from '@/lib/sound-names';
@@ -678,6 +679,25 @@ export default function BrowsePage() {
                 <span className="text-[#ff3700]/70 tracking-[0.2em] uppercase">Frontends</span>
               </div>
               <span className="tracking-[0.15em] text-white/15">{DEFS.length} COMPONENTS</span>
+            </div>
+
+            <div className="mb-8 flex flex-col gap-3 rounded-2xl border border-[#ff3700]/20 bg-[#120b08] px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:px-5">
+              <div className="min-w-0">
+                <p className="font-tight text-[15px] font-medium text-white sm:text-[16px]">
+                  These are only starting points.
+                </p>
+                <p className="mt-1 max-w-[620px] font-tight text-[13px] leading-relaxed text-white/50 sm:text-[14px]">
+                  Experiment with the sounds, then build your own interfaces from the docs.
+                </p>
+              </div>
+              <Link
+                href="/docs"
+                onClick={() => playSound('tick')}
+                className="inline-flex shrink-0 items-center gap-2 self-start rounded-full border border-[#ff3700]/35 bg-[#ff3700]/10 px-3.5 py-2 font-mono text-[11px] uppercase tracking-[0.12em] text-[#ff8a66] transition-colors hover:border-[#ff3700]/70 hover:bg-[#ff3700]/20 hover:text-white sm:self-auto"
+              >
+                Explore docs
+                <span aria-hidden>→</span>
+              </Link>
             </div>
 
             <div className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 items-stretch">

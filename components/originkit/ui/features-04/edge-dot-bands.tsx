@@ -35,14 +35,14 @@ export const EdgeDotBands = () => (
   <>
     <div
       aria-hidden
-      className={`${BAR} top-[-8.5px] left-[2.36px] ipad:left-[1.51px] desktop-sm:top-[-2.5px] desktop-sm:left-[1.5px]`}
+      className={`${BAR} ok-feature-edge-dot-band top-[-8.5px] left-[2.36px] ipad:left-[1.51px] desktop-sm:top-[-2.5px] desktop-sm:left-[1.5px]`}
       style={{ backgroundImage: DOT_TILE }}
     />
     {/* The two bars sample the dot field at different phases in Figma, so the
         rows never line up across the frame — the offset keeps that. */}
     <div
       aria-hidden
-      className={`${BAR} top-[-9.5px] right-[-1.36px] ipad:top-[-13.5px] ipad:right-[-0.5px] desktop-sm:top-[-2.5px] desktop-sm:right-[0.5px]`}
+      className={`${BAR} ok-feature-edge-dot-band top-[-9.5px] right-[-1.36px] ipad:top-[-13.5px] ipad:right-[-0.5px] desktop-sm:top-[-2.5px] desktop-sm:right-[0.5px]`}
       style={{ backgroundImage: DOT_TILE, backgroundPosition: "0 3.6px" }}
     />
   </>

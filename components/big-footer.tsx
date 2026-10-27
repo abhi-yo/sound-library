@@ -21,9 +21,9 @@ const AURORA_COLOR_STOPS: [string, string, string] = ['#ff3700', '#ff5200', '#e0
 
 export const BigFooter = React.memo(function BigFooter() {
   return (
-    <footer className="relative w-full min-h-[540px] lg:min-h-[600px] flex flex-col justify-between bg-[#080808] text-white border-t border-[#1f1f1f] overflow-hidden select-none">
+    <footer className="sound-bits-footer relative w-full min-h-[540px] lg:min-h-[600px] flex flex-col justify-between bg-[#080808] text-white border-t border-[#1f1f1f] overflow-hidden select-none">
       {/* Dynamic Aurora Ambient Background */}
-      <div className="absolute inset-0 pointer-events-none opacity-75 overflow-hidden">
+      <div className="sound-bits-footer__aurora absolute inset-0 pointer-events-none opacity-75 overflow-hidden">
         <Aurora
           colorStops={AURORA_COLOR_STOPS}
           blend={0.5}
@@ -34,7 +34,7 @@ export const BigFooter = React.memo(function BigFooter() {
 
       {/* Subtle Tactile Film Grain Texture Overlay */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-[0.22] mix-blend-overlay z-[1]"
+        className="sound-bits-footer__grain absolute inset-0 pointer-events-none opacity-[0.22] mix-blend-overlay z-[1]"
         style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
           backgroundRepeat: 'repeat',
@@ -43,11 +43,11 @@ export const BigFooter = React.memo(function BigFooter() {
       />
 
       {/* Main Container evenly utilizing the full grid width */}
-      <div className="relative z-10 w-full flex-1 flex flex-col justify-between max-w-[1440px] mx-auto px-6 py-14 sm:px-10 sm:py-16 md:px-12 lg:px-16">
+      <div className="sound-bits-footer__inner relative z-10 w-full flex-1 flex flex-col justify-between max-w-[1440px] mx-auto px-6 py-14 sm:px-10 sm:py-16 md:px-12 lg:px-16">
         {/* Top Row: Spanning across 4 balanced columns */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 items-start w-full">
+        <div className="sound-bits-footer__top grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 items-start w-full">
           {/* Column 1: Brand Wordmark + Enlarged Logo + Tagline */}
-          <div className="lg:col-span-5 flex flex-col gap-4">
+          <div className="sound-bits-footer__brand lg:col-span-5 flex flex-col gap-4">
             <div className="flex items-baseline gap-3.5">
               <h2 className="font-helvetica-neue text-3xl sm:text-4xl md:text-[44px] font-medium uppercase tracking-tight leading-[0.95] text-white">
                 SOUND<br />
@@ -66,7 +66,7 @@ export const BigFooter = React.memo(function BigFooter() {
           </div>
 
           {/* Column 2: Navigation */}
-          <div className="lg:col-span-2 lg:pl-2">
+          <div className="sound-bits-footer__nav lg:col-span-2 lg:pl-2">
             <p className="font-tight text-[12px] font-semibold text-[#ff3700] uppercase tracking-wider mb-4">
               Navigation
             </p>
@@ -111,7 +111,7 @@ export const BigFooter = React.memo(function BigFooter() {
           </div>
 
           {/* Column 3: Community */}
-          <div className="lg:col-span-2">
+          <div className="sound-bits-footer__community lg:col-span-2">
             <p className="font-tight text-[12px] font-semibold text-[#ff3700] uppercase tracking-wider mb-4">
               Community
             </p>
@@ -144,7 +144,7 @@ export const BigFooter = React.memo(function BigFooter() {
           </div>
 
           {/* Column 4: Contact & Inquiries (Pinned to Right) */}
-          <div className="lg:col-span-3 flex flex-col lg:items-end lg:text-right space-y-4">
+          <div className="sound-bits-footer__contact lg:col-span-3 flex flex-col lg:items-end lg:text-right space-y-4">
             <p className="font-tight text-[12px] font-semibold text-[#ff3700] uppercase tracking-wider mb-1">
               Contact & Inquiries
             </p>
@@ -164,17 +164,17 @@ export const BigFooter = React.memo(function BigFooter() {
         </div>
 
         {/* Middle Breathing Room */}
-        <div className="my-10 sm:my-14 md:my-16" />
+        <div className="sound-bits-footer__spacer my-10 sm:my-14 md:my-16" />
 
         {/* Bottom Row: Game on Left, Policies Center, Copyright Pinned on Right */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 items-end w-full">
+        <div className="sound-bits-footer__bottom grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 items-end w-full">
           {/* Bottom Left: Tap game */}
-          <div className="lg:col-span-5">
+          <div className="sound-bits-footer__game lg:col-span-5">
             <FooterTapGame />
           </div>
 
           {/* Bottom Center: Legal Policies */}
-          <div className="lg:col-span-3 lg:pl-2">
+          <div className="sound-bits-footer__legal lg:col-span-3 lg:pl-2">
             <p className="font-tight text-[12px] font-semibold text-white/40 uppercase tracking-wider mb-3">
               Legal
             </p>
@@ -201,7 +201,7 @@ export const BigFooter = React.memo(function BigFooter() {
           </div>
 
           {/* Bottom Right: Credits & Copyright (Pinned to Far Right) */}
-          <div className="lg:col-span-4 flex flex-col lg:items-end lg:text-right space-y-1 font-tight text-[13px] text-white/40">
+          <div className="sound-bits-footer__credits lg:col-span-4 flex flex-col lg:items-end lg:text-right space-y-1 font-tight text-[13px] text-white/40">
             <p className="text-white/60">Built for interactive web interfaces.</p>
             <p className="text-white/80 font-medium">Studio Sound Bits</p>
             <p className="pt-2 text-white/30 font-mono text-[12px]">© {new Date().getFullYear()} SOUND BITS · ALL RIGHTS RESERVED</p>

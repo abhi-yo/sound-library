@@ -2,7 +2,7 @@
 "use client";
 
 /* —— Dotted WebGL background (inlined; avoids nested ui/ publish) —— */
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import {
     Renderer,
     Camera,
@@ -940,8 +940,18 @@ export function DotmatrixHero({
   docsLabel = "Documentation",
   joinLabel = "GitHub",
 }: DotmatrixHeroProps = {}) {
+  const [isPhone, setIsPhone] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 640px)');
+    const update = () => setIsPhone(media.matches);
+    update();
+    media.addEventListener('change', update);
+    return () => media.removeEventListener('change', update);
+  }, []);
+
   return (
-    <section className="ok-h26-hero" style={{ minHeight: 'calc(100svh - 56px)', height: 'auto' }}>
+    <section className="ok-h26-hero">
 
       <div className="ok-h26-hero-media">
         <div className="ok-h26-hero-media__bg">
@@ -950,7 +960,7 @@ export function DotmatrixHero({
             colors={["#0f0500", "#542005", "#a2430b"]}
             frequency={1.5}
             speed={2}
-            cellSize={10}
+            cellSize={isPhone ? 6 : 10}
             gamma={3}
             paletteBias={8}
           />

@@ -39,6 +39,7 @@ interface Art {
   alt: string;
   boxClassName: string;
   artClassName: string;
+  accent?: boolean;
 }
 
 export const FeatureCard = ({
@@ -52,9 +53,9 @@ export const FeatureCard = ({
 }) => (
   <Plate
     outerClassName="ipad:h-[373px]"
-    innerClassName="flex-col gap-[10px] px-[20px] pt-[12px] pb-[20px] ipad:min-h-px ipad:flex-1 ipad:justify-end"
+    innerClassName="flex-col gap-[8px] px-[16px] pt-[8px] pb-[16px] ipad:min-h-px ipad:flex-1 ipad:justify-end ipad:gap-[10px] ipad:px-[20px] ipad:pt-[12px] ipad:pb-[20px]"
   >
-    <div className="flex w-full flex-col items-center justify-center pb-[20px]">
+    <div className="flex w-full flex-col items-center justify-center pb-[12px] ipad:pb-[20px]">
       <AsciiArt {...art} />
     </div>
     <CardText title={title} body={body} />
@@ -72,9 +73,9 @@ export const WideCard = ({
 }) => (
   <Plate
     outerClassName="desktop-sm:h-full"
-    innerClassName="flex-col items-center gap-[10px] px-[20px] pt-[12px] pb-[20px] ipad:pt-[20px] desktop-sm:min-h-px desktop-sm:flex-1 desktop-sm:justify-between desktop-sm:pt-[32px]"
+    innerClassName="flex-col items-center gap-[8px] px-[16px] pt-[8px] pb-[16px] ipad:gap-[10px] ipad:px-[20px] ipad:pt-[20px] ipad:pb-[20px] desktop-sm:min-h-px desktop-sm:flex-1 desktop-sm:justify-between desktop-sm:pt-[32px]"
   >
-    <div className="flex w-full flex-col items-center justify-center pb-[20px]">
+    <div className="flex w-full flex-col items-center justify-center pb-[12px] ipad:pb-[20px]">
       <AsciiArt {...art} />
     </div>
     <CardText title={title} body={body} />

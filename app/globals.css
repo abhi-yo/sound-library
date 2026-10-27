@@ -364,6 +364,102 @@ aside:has(#nd-toc) {
   gap: 0.875rem;
 }
 
+@media (max-width: 1024px) {
+  .sound-bits-footer {
+    min-height: 0;
+    isolation: isolate;
+    background:
+      radial-gradient(circle at 88% 0%, rgba(255, 55, 0, 0.22), transparent 34%),
+      linear-gradient(160deg, #120b09 0%, #090909 48%, #070707 100%);
+  }
+
+  .sound-bits-footer__aurora {
+    opacity: 0.2;
+  }
+
+  .sound-bits-footer__grain {
+    opacity: 0.1;
+  }
+
+  .sound-bits-footer__inner {
+    padding: 2.25rem 1.25rem 1.5rem;
+  }
+
+  .sound-bits-footer__top {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 1.25rem;
+    row-gap: 2.25rem;
+  }
+
+  .sound-bits-footer__brand,
+  .sound-bits-footer__contact {
+    grid-column: 1 / -1;
+  }
+
+  .sound-bits-footer__brand {
+    gap: 0.875rem;
+    padding-bottom: 0.25rem;
+  }
+
+  .sound-bits-footer__brand h2 {
+    font-size: 2.25rem;
+  }
+
+  .sound-bits-footer__top nav,
+  .sound-bits-footer__community > div {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .sound-bits-footer__top nav a,
+  .sound-bits-footer__community a {
+    font-size: 0.875rem;
+    line-height: 1.25;
+  }
+
+  .sound-bits-footer__contact {
+    gap: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1.25rem;
+  }
+
+  .sound-bits-footer__contact p:last-of-type {
+    max-width: 20rem;
+  }
+
+  .sound-bits-footer__spacer,
+  .sound-bits-footer__game {
+    display: none;
+  }
+
+  .sound-bits-footer__bottom {
+    gap: 1.5rem;
+    margin-top: 2.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .sound-bits-footer__bottom > div:first-child {
+    order: 2;
+  }
+
+  .sound-bits-footer__bottom > div:nth-child(2) {
+    order: 1;
+  }
+
+  .sound-bits-footer__bottom > div:last-child {
+    order: 3;
+  }
+
+  .sound-bits-footer__credits {
+    font-size: 0.75rem;
+  }
+
+  .sound-bits-footer__credits p:first-child {
+    color: rgba(255, 255, 255, 0.45);
+  }
+}
+
 @media (min-width: 640px) {
   .sound-card-grid {
     gap: 1rem;

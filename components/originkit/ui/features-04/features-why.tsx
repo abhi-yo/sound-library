@@ -38,50 +38,53 @@ const FEATURES = {
     title: "Procedural",
     body: "Every sound is synthesized live via Web Audio API. No audio files to download, host, or cache. Pure code.",
     art: {
-      src: asset("focus.png"),
-      alt: "An isometric cube rendered in ASCII characters",
-      boxClassName: "h-[166px] w-[180px] ipad:h-[196px] ipad:w-[212px]",
-      artClassName:
-        "top-[-29.98px] left-[-30.13px] h-[242.3px] w-[242.3px] ipad:top-[-35.4px] ipad:left-[-35.49px] ipad:h-[285.4px] ipad:w-[285.4px]",
+      src: asset("procedural.png"),
+      alt: "An isometric oscillator module with an orange sine wave on its screen, knobs, faders and a patch cable, rendered in ASCII characters",
+      boxClassName: "h-[150px] w-[200px] ipad:h-[196px] ipad:w-[212px]",
+      artClassName: "inset-0 h-full w-full",
+      accent: true,
     },
   },
   connect: {
     title: "Framework Agnostic",
     body: "React, Vue, Svelte, vanilla JS — a single import works everywhere. No adapters, no wrappers, no config.",
     art: {
-      src: asset("connect.png"),
-      alt: "Interlocking isometric blocks rendered in ASCII characters",
-      boxClassName: "h-[166px] w-[198px] ipad:h-[196px] ipad:w-[234px]",
-      artClassName:
-        "top-[-7.55px] left-[7.44px] h-[179.8px] w-[194.2px] ipad:top-[-8.91px] ipad:left-[8.79px] ipad:h-[212.3px] ipad:w-[229.5px]",
+      src: asset("agnostic.png"),
+      alt: "One isometric sound core wired into four different framework blocks, rendered in ASCII characters",
+      boxClassName: "h-[150px] w-[210px] ipad:h-[196px] ipad:w-[234px]",
+      artClassName: "inset-0 h-full w-full",
+      accent: true,
     },
   },
   scale: {
     title: "Instant Playback",
     body: "Sub-millisecond latency because there are no network round-trips and no decoding stalls. Sounds fire the instant you call them.",
     art: {
-      src: asset("scale.png"),
-      alt: "A rising staircase of isometric blocks rendered in ASCII characters",
+      src: asset("playback.png"),
+      alt: "An isometric speaker cabinet beside a glowing play pad sending ripples across the floor, rendered in ASCII characters",
       boxClassName:
-        "h-[166px] w-[173px] ipad:h-[213px] ipad:w-[223px] desktop-sm:h-[271px] desktop-sm:w-[283px]",
-      artClassName:
-        "top-[-21.83px] left-[-60.63px] h-[209.8px] w-[279.7px] ipad:top-[-28.01px] ipad:left-[-78.15px] ipad:h-[269.2px] ipad:w-[360.5px] desktop-sm:top-[-35.64px] desktop-sm:left-[-99.18px] desktop-sm:h-[342.5px] desktop-sm:w-[457.5px]",
+        "h-[170px] w-[180px] ipad:h-[213px] ipad:w-[223px] desktop-sm:h-[271px] desktop-sm:w-[283px]",
+      artClassName: "inset-0 h-full w-full",
+      accent: true,
     },
   },
 };
 
 export const FeaturesWhy = () => (
-  <section className="animate-hero-reveal relative w-full overflow-hidden bg-[#0a0a0a] desktop-sm:bg-[#0c0c0c]">
-    <div className="relative mx-auto w-full overflow-hidden pt-[81px] ipad:pt-[127px] desktop-sm:pt-[63px] wide-lg:max-w-[1440px]">
-      <GridRows />
-      <GridColumns />
-      <CornerBlocks />
+  <section className="ok-f04-why animate-hero-reveal relative w-full overflow-hidden bg-[#0a0a0a] desktop-sm:bg-[#0c0c0c]">
+    <div className="relative mx-auto w-full overflow-hidden pt-[56px] ipad:pt-[127px] desktop-sm:pt-[63px] wide-lg:max-w-[1440px]">
+      {/* Ruled grid + highlighted cells; hidden on phones (see hero-26.css). */}
+      <div aria-hidden className="ok-f04-bg-grid contents">
+        <GridRows />
+        <GridColumns />
+        <CornerBlocks />
+      </div>
       <Glow />
       <DesktopGlow />
       <EdgeDotBands />
 
-      <div className="relative mx-auto flex w-full max-w-[1192px] flex-col items-center gap-[32px] px-4 sm:px-6 lg:px-8 pb-[81px] ipad:gap-[52px] ipad:pb-[104px] desktop-sm:gap-[72px] desktop-sm:pb-[62px]">
-        <header className="flex w-full flex-col items-center gap-[20px] ipad:w-[502px]">
+      <div className="relative mx-auto flex w-full max-w-[1192px] flex-col items-center gap-[24px] px-4 sm:px-6 lg:px-8 pb-[60px] ipad:gap-[52px] ipad:pb-[104px] desktop-sm:gap-[72px] desktop-sm:pb-[62px]">
+        <header className="flex w-full flex-col items-center gap-[16px] ipad:w-[502px] ipad:gap-[20px]">
           <div className="flex items-center gap-[8px] rounded-[100px] bg-[#1c1c1c] border border-[#2a2a2a] px-[14px] py-[12px]">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff3700" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M9 18V5l12-2v13" />
@@ -105,12 +108,16 @@ export const FeaturesWhy = () => (
         <div className="flex w-full flex-col gap-[12px] ipad:gap-[16px] desktop-sm:grid desktop-sm:grid-cols-3 desktop-sm:items-stretch">
           <div className="flex flex-col gap-[12px] ipad:flex-row ipad:items-center ipad:gap-[16px] desktop-sm:contents">
             <div className="flex flex-col gap-[12px] ipad:w-[286px] ipad:shrink-0 ipad:gap-[16px] desktop-sm:w-auto">
-              <Plate innerClassName="h-[76px] items-center gap-[10px] px-[20px] py-[12px]">
+              <Plate innerClassName="h-[64px] items-center gap-[10px] px-[16px] py-[10px] ipad:h-[76px] ipad:px-[20px] ipad:py-[12px]">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff3700" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="16 18 22 12 16 6" />
-                  <polyline points="8 6 2 12 8 18" />
+                  {/* waveform bars */}
+                  <line x1="3" y1="10" x2="3" y2="14" />
+                  <line x1="7.5" y1="6" x2="7.5" y2="18" />
+                  <line x1="12" y1="3" x2="12" y2="21" />
+                  <line x1="16.5" y1="7" x2="16.5" y2="17" />
+                  <line x1="21" y1="10" x2="21" y2="14" />
                 </svg>
-                <p className="w-[154px] font-tight text-[16px] leading-[1.2] font-medium text-white desktop-sm:w-auto desktop-sm:text-[18px] desktop-sm:whitespace-nowrap">
+                <p className="w-[154px] font-tight text-[15px] leading-[1.2] font-medium text-white ipad:text-[16px] desktop-sm:w-auto desktop-sm:text-[18px] desktop-sm:whitespace-nowrap">
                   60+ Synthesized Sounds
                 </p>
               </Plate>
@@ -121,12 +128,12 @@ export const FeaturesWhy = () => (
             <div className="flex flex-col gap-[12px] ipad:flex-1 ipad:gap-[16px]">
               <FeatureCard {...FEATURES.connect} />
 
-              <Plate innerClassName="h-[76px] items-center gap-[12px] px-[20px] py-[12px]">
+              <Plate innerClassName="h-[64px] items-center gap-[12px] px-[16px] py-[10px] ipad:h-[76px] ipad:px-[20px] ipad:py-[12px]">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff3700" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10" />
-                  <polyline points="12 6 12 12 16 14" />
+                  {/* lightning bolt */}
+                  <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" />
                 </svg>
-                <p className="font-tight text-[16px] leading-[1.2] font-medium whitespace-nowrap text-white desktop-sm:text-[18px]">
+                <p className="font-tight text-[15px] leading-[1.2] font-medium whitespace-nowrap text-white ipad:text-[16px] desktop-sm:text-[18px]">
                   Sub-ms Latency
                 </p>
               </Plate>

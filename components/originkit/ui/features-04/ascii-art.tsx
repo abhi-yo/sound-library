@@ -43,6 +43,8 @@ interface AsciiArtProps {
   boxClassName: string;
   /** The render itself, scaled and offset the way Figma crops it. */
   artClassName: string;
+  /** Keep orange accent pixels in colour instead of flattening them to ink. */
+  accent?: boolean;
 }
 
 export const AsciiArt = ({
@@ -50,6 +52,7 @@ export const AsciiArt = ({
   alt,
   boxClassName,
   artClassName,
+  accent = false,
 }: AsciiArtProps) => {
   const artRef = useRef<HTMLDivElement>(null);
   const [width, setWidth] = useState(0);
@@ -74,7 +77,8 @@ export const AsciiArt = ({
             image={{ src, alt }}
             fit="contain"
             columns={Math.round(width / PITCH)}
-            inkColor="#333333"
+            inkColor={accent ? "#4a4a4a" : "#333333"}
+            colorMode={accent ? "accent" : "mono"}
             revealOptions={{
               size: Math.round(width / REVEAL_RATIO),
               softness: 12,
