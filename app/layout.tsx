@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import { RootProvider } from 'fumadocs-ui/provider/next';
 import { CopyClickSound } from '@/components/copy-click-sound';
+import { UiSoundLayer } from '@/components/ui-sound-layer';
 
 import './globals.css';
 
@@ -89,6 +90,7 @@ export default function RootLayout({
           search={{ enabled: true }}
         >
           <CopyClickSound />
+          <UiSoundLayer />
           {children}
         </RootProvider>
         <Analytics />

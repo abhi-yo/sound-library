@@ -45,7 +45,9 @@ export default function HomePage() {
 
       <section className="relative w-full overflow-hidden bg-[#0a0a0a] desktop-sm:bg-[#0c0c0c]">
         <div className="relative mx-auto w-full overflow-hidden wide-lg:max-w-[1440px]">
-          <EdgeDotBands />
+          <div className="ok-browse-edge-bands">
+            <EdgeDotBands />
+          </div>
           <HomeHowItWorks />
           <div className="pb-20 sm:pb-24 ipad:pb-28 px-0">
             <CtaSection />

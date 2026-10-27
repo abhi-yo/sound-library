@@ -4,7 +4,8 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Star } from 'lucide-react';
 import { BloubAvatar } from '@/components/bloub-avatar';
-import { playSound } from '@/lib/lazy-sounds';
+import { uiSound } from '@/lib/ui-sound';
+import { SoundToggle } from '@/components/sound-toggle';
 
 function GitHubIcon(props: React.SVGProps<SVGSVGElement>) {
   return (
@@ -76,7 +77,7 @@ export default function HomeHeader() {
         <nav className="hidden md:flex items-center gap-1 bg-[#121214] border border-[#242426] rounded-full px-2 py-1">
           <Link
             href="/"
-            onClick={() => playSound('tick')}
+            onClick={() => uiSound('tick')}
             className={`font-tight text-[13px] px-3 py-1 rounded-full transition-colors ${
               pathname === '/'
                 ? 'bg-white/10 text-white font-medium'
@@ -87,7 +88,7 @@ export default function HomeHeader() {
           </Link>
           <Link
             href="/browse"
-            onClick={() => playSound('tick')}
+            onClick={() => uiSound('tick')}
             className={`font-tight text-[13px] px-3 py-1 rounded-full transition-colors ${
               pathname === '/browse'
                 ? 'bg-[#ff3700]/20 text-[#ff5722] font-medium border border-[#ff3700]/30'
@@ -98,7 +99,7 @@ export default function HomeHeader() {
           </Link>
           <Link
             href="/docs"
-            onClick={() => playSound('tick')}
+            onClick={() => uiSound('tick')}
             className={`font-tight text-[13px] px-3 py-1 rounded-full transition-colors ${
               pathname.startsWith('/docs')
                 ? 'bg-white/10 text-white font-medium'
@@ -111,9 +112,10 @@ export default function HomeHeader() {
 
         {/* Right Actions */}
         <div className="flex items-center gap-2">
+          <SoundToggle />
           <Link
             href="/browse"
-            onClick={() => playSound('tick')}
+            onClick={() => uiSound('tick')}
             className="md:hidden inline-flex h-8 items-center rounded-[8px] border border-[#262626] bg-[#121212] px-2.5 text-xs font-medium text-white/90 hover:bg-[#1c1c1c]"
           >
             Frontends
@@ -122,7 +124,7 @@ export default function HomeHeader() {
             href="https://github.com/abhi-yo/sound-library"
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => playSound('button-click')}
+            onClick={() => uiSound('button-click')}
             className="inline-flex h-8.5 items-center gap-2 rounded-[8px] border border-[#262626] bg-[#121212] px-3 py-1.5 text-xs font-medium text-white/90 hover:bg-[#1c1c1c] hover:border-[#383838] transition-colors"
           >
             <GitHubIcon className="h-3.5 w-3.5 fill-current text-white/80" />

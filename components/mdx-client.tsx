@@ -35,12 +35,21 @@ export function SoundMatrix() {
   );
 }
 
-export const SoundShowcase = dynamic(
+const SoundShowcaseInner = dynamic(
   () => import('@/components/sound-showcase').then((m) => m.SoundShowcase),
   { ssr: false }
 );
 
-export const CommandPaletteMockup = dynamic(
+/** Mounted (and its sound code fetched) only when it nears the viewport. */
+export function SoundShowcase(props: React.ComponentProps<typeof SoundShowcaseInner>) {
+  return (
+    <LazyMount minHeight={360}>
+      <SoundShowcaseInner {...props} />
+    </LazyMount>
+  );
+}
+
+const CommandPaletteMockupInner = dynamic(
   () =>
     import('@/components/ui-mockups/command-palette-mockup').then(
       (m) => m.CommandPaletteMockup
@@ -48,7 +57,16 @@ export const CommandPaletteMockup = dynamic(
   { ssr: false }
 );
 
-export const AudioRackMockup = dynamic(
+/** Mounted (and its sound code fetched) only when it nears the viewport. */
+export function CommandPaletteMockup(props: React.ComponentProps<typeof CommandPaletteMockupInner>) {
+  return (
+    <LazyMount minHeight={420}>
+      <CommandPaletteMockupInner {...props} />
+    </LazyMount>
+  );
+}
+
+const AudioRackMockupInner = dynamic(
   () =>
     import('@/components/ui-mockups/audio-rack-mockup').then(
       (m) => m.AudioRackMockup
@@ -56,7 +74,16 @@ export const AudioRackMockup = dynamic(
   { ssr: false }
 );
 
-export const InteractiveOsMockup = dynamic(
+/** Mounted (and its sound code fetched) only when it nears the viewport. */
+export function AudioRackMockup(props: React.ComponentProps<typeof AudioRackMockupInner>) {
+  return (
+    <LazyMount minHeight={420}>
+      <AudioRackMockupInner {...props} />
+    </LazyMount>
+  );
+}
+
+const InteractiveOsMockupInner = dynamic(
   () =>
     import('@/components/ui-mockups/interactive-os-mockup').then(
       (m) => m.InteractiveOsMockup
@@ -64,10 +91,28 @@ export const InteractiveOsMockup = dynamic(
   { ssr: false }
 );
 
-export const SoundStudio = dynamic(
+/** Mounted (and its sound code fetched) only when it nears the viewport. */
+export function InteractiveOsMockup(props: React.ComponentProps<typeof InteractiveOsMockupInner>) {
+  return (
+    <LazyMount minHeight={480}>
+      <InteractiveOsMockupInner {...props} />
+    </LazyMount>
+  );
+}
+
+const SoundStudioInner = dynamic(
   () => import('@/components/ui-mockups/sound-studio').then((m) => m.SoundStudio),
   { ssr: false }
 );
+
+/** Mounted (and its sound code fetched) only when it nears the viewport. */
+export function SoundStudio(props: React.ComponentProps<typeof SoundStudioInner>) {
+  return (
+    <LazyMount minHeight={480}>
+      <SoundStudioInner {...props} />
+    </LazyMount>
+  );
+}
 
 const InteractiveDemoGridInner = dynamic(
   () =>

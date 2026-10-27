@@ -483,15 +483,18 @@
   }
 
   .ok-h26-btn {
-    flex: 1 1 140px;
-    min-width: 0;
+    flex: 0 0 auto;
+    min-height: 40px;
   }
 
   .ok-h26-btn__label {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    padding: 10px 12px;
     font-size: 14px;
+  }
+
+  .ok-h26-btn__icon {
+    width: 40px;
+    height: 40px;
   }
 
   .ok-feature-edge-dot-band {
@@ -511,24 +514,10 @@
   }
 }
 
-/* Phones: stack the CTAs full-width so labels never truncate and taps are easy. */
+/* Phones: keep CTAs at their natural width; they wrap onto a second line if needed. */
 @media (max-width: 480px) {
-  .ok-h26-cta-row {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
   .ok-h26-btn {
-    flex-basis: auto;
-    justify-content: space-between;
     min-height: 44px;
-  }
-
-  .ok-h26-btn__label {
-    flex: 1 1 auto;
-    padding: 12px 14px;
-    overflow: visible;
-    text-overflow: clip;
   }
 
   .ok-h26-btn__icon {

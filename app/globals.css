@@ -466,3 +466,14 @@ aside:has(#nd-toc) {
   }
 }
 
+
+/* Side dot strips (landing + browse): only on full-width screens (they overlap content below this). */
+.ok-browse-edge-bands {
+  display: none;
+}
+
+@media (min-width: 1200px) {
+  .ok-browse-edge-bands {
+    display: contents;
+  }
+}

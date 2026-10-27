@@ -4,7 +4,8 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { SoundBitsLogo } from './sound-bits-logo';
-import { playSound } from '@/lib/lazy-sounds';
+import { uiSound } from '@/lib/ui-sound';
+import { LazyMount } from '@/components/lazy-mount';
 
 const FooterTapGame = dynamic(
   () => import('./footer-tap-game').then((m) => m.FooterTapGame),
@@ -73,28 +74,28 @@ export const BigFooter = React.memo(function BigFooter() {
             <nav className="space-y-2.5 font-tight text-[14px] sm:text-[15px]">
               <Link
                 href="/"
-                onClick={() => playSound('tick')}
+                onClick={() => uiSound('tick')}
                 className="block text-white/70 hover:text-white transition-colors"
               >
                 Home
               </Link>
               <Link
                 href="/docs"
-                onClick={() => playSound('tick')}
+                onClick={() => uiSound('tick')}
                 className="block text-white/70 hover:text-white transition-colors"
               >
                 Documentation
               </Link>
               <Link
                 href="/browse"
-                onClick={() => playSound('tick')}
+                onClick={() => uiSound('tick')}
                 className="block text-white/70 hover:text-white transition-colors"
               >
                 Frontends & Examples
               </Link>
               <Link
                 href="/docs/sounds/interaction"
-                onClick={() => playSound('tick')}
+                onClick={() => uiSound('tick')}
                 className="block text-white/70 hover:text-white transition-colors"
               >
                 Sound Catalog
@@ -170,7 +171,9 @@ export const BigFooter = React.memo(function BigFooter() {
         <div className="sound-bits-footer__bottom grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 items-end w-full">
           {/* Bottom Left: Tap game */}
           <div className="sound-bits-footer__game lg:col-span-5">
-            <FooterTapGame />
+            <LazyMount minHeight={96}>
+              <FooterTapGame />
+            </LazyMount>
           </div>
 
           {/* Bottom Center: Legal Policies */}

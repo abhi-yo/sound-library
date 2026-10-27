@@ -5,7 +5,10 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import HomeHeader from '@/components/home-header';
 import { playSound, playCopySound } from '@/lib/lazy-sounds';
+import { uiSound } from '@/lib/ui-sound';
 import type { SoundName } from '@/lib/sound-names';
+import { LazyMount } from '@/components/lazy-mount';
+import { EXTRA_FRONTENDS } from '@/components/frontends/browse';
 import {
   CursorClick,
   Plus,
@@ -74,6 +77,8 @@ const DEFS: ComponentDef[] = [
     soundAltLabel: 'notify',
     code: `playSound(liked ? 'bubble' : 'bell')`,
   },
+  // 06–15 live in components/frontends/browse, each in its own lazy chunk.
+  ...EXTRA_FRONTENDS.map(({ Component: _c, anatomy: _a, ...def }) => def),
 ];
 
 /* ─── Outer card shell — same for every component ───────────────────────── */
@@ -118,6 +123,9 @@ function CardShell({
         <button
           type="button"
           onClick={onExpand}
+          data-sound="swish"
+          aria-label={`Expand ${def.id}`}
+          aria-haspopup="dialog"
           className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.04] text-white/35 backdrop-blur-sm transition-colors hover:border-[#ff3700]/35 hover:text-white/80 cursor-pointer"
         >
           <ArrowsOut size={12} weight="bold" />
@@ -635,6 +643,11 @@ function ModalPreviewItem({ id }: { id: string }) {
       />
     );
   }
+  const extra = EXTRA_FRONTENDS.find((f) => f.id === id);
+  if (extra) {
+    const Demo = extra.Component;
+    return <Demo size="default" />;
+  }
   return null;
 }
 
@@ -646,7 +659,12 @@ export default function BrowsePage() {
 
   useEffect(() => {
     const h = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setActiveId(null);
+      if (e.key === 'Escape') {
+        setActiveId((cur) => {
+          if (cur) uiSound('tick');
+          return null;
+        });
+      }
     };
     window.addEventListener('keydown', h);
     return () => window.removeEventListener('keydown', h);
@@ -667,7 +685,10 @@ export default function BrowsePage() {
 
       <main className="relative w-full flex-1 overflow-hidden bg-[#0a0a0a]">
         <div className="relative mx-auto w-full overflow-hidden max-w-[1440px] px-0 pt-10 pb-16 sm:pt-14 sm:pb-20">
-          <EdgeDotBands />
+          {/* Side dot strips: only on full-width screens; below that they overlap the content. */}
+          <div className="ok-browse-edge-bands">
+            <EdgeDotBands />
+          </div>
 
           <div className="relative mx-auto w-full min-w-0 max-w-[960px] px-4 sm:px-6">
             <div className="flex items-center justify-between font-mono text-[11px] text-white/20 mb-10 pb-4 border-b border-white/[0.05]">
@@ -692,7 +713,7 @@ export default function BrowsePage() {
               </div>
               <Link
                 href="/docs"
-                onClick={() => playSound('tick')}
+                onClick={() => uiSound('button-click')}
                 className="inline-flex shrink-0 items-center gap-2 self-start rounded-full border border-[#ff3700]/35 bg-[#ff3700]/10 px-3.5 py-2 font-mono text-[11px] uppercase tracking-[0.12em] text-[#ff8a66] transition-colors hover:border-[#ff3700]/70 hover:bg-[#ff3700]/20 hover:text-white sm:self-auto"
               >
                 Explore docs
@@ -708,6 +729,16 @@ export default function BrowsePage() {
               <SwitchCardItem onExpand={() => setActiveId('switch')} />
               <StepperCardItem onExpand={() => setActiveId('stepper')} />
               <ReactionCardItem onExpand={() => setActiveId('reaction')} />
+              {EXTRA_FRONTENDS.map((f, i) => {
+                const Demo = f.Component;
+                return (
+                  <CardShell key={f.id} def={DEFS[5 + i]} onExpand={() => setActiveId(f.id)}>
+                    <LazyMount minHeight={120} rootMargin="300px 0px" className="flex items-center justify-center">
+                      <Demo size="compact" />
+                    </LazyMount>
+                  </CardShell>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -716,7 +747,10 @@ export default function BrowsePage() {
       {activeDef && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          onClick={() => setActiveId(null)}
+          onClick={() => {
+            uiSound('tick');
+            setActiveId(null);
+          }}
         >
           <div className="absolute inset-0 bg-black/75 backdrop-blur-[6px]" />
 
@@ -733,7 +767,11 @@ export default function BrowsePage() {
               </div>
               <button
                 type="button"
-                onClick={() => setActiveId(null)}
+                aria-label="Close"
+                onClick={() => {
+                  uiSound('tick');
+                  setActiveId(null);
+                }}
                 className="w-6 h-6 rounded-full bg-[#15151a] border border-white/[0.06] flex items-center justify-center text-white/30 hover:text-white/70 transition-colors cursor-pointer"
               >
                 <X size={11} weight="bold" />

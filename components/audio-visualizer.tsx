@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useEffect } from 'react';
-import { getAudioAnalyser } from '@/lib/lazy-sounds';
+import { peekAudioAnalyser } from '@/lib/lazy-sounds';
 
 export function AudioVisualizer({ className = 'h-24 w-full' }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -14,12 +14,12 @@ export function AudioVisualizer({ className = 'h-24 w-full' }: { className?: str
     if (!ctx) return;
 
     let phase = 0;
-    let analyser: AnalyserNode | null = null;
-    void getAudioAnalyser().then((a) => {
-      analyser = a;
-    });
+    // Pick up the analyser once a sound has actually played; never load the
+    // engine or create an AudioContext just to draw the idle scope.
+    let analyser: AnalyserNode | null = peekAudioAnalyser();
 
     const render = () => {
+      if (!analyser) analyser = peekAudioAnalyser();
       const width = canvas.width;
       const height = canvas.height;
 

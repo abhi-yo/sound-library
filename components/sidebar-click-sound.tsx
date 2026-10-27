@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { playSound } from '@/lib/lazy-sounds';
+import { uiSound } from '@/lib/ui-sound';
 
 /**
  * Attaches a crisp, tactile click sound to all sidebar links and buttons in the documentation.
@@ -51,7 +51,7 @@ export function SidebarClickSound() {
       lastTargetRef.current = sidebarItem;
 
       // Play the tactile button click sound
-      playSound('button-click');
+      uiSound('tick');
     };
 
     // Capture phase listener ensures we intercept the primary click cleanly

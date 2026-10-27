@@ -2,7 +2,10 @@
 "use client";
 
 /* —— Dotted WebGL background (inlined; avoids nested ui/ publish) —— */
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
+import Link from "next/link";
+import { preloadSounds } from "@/lib/lazy-sounds";
+import { uiSound } from "@/lib/ui-sound";
 import {
     Renderer,
     Camera,
@@ -942,6 +945,12 @@ export function DotmatrixHero({
 }: DotmatrixHeroProps = {}) {
   const [isPhone, setIsPhone] = useState(false);
 
+  // Play on press (not on click) so the sound starts before navigation begins.
+  const pressSound = () => uiSound("button-click");
+  const keySound = (e: KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") pressSound();
+  };
+
   useEffect(() => {
     const media = window.matchMedia('(max-width: 640px)');
     const update = () => setIsPhone(media.matches);
@@ -958,10 +967,10 @@ export function DotmatrixHero({
           <DottedBackground
             bgColor="#000000"
             colors={["#0f0500", "#542005", "#a2430b"]}
-            frequency={1.5}
-            speed={2}
-            cellSize={isPhone ? 6 : 10}
-            gamma={3}
+            frequency={isPhone ? 1.3 : 1.5}
+            speed={isPhone ? 0.8 : 2}
+            cellSize={isPhone ? 7 : 10}
+            gamma={isPhone ? 3.6 : 3}
             paletteBias={8}
           />
         </div>
@@ -979,18 +988,18 @@ export function DotmatrixHero({
               <p>{description}</p>
             </div>
             <div className="ok-h26-cta-row">
-              <a className="ok-h26-btn ok-h26-btn--white" href="/docs">
+              <Link className="ok-h26-btn ok-h26-btn--white" href="/docs" data-no-sound onPointerEnter={preloadSounds} onFocus={preloadSounds} onPointerDown={pressSound} onKeyDown={keySound}>
                 <span className="ok-h26-btn__label">{primaryCtaLabel}</span>
                 <span className="ok-h26-btn__icon">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#cc2d00" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </span>
-              </a>
-              <a className="ok-h26-btn ok-h26-btn--blue" href="/browse">
+              </Link>
+              <Link className="ok-h26-btn ok-h26-btn--blue" href="/browse" data-no-sound onPointerEnter={preloadSounds} onFocus={preloadSounds} onPointerDown={pressSound} onKeyDown={keySound}>
                 <span className="ok-h26-btn__label">{secondaryCtaLabel}</span>
                 <span className="ok-h26-btn__icon">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ffb088" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                 </span>
-              </a>
+              </Link>
             </div>
           </div>
         </div>

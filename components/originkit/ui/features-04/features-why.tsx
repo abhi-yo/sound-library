@@ -2,9 +2,9 @@
 // Dark-themed for sound-bits
 "use client";
 
+import { EdgeDotBands } from "@/components/originkit/ui/features-04/edge-dot-bands";
 import { FeatureCard, Plate, WideCard } from "@/components/originkit/ui/features-04/cards";
 import { CornerBlocks } from "@/components/originkit/ui/features-04/corner-blocks";
-import { EdgeDotBands } from "@/components/originkit/ui/features-04/edge-dot-bands";
 import { GridColumns, GridRows } from "@/components/originkit/ui/features-04/grid-pattern";
 
 function asset(file: string) {
@@ -81,7 +81,9 @@ export const FeaturesWhy = () => (
       </div>
       <Glow />
       <DesktopGlow />
-      <EdgeDotBands />
+      <div className="ok-browse-edge-bands">
+        <EdgeDotBands />
+      </div>
 
       <div className="relative mx-auto flex w-full max-w-[1192px] flex-col items-center gap-[24px] px-4 sm:px-6 lg:px-8 pb-[60px] ipad:gap-[52px] ipad:pb-[104px] desktop-sm:gap-[72px] desktop-sm:pb-[62px]">
         <header className="flex w-full flex-col items-center gap-[16px] ipad:w-[502px] ipad:gap-[20px]">

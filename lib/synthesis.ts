@@ -1,8 +1,10 @@
 import type { SoundName } from './sound-names';
-import { masterGain } from './sounds';
+import { masterGain, voiceOutput } from './sounds';
 
 export function getMasterOutput(ctx: AudioContext): AudioNode {
-  return masterGain || ctx.destination;
+  // While a voice is being built, route it through that voice's own gain so the
+  // engine can cap, steal and clean it up as one unit.
+  return voiceOutput || masterGain || ctx.destination;
 }
 
 /** Sound synthesis definitions using native Web Audio API */
